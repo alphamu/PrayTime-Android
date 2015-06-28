@@ -1,0 +1,26 @@
+<resources>
+    <string name="app_name">Salaat Times</string>
+
+    <string name="hello_world">Hello world!</string>
+    <string name="action_settings">Settings</string>
+
+    <string name="fajr">Fajr</string>
+    <string name="dhuhr">Dhuhr</string>
+    <string name="asr">Asr</string>
+    <string name="maghrib">Maghrib</string>
+    <string name="isha">Isha</string>
+    <string name="sunrise">Sunrise</string>
+    <string name="sunset">Sunset</string>
+
+    <string name="button_alarm_on">\u2192 Turn on alarm</string>
+    <string name="button_alarm_off">\u2192 Turn off alarm</string>
+    <plurals name="button_alarm">
+        <item quantity="zero">@string/button_alarm_on</item>
+        <item quantity="one">@string/button_alarm_off</item>
+    </plurals>
+    <string name="title_activity_set_alarm">SetAlarmActivity</string>
+    <string name="title_activity_onboarding">OnboardingActivity</string>
+
+<!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+</resources>
