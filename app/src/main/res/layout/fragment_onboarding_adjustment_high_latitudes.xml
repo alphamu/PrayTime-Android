@@ -1,0 +1,13 @@
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    tools:context="com.alimuzaffar.ramadanalarm.fragments.OnboardingAdjustmentHighLatitudesFragment">
+
+    <include layout="@layout/view_card_title"/>
+
+    <include layout="@layout/view_prev_next"/>
+
+</LinearLayout>

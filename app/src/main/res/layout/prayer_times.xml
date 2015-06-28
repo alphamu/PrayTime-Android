@@ -13,21 +13,7 @@
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
-        <LinearLayout
-            style="@style/Widget.CardTitle"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
-
-            <TextView
-                android:id="@+id/card_title"
-                style="@style/Widget.CardTitle.Text"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center_vertical"
-                android:text="Timezone"/>
-
-        </LinearLayout>
+        <include layout="@layout/view_card_title"/>
 
         <LinearLayout
             style="@style/Widget.TimeRow.Separator"

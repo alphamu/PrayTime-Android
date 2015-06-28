@@ -26,6 +26,13 @@ public class SalaatTimesActivity extends AppCompatActivity {
     Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
     setSupportActionBar(toolbar);
 
+    if (!AppSettings.getInstance(this).getBoolean(AppSettings.Key.HAS_DEFAULT_SET)) {
+      Intent intent = new Intent(this, OnboardingActivity.class);
+      intent.putExtra(OnboardingActivity.EXTRA_CARD_INDEX, 0);
+      startActivity(intent);
+
+    }
+
 
     // In future releases we will add more cards.
     // Then we'll need to do this for each card.

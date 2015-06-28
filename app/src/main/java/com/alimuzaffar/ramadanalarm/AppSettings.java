@@ -44,8 +44,14 @@ public class AppSettings {
 	   * String: SAMPLE_KEY, SAMPLE_STR or just SAMPLE
 	   */
     public static final String IS_ALARM_SET = "is_alarm_set_for_%d";
+    public static final String HAS_DEFAULT_SET = "has_default_set";
+    public static final String CALC_METHOD = "calc_method";
+    public static final String ASR_METHOD = "asr_method";
+    public static final String ADJUST_METHOD = "adjust_high_latitudes_method";
+    public static final String TIME_FORMAT = "time_format";
 
   }
+
 
   private AppSettings(Context context) {
     mPref = context.getSharedPreferences(SETTINGS_NAME, Context.MODE_PRIVATE);

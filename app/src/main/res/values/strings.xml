@@ -12,6 +12,9 @@
     <string name="sunrise">Sunrise</string>
     <string name="sunset">Sunset</string>
 
+    <string name="button_prev">\u2190 Previous</string>
+    <string name="button_next">Next \u2192</string>
+
     <string name="button_alarm_on">\u2192 Turn on alarm</string>
     <string name="button_alarm_off">\u2192 Turn off alarm</string>
     <plurals name="button_alarm">
