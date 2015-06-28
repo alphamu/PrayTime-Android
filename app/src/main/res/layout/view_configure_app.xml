@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.CardView
+    android:id="@+id/card_view"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_gravity="center"
+    card_view:cardCornerRadius="4dp">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="480dp"
+            android:orientation="vertical"
+            android:paddingBottom="@dimen/space_x2"
+            android:paddingLeft="@dimen/space"
+            android:paddingRight="@dimen/space"
+            android:paddingTop="@dimen/space_x3">
+
+            <TextView
+                style="@style/Widget.CardTitle.Text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/space_x3"
+                android:text="@string/config_title"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/space"
+                android:text="@string/explain_default_config"/>
+
+            <TextView
+                android:id="@+id/configure_now"
+                style="@style/Widget.Button.NextPrev"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/space_x6"
+                android:gravity="center_vertical"
+                android:text="@string/button_configure_now"/>
+
+            <TextView
+                android:id="@+id/use_default"
+                style="@style/Widget.Button.NextPrev"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/space_x6"
+                android:gravity="center_vertical"
+                android:text="@string/button_use_default"/>
+
+        </LinearLayout>
+    </ScrollView>
+
+</android.support.v7.widget.CardView>

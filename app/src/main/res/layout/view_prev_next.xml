@@ -6,22 +6,22 @@
 
     <TextView
         android:id="@+id/prev"
+        style="@style/Widget.Button.NextPrev"
         android:layout_width="0dp"
         android:layout_height="48dp"
         android:layout_weight="1"
         android:gravity="center_vertical|start"
         android:paddingLeft="@dimen/space"
-        android:text="@string/button_prev"
-        android:textColor="@color/button_text"/>
+        android:text="@string/button_prev"/>
 
     <TextView
         android:id="@+id/next"
+        style="@style/Widget.Button.NextPrev"
         android:layout_width="0dp"
         android:layout_height="48dp"
         android:layout_weight="1"
         android:gravity="center_vertical|end"
         android:paddingRight="@dimen/space"
-        android:text="@string/button_next"
-        android:textColor="@color/button_text"/>
+        android:text="@string/button_next"/>
 
 </LinearLayout>

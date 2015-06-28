@@ -4,12 +4,12 @@
         <layer-list>
             <item>
                 <shape android:shape="rectangle">
-                    <solid android:color="@color/separator"/>
+                    <solid android:color="?attr/separatorColor"/>
                 </shape>
             </item>
             <item android:bottom="1dp">
                 <shape android:shape="rectangle">
-                    <solid android:color="@color/cardview_light_background"/>
+                    <solid android:color="?attr/cardViewBackgroundColor"/>
                 </shape>
             </item>
         </layer-list>
@@ -18,12 +18,12 @@
         <layer-list>
             <item>
                 <shape android:shape="rectangle">
-                    <solid android:color="@color/separator"/>
+                    <solid android:color="?attr/separatorColor"/>
                 </shape>
             </item>
             <item android:bottom="1dp">
                 <shape android:shape="rectangle">
-                    <solid android:color="@color/green_accent"/>
+                    <solid android:color="?attr/colorAccent"/>
                 </shape>
             </item>
         </layer-list>
@@ -32,12 +32,12 @@
         <layer-list>
             <item>
                 <shape android:shape="rectangle">
-                    <solid android:color="@color/separator"/>
+                    <solid android:color="?attr/separatorColor"/>
                 </shape>
             </item>
             <item android:bottom="1dp">
                 <shape android:shape="rectangle">
-                    <solid android:color="@color/green_accent"/>
+                    <solid android:color="?attr/colorAccent"/>
                 </shape>
             </item>
         </layer-list>

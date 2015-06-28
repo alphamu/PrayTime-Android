@@ -24,12 +24,21 @@
     <string name="button_alarm_on">\u2192 Turn on alarm</string>
     <string name="button_alarm_off">\u2192 Turn off alarm</string>
     <plurals name="button_alarm">
-        <item quantity="zero">@string/button_alarm_on</item>
-        <item quantity="one">@string/button_alarm_off</item>
+        <item quantity="zero">@string/button_alarm_off</item>
+        <item quantity="one">@string/button_alarm_on</item>
     </plurals>
     <string name="title_activity_set_alarm">SetAlarmActivity</string>
     <string name="title_activity_onboarding">OnboardingActivity</string>
 
-<!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="config_title">Please take a moment to configure the Salaat times to your requirements.</string>
+    <string name="explain_default_config">
+        By default Salaat times are configured using Muslim World League calculation
+        method, Shafii Juristic for Asr time calculations and makes no adjustment
+        for people living in higher latitudes.\n\n
+        Other calculation methods include: Karachi, ISNA, Makkah, Egypt, Tehran, Jafri\n\n
+        You can choose to use the default settings (don\'t worry you can change them later), or
+        configure the Salaat times to your requirements below.
+    </string>
+    <string name="button_configure_now">Configure settings now</string>
+    <string name="button_use_default">Use default settings</string>
 </resources>

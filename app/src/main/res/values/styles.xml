@@ -24,6 +24,10 @@
         <item name="colorPrimary">@color/green_primary</item>
         <item name="colorPrimaryDark">@color/green_primary_dark</item>
         <item name="colorAccent">@color/green_accent</item>
+        <!-- Custom app attributes -->
+        <item name="separatorColor">@color/separator</item>
+        <item name="cardViewBackgroundColor">@color/cardview_light_background</item>
+        <item name="buttonTextColor">@color/button_text_light</item>
     </style>
 
     <style name="Widget.CardContent" parent="android:Widget">
@@ -45,7 +49,7 @@
 
     <style name="Widget.CardTitle.Text" parent="android:Widget">
         <item name="android:textSize">20sp</item>
-        <item name="android:textColor">@color/green_primary_dark</item>
+        <item name="android:textColor">?attr/colorPrimaryDark</item>
     </style>
 
     <style name="Widget.TimeRow" parent="android:Widget">
@@ -53,7 +57,7 @@
         <item name="android:paddingBottom">12dp</item>
         <item name="android:paddingRight">8dp</item>
         <item name="android:paddingLeft">8dp</item>
-        <item name="android:textColor">@color/secondary_text_default_material_light</item>
+        <item name="android:textColor">?android:attr/textColorSecondary</item>
     </style>
 
     <style name="Widget.TimeRow.Separator" parent="Widget.TimeRow">
@@ -61,9 +65,12 @@
     </style>
 
     <style name="Widget.Explain.Separator" parent="Widget.TimeRow">
-        <item name="android:textColor">@color/material_blue_grey_800</item>
         <item name="android:textSize">12sp</item>
         <item name="android:background">@drawable/bg_table_row</item>
+    </style>
+
+    <style name="Widget.Button.NextPrev" parent="android:Widget">
+        <item name="android:textColor">?attr/buttonTextColor</item>
     </style>
 
 
