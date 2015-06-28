@@ -8,6 +8,7 @@ import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 
 import com.alimuzaffar.ramadanalarm.fragments.OnOnboardingOptionSelectedListener;
 import com.alimuzaffar.ramadanalarm.fragments.OnboardingAdjustmentHighLatitudesFragment;
@@ -28,6 +29,8 @@ public class OnboardingActivity extends AppCompatActivity implements OnOnboardin
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_onboarding);
+    Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+    setSupportActionBar(toolbar);
     // Instantiate a ViewPager and a PagerAdapter.
     Intent intent = getIntent();
     mCardIndex = intent.getIntExtra(EXTRA_CARD_INDEX, 0);
@@ -51,7 +54,7 @@ public class OnboardingActivity extends AppCompatActivity implements OnOnboardin
 
   @Override
   public void onOptionSelected() {
-
+    mPager.setCurrentItem(mPager.getCurrentItem()+1);
   }
 
   private class ScreenSlidePagerAdapter extends FragmentStatePagerAdapter {

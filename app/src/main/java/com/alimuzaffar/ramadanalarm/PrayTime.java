@@ -48,27 +48,27 @@ public class PrayTime {
   private double JDate; // Julian date
   // ------------------------------------------------------------
   // Calculation Methods
-  private int Jafari; // Ithna Ashari
-  private int Karachi; // University of Islamic Sciences, Karachi
-  private int ISNA; // Islamic Society of North America (ISNA)
-  private int MWL; // Muslim World League (MWL)
-  private int Makkah; // Umm al-Qura, Makkah
-  private int Egypt; // Egyptian General Authority of Survey
-  private int Custom; // Custom Setting
-  private int Tehran; // Institute of Geophysics, University of Tehran
+  public static final int JAFARI = 0; // Ithna Ashari
+  public static final int KARACHI = 1; // University of Islamic Sciences, KARACHI
+  public static final int ISNA = 2; // Islamic Society of North America (ISNA)
+  public static final int MWL = 3; // Muslim World League (MWL)
+  public static final int MAKKAH = 4; // Umm al-Qura, MAKKAH
+  public static final int EGYPT = 5; // Egyptian General Authority of Survey
+  public static final int CUSTOM = 7; // CUSTOM Setting
+  public static final int TEHRAN = 6; // Institute of Geophysics, University of TEHRAN
   // Juristic Methods
-  private int Shafii; // Shafii (standard)
-  private int Hanafi; // Hanafi
+  public static final int SHAFII = 0; // SHAFII (standard)
+  public static final int HANAFI = 1; // HANAFI
   // Adjusting Methods for Higher Latitudes
-  private int None; // No adjustment
-  private int MidNight; // middle of night
-  private int OneSeventh; // 1/7th of night
-  private int AngleBased; // angle/60th of night
+  public static final int NONE = 0; // No adjustment
+  public static final int MID_NIGHT = 1; // middle of night
+  public static final int ONE_SEVENTH = 2; // 1/7th of night
+  public static final int ANGLE_BASED = 3; // angle/60th of night
   // Time Formats
-  private int Time24; // 24-hour format
-  private int Time12; // 12-hour format
-  private int Time12NS; // 12-hour format with no suffix
-  private int Floating; // floating point number
+  public static final int TIME_24 = 0; // 24-hour format
+  public static final int TIME_12 = 1; // 12-hour format
+  public static final int TIME_12_NS = 2; // 12-hour format with no suffix
+  public static final int FLOATING = 3; // floating point number
   // Time Names
   private ArrayList<String> timeNames;
   private String InvalidTime; // The string used for invalid times
@@ -90,38 +90,11 @@ public class PrayTime {
 
   public PrayTime() {
     // Initialize vars
-
     this.setCalcMethod(0);
     this.setAsrJuristic(0);
     this.setDhuhrMinutes(0);
     this.setAdjustHighLats(1);
     this.setTimeFormat(0);
-
-    // Calculation Methods
-    this.setJafari(0); // Ithna Ashari
-    this.setKarachi(1); // University of Islamic Sciences, Karachi
-    this.setISNA(2); // Islamic Society of North America (ISNA)
-    this.setMWL(3); // Muslim World League (MWL)
-    this.setMakkah(4); // Umm al-Qura, Makkah
-    this.setEgypt(5); // Egyptian General Authority of Survey
-    this.setTehran(6); // Institute of Geophysics, University of Tehran
-    this.setCustom(7); // Custom Setting
-
-    // Juristic Methods
-    this.setShafii(0); // Shafii (standard)
-    this.setHanafi(1); // Hanafi
-
-    // Adjusting Methods for Higher Latitudes
-    this.setNone(0); // No adjustment
-    this.setMidNight(1); // middle of night
-    this.setOneSeventh(2); // 1/7th of night
-    this.setAngleBased(3); // angle/60th of night
-
-    // Time Formats
-    this.setTime24(0); // 24-hour format
-    this.setTime12(1); // 12-hour format
-    this.setTime12NS(2); // 12-hour format with no suffix
-    this.setFloating(3); // floating point number
 
     // Time Names
     timeNames = new ArrayList<String>();
@@ -161,37 +134,37 @@ public class PrayTime {
          */
     methodParams = new HashMap<Integer, double[]>();
 
-    // Jafari
+    // JAFARI
     double[] Jvalues = {16, 0, 4, 0, 14};
-    methodParams.put(Integer.valueOf(this.getJafari()), Jvalues);
+    methodParams.put(JAFARI, Jvalues);
 
-    // Karachi
+    // KARACHI
     double[] Kvalues = {18, 1, 0, 0, 18};
-    methodParams.put(Integer.valueOf(this.getKarachi()), Kvalues);
+    methodParams.put(KARACHI, Kvalues);
 
     // ISNA
     double[] Ivalues = {15, 1, 0, 0, 15};
-    methodParams.put(Integer.valueOf(this.getISNA()), Ivalues);
+    methodParams.put(ISNA, Ivalues);
 
     // MWL
     double[] MWvalues = {18, 1, 0, 0, 17};
-    methodParams.put(Integer.valueOf(this.getMWL()), MWvalues);
+    methodParams.put(MWL, MWvalues);
 
-    // Makkah
+    // MAKKAH
     double[] MKvalues = {18.5, 1, 0, 1, 90};
-    methodParams.put(Integer.valueOf(this.getMakkah()), MKvalues);
+    methodParams.put(MAKKAH, MKvalues);
 
-    // Egypt
+    // EGYPT
     double[] Evalues = {19.5, 1, 0, 0, 17.5};
-    methodParams.put(Integer.valueOf(this.getEgypt()), Evalues);
+    methodParams.put(EGYPT, Evalues);
 
-    // Tehran
+    // TEHRAN
     double[] Tvalues = {17.7, 0, 4.5, 0, 14};
-    methodParams.put(Integer.valueOf(this.getTehran()), Tvalues);
+    methodParams.put(TEHRAN, Tvalues);
 
-    // Custom
+    // CUSTOM
     double[] Cvalues = {18, 1, 0, 0, 17};
-    methodParams.put(Integer.valueOf(this.getCustom()), Cvalues);
+    methodParams.put(CUSTOM, Cvalues);
 
   }
 
@@ -379,7 +352,7 @@ public class PrayTime {
   }
 
   // compute the time of Asr
-  // Shafii: step=1, Hanafi: step=2
+  // SHAFII: step=1, HANAFI: step=2
   private double computeAsr(double step, double t) {
     double D = sunDeclination(this.getJDate() + t);
     double G = -darccot(step + dtan(Math.abs(this.getLat() - D)));
@@ -422,12 +395,12 @@ public class PrayTime {
     for (int i = 0; i < 5; i++) {
       if (params[i] == -1) {
         params[i] = methodParams.get(this.getCalcMethod())[i];
-        methodParams.put(this.getCustom(), params);
+        methodParams.put(CUSTOM, params);
       } else {
-        methodParams.get(this.getCustom())[i] = params[i];
+        methodParams.get(CUSTOM)[i] = params[i];
       }
     }
-    this.setCalcMethod(this.getCustom());
+    this.setCalcMethod(CUSTOM);
   }
 
   // set the angle for calculating Fajr
@@ -597,7 +570,7 @@ public class PrayTime {
       times[6] = times[5] + methodParams.get(this.getCalcMethod())[4] / 60;
     }
 
-    if (this.getAdjustHighLats() != this.getNone()) {
+    if (this.getAdjustHighLats() != NONE) {
       times = adjustHighLatTimes(times);
     }
 
@@ -609,7 +582,7 @@ public class PrayTime {
 
     ArrayList<String> result = new ArrayList<String>();
 
-    if (this.getTimeFormat() == this.getFloating()) {
+    if (this.getTimeFormat() == FLOATING) {
       for (double time : times) {
         result.add(String.valueOf(time));
       }
@@ -617,9 +590,9 @@ public class PrayTime {
     }
 
     for (int i = 0; i < 7; i++) {
-      if (this.getTimeFormat() == this.getTime12()) {
+      if (this.getTimeFormat() == TIME_12) {
         result.add(floatToTime12(times[i], false));
-      } else if (this.getTimeFormat() == this.getTime12NS()) {
+      } else if (this.getTimeFormat() == TIME_12_NS) {
         result.add(floatToTime12(times[i], true));
       } else {
         result.add(floatToTime24(times[i]));
@@ -660,11 +633,11 @@ public class PrayTime {
   private double nightPortion(double angle) {
     double calc = 0;
 
-    if (adjustHighLats == AngleBased)
+    if (adjustHighLats == ANGLE_BASED)
       calc = (angle) / 60.0;
-    else if (adjustHighLats == MidNight)
+    else if (adjustHighLats == MID_NIGHT)
       calc = 0.5;
-    else if (adjustHighLats == OneSeventh)
+    else if (adjustHighLats == ONE_SEVENTH)
       calc = 0.14286;
 
     return calc;
@@ -718,13 +691,11 @@ public class PrayTime {
     // Test Prayer times here
     PrayTime prayers = new PrayTime();
 
-    prayers.setTimeFormat(prayers.Time12);
-    prayers.setCalcMethod(prayers.Karachi);
-    prayers.setAsrJuristic(prayers.Shafii);
-    prayers.setAdjustHighLats(prayers.AngleBased);
-    //-33.873677,151.196515
-    //prayers.setLat(-33.873677);
-    //prayers.setLng(151.196515);
+    prayers.setTimeFormat(prayers.TIME_12);
+    prayers.setCalcMethod(prayers.KARACHI);
+    prayers.setAsrJuristic(prayers.SHAFII);
+    prayers.setAdjustHighLats(prayers.ANGLE_BASED);
+
     int[] offsets = {0, 0, 0, 0, 0, 0, 0}; // {Fajr,Sunrise,Dhuhr,Asr,Sunset,Maghrib,Isha}
     prayers.tune(offsets);
 
@@ -758,13 +729,11 @@ public class PrayTime {
     // Test Prayer times here
     PrayTime prayers = new PrayTime();
 
-    prayers.setTimeFormat(prayers.Time12);
+    prayers.setTimeFormat(prayers.TIME_12);
     prayers.setCalcMethod(prayers.MWL);
-    prayers.setAsrJuristic(prayers.Shafii);
-    prayers.setAdjustHighLats(prayers.AngleBased);
-    //-33.873677,151.196515
-    //prayers.setLat(-33.873677);
-    //prayers.setLng(151.196515);
+    prayers.setAsrJuristic(prayers.SHAFII);
+    prayers.setAdjustHighLats(prayers.ANGLE_BASED);
+
     int[] offsets = {0, 0, 0, 0, 0, 0, 0}; // {Fajr,Sunrise,Dhuhr,Asr,Sunset,Maghrib,Isha}
     prayers.tune(offsets);
 
@@ -855,150 +824,6 @@ public class PrayTime {
 
   public void setJDate(double jDate) {
     JDate = jDate;
-  }
-
-  private int getJafari() {
-    return Jafari;
-  }
-
-  private void setJafari(int jafari) {
-    Jafari = jafari;
-  }
-
-  private int getKarachi() {
-    return Karachi;
-  }
-
-  private void setKarachi(int karachi) {
-    Karachi = karachi;
-  }
-
-  private int getISNA() {
-    return ISNA;
-  }
-
-  private void setISNA(int iSNA) {
-    ISNA = iSNA;
-  }
-
-  private int getMWL() {
-    return MWL;
-  }
-
-  private void setMWL(int mWL) {
-    MWL = mWL;
-  }
-
-  private int getMakkah() {
-    return Makkah;
-  }
-
-  private void setMakkah(int makkah) {
-    Makkah = makkah;
-  }
-
-  private int getEgypt() {
-    return Egypt;
-  }
-
-  private void setEgypt(int egypt) {
-    Egypt = egypt;
-  }
-
-  private int getCustom() {
-    return Custom;
-  }
-
-  private void setCustom(int custom) {
-    Custom = custom;
-  }
-
-  private int getTehran() {
-    return Tehran;
-  }
-
-  private void setTehran(int tehran) {
-    Tehran = tehran;
-  }
-
-  private int getShafii() {
-    return Shafii;
-  }
-
-  private void setShafii(int shafii) {
-    Shafii = shafii;
-  }
-
-  private int getHanafi() {
-    return Hanafi;
-  }
-
-  private void setHanafi(int hanafi) {
-    Hanafi = hanafi;
-  }
-
-  private int getNone() {
-    return None;
-  }
-
-  private void setNone(int none) {
-    None = none;
-  }
-
-  private int getMidNight() {
-    return MidNight;
-  }
-
-  private void setMidNight(int midNight) {
-    MidNight = midNight;
-  }
-
-  private int getOneSeventh() {
-    return OneSeventh;
-  }
-
-  private void setOneSeventh(int oneSeventh) {
-    OneSeventh = oneSeventh;
-  }
-
-  private int getAngleBased() {
-    return AngleBased;
-  }
-
-  private void setAngleBased(int angleBased) {
-    AngleBased = angleBased;
-  }
-
-  private int getTime24() {
-    return Time24;
-  }
-
-  private void setTime24(int time24) {
-    Time24 = time24;
-  }
-
-  private int getTime12() {
-    return Time12;
-  }
-
-  private void setTime12(int time12) {
-    Time12 = time12;
-  }
-
-  private int getTime12NS() {
-    return Time12NS;
-  }
-
-  private void setTime12NS(int time12ns) {
-    Time12NS = time12ns;
-  }
-
-  private int getFloating() {
-    return Floating;
-  }
-
-  private void setFloating(int floating) {
-    Floating = floating;
   }
 
   private int getNumIterations() {

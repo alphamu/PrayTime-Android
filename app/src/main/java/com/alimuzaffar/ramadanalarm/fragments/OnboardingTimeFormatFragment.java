@@ -78,4 +78,9 @@ public class OnboardingTimeFormatFragment extends OnboardingBaseFragment {
     super.onDetach();
     mListener = null;
   }
+
+  @Override
+  public void onClick(View v) {
+
+  }
 }

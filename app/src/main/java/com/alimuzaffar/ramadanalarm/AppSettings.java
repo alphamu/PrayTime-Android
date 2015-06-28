@@ -25,6 +25,8 @@ import android.content.SharedPreferences;
  * simple use AppSettings.getInstance() to save some precious line space.
  */
 public class AppSettings {
+  public static final PrayTime sDefaults = new PrayTime();
+
   private static final String SETTINGS_NAME = "default_settings";
   private static AppSettings sSharedPrefs;
   private SharedPreferences mPref;
@@ -45,10 +47,10 @@ public class AppSettings {
 	   */
     public static final String IS_ALARM_SET = "is_alarm_set_for_%d";
     public static final String HAS_DEFAULT_SET = "has_default_set";
-    public static final String CALC_METHOD = "calc_method";
-    public static final String ASR_METHOD = "asr_method";
-    public static final String ADJUST_METHOD = "adjust_high_latitudes_method";
-    public static final String TIME_FORMAT = "time_format";
+    public static final String CALC_METHOD = "calc_method_for_%d";
+    public static final String ASR_METHOD = "asr_method_for_%d";
+    public static final String ADJUST_METHOD = "adjust_high_latitudes_method_for_%d";
+    public static final String TIME_FORMAT = "time_format_for_%d";
 
   }
 
@@ -241,7 +243,33 @@ public class AppSettings {
     }
   }
 
-  public boolean isAlarmSetFor(int index) {
-    return getBoolean(String.format(Key.IS_ALARM_SET, index));
+  public String getKeyFor(String key, int index) {
+    return String.format(key, index);
   }
+
+  public boolean isAlarmSetFor(int index) {
+    return getBoolean(getKeyFor(Key.IS_ALARM_SET, index));
+  }
+
+  public int getCalcMethodSetFor(int index) {
+    return getInt(getKeyFor(Key.CALC_METHOD, index), PrayTime.MWL);
+  }
+
+  public void setCalcMethodSetFor(int index, int value) {
+    set(getKeyFor(Key.CALC_METHOD, index), value);
+  }
+
+  public int getAsrMethodSetFor(int index) {
+    return getInt(String.format(Key.ASR_METHOD, index), PrayTime.SHAFII);
+  }
+
+  public int getHighLatitudeAdjustmentFor(int index) {
+    return getInt(getKeyFor(Key.ADJUST_METHOD, index), PrayTime.MID_NIGHT);
+  }
+
+  public int getTimeFormatFor(int index) {
+    return getInt(getKeyFor(Key.TIME_FORMAT, index), PrayTime.TIME_12);
+  }
+
+
 }

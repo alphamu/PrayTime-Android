@@ -8,6 +8,75 @@
 
     <include layout="@layout/view_card_title"/>
 
+    <TextView
+        style="@style/Widget.Explain.Separator"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/calc_method_explain"/>
+
+    <TextView
+        android:id="@+id/karachi"
+        style="@style/Widget.TimeRow.Separator"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:tag="1"
+        android:singleLine="true"
+        android:text="KARACHI - University of Islamic Sciences"/>
+
+    <TextView
+        android:id="@+id/isna"
+        style="@style/Widget.TimeRow.Separator"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:tag="2"
+        android:singleLine="true"
+        android:text="ISNA - Islamic Society of North America"/>
+
+    <TextView
+        android:id="@+id/mwl"
+        style="@style/Widget.TimeRow.Separator"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:tag="3"
+        android:singleLine="true"
+        android:text="MWL - Muslim World League"/>
+
+    <TextView
+        android:id="@+id/makkah"
+        style="@style/Widget.TimeRow.Separator"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:tag="4"
+        android:singleLine="true"
+        android:text="MAKKAH - Umm al-Qura"/>
+
+    <TextView
+        android:id="@+id/egypt"
+        style="@style/Widget.TimeRow.Separator"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:tag="5"
+        android:singleLine="true"
+        android:text="EGYPT - Egyptian General Authority of Survey"/>
+
+    <TextView
+        android:id="@+id/tehran"
+        style="@style/Widget.TimeRow.Separator"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:tag="6"
+        android:singleLine="true"
+        android:text="TEHRAN - Institute of Geophysics, University of Tehran"/>
+
+    <TextView
+        android:id="@+id/jafri"
+        style="@style/Widget.TimeRow.Separator"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:tag="0"
+        android:singleLine="true"
+        android:text="JAFARI - Ithna Ashari"/>
+
     <include layout="@layout/view_prev_next"/>
 
 </LinearLayout>

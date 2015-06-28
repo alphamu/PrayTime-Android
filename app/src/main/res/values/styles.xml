@@ -37,8 +37,8 @@
     <style name="Widget.CardTitle" parent="android:Widget">
         <item name="android:paddingLeft">16dp</item>
         <item name="android:paddingRight">16dp</item>
-        <item name="android:paddingTop">18dp</item>
-        <item name="android:paddingBottom">18dp</item>
+        <item name="android:paddingTop">12dp</item>
+        <item name="android:paddingBottom">12dp</item>
         <item name="android:orientation">horizontal</item>
         <item name="android:background">@drawable/bg_card_title</item>
     </style>
@@ -49,14 +49,22 @@
     </style>
 
     <style name="Widget.TimeRow" parent="android:Widget">
-        <item name="android:paddingTop">16dp</item>
-        <item name="android:paddingBottom">16dp</item>
+        <item name="android:paddingTop">12dp</item>
+        <item name="android:paddingBottom">12dp</item>
         <item name="android:paddingRight">8dp</item>
         <item name="android:paddingLeft">8dp</item>
+        <item name="android:textColor">@color/secondary_text_default_material_light</item>
     </style>
 
     <style name="Widget.TimeRow.Separator" parent="Widget.TimeRow">
         <item name="android:background">@drawable/bg_table_row</item>
     </style>
+
+    <style name="Widget.Explain.Separator" parent="Widget.TimeRow">
+        <item name="android:textColor">@color/material_blue_grey_800</item>
+        <item name="android:textSize">12sp</item>
+        <item name="android:background">@drawable/bg_table_row</item>
+    </style>
+
 
 </resources>

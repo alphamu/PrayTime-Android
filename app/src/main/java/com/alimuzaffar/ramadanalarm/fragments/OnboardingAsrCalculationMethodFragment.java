@@ -77,4 +77,8 @@ public class OnboardingAsrCalculationMethodFragment extends OnboardingBaseFragme
     mListener = null;
   }
 
+  @Override
+  public void onClick(View v) {
+
+  }
 }

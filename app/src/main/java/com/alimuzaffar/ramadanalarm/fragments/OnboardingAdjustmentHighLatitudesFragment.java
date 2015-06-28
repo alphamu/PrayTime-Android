@@ -76,4 +76,8 @@ public class OnboardingAdjustmentHighLatitudesFragment extends OnboardingBaseFra
     mListener = null;
   }
 
+  @Override
+  public void onClick(View v) {
+
+  }
 }
