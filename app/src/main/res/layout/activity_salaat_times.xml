@@ -20,7 +20,7 @@
             android:paddingRight="@dimen/activity_horizontal_margin"
             android:paddingTop="@dimen/activity_vertical_margin">
 
-            <include layout="@layout/prayer_times" />
+            <include layout="@layout/view_prayer_times" />
 
         </RelativeLayout>
 </LinearLayout>

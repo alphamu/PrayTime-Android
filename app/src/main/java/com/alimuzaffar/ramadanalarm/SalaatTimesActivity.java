@@ -56,7 +56,7 @@ public class SalaatTimesActivity extends AppCompatActivity implements View.OnCli
     // Then we'll need to do this for each card.
     // For now it's included in the layout which
     // makes it easier to work with the layout editor.
-    // inflater.inflate(R.layout.prayer_times, timesContainer, true);
+    // inflater.inflate(R.layout.view_prayer_times, timesContainer, true);
 
     //Toolbar will now take on default Action Bar characteristics
     LinkedHashMap<String, String> prayerTimes = PrayTime.getPrayerTimes(this);
@@ -146,7 +146,7 @@ public class SalaatTimesActivity extends AppCompatActivity implements View.OnCli
     } else if (v.getId() == mUseDefault.getId()) {
       mTimesContainer.removeAllViews();
       LayoutInflater inflater = LayoutInflater.from(this);
-      inflater.inflate(R.layout.prayer_times, mTimesContainer);
+      inflater.inflate(R.layout.view_prayer_times, mTimesContainer);
       init();
     }
   }

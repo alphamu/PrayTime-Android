@@ -28,6 +28,8 @@
         <item name="separatorColor">@color/separator</item>
         <item name="cardViewBackgroundColor">@color/cardview_light_background</item>
         <item name="buttonTextColor">@color/button_text_light</item>
+        <item name="cardTitleBackground">@drawable/bg_card_title_light</item>
+        <item name="rowWithSeparatorBackground">@drawable/bg_table_row_light</item>
     </style>
 
     <style name="Widget.CardContent" parent="android:Widget">
@@ -44,7 +46,7 @@
         <item name="android:paddingTop">12dp</item>
         <item name="android:paddingBottom">12dp</item>
         <item name="android:orientation">horizontal</item>
-        <item name="android:background">@drawable/bg_card_title</item>
+        <item name="android:background">?attr/cardTitleBackground</item>
     </style>
 
     <style name="Widget.CardTitle.Text" parent="android:Widget">
@@ -61,12 +63,12 @@
     </style>
 
     <style name="Widget.TimeRow.Separator" parent="Widget.TimeRow">
-        <item name="android:background">@drawable/bg_table_row</item>
+        <item name="android:background">?attr/rowWithSeparatorBackground</item>
     </style>
 
     <style name="Widget.Explain.Separator" parent="Widget.TimeRow">
         <item name="android:textSize">12sp</item>
-        <item name="android:background">@drawable/bg_table_row</item>
+        <item name="android:background">?attr/rowWithSeparatorBackground</item>
     </style>
 
     <style name="Widget.Button.NextPrev" parent="android:Widget">

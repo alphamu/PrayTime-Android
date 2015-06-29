@@ -39,6 +39,6 @@
         You can choose to use the default settings (don\'t worry you can change them later), or
         configure the Salaat times to your requirements below.
     </string>
-    <string name="button_configure_now">Configure settings now</string>
-    <string name="button_use_default">Use default settings</string>
+    <string name="button_configure_now">Configure settings now \u2192</string>
+    <string name="button_use_default">Use default settings \u2192</string>
 </resources>
