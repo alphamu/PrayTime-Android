@@ -41,4 +41,11 @@
     </string>
     <string name="button_configure_now">Configure settings now \u2192</string>
     <string name="button_use_default">Use default settings \u2192</string>
+    <string name="calc_method_karachi">KARACHI - University of Islamic Sciences</string>
+    <string name="calc_method_isna">ISNA - Islamic Society of North America</string>
+    <string name="calc_method_mwl">MWL - Muslim World League</string>
+    <string name="calc_method_makkah">MAKKAH - Umm al-Qura</string>
+    <string name="calc_method_egypt">EGYPT - Egyptian General Authority of Survey</string>
+    <string name="calc_method_tehran">TEHRAN - Institute of Geophysics, University of Tehran</string>
+    <string name="calc_method_jafari">JAFARI - Ithna Ashari</string>
 </resources>
