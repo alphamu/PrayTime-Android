@@ -70,7 +70,7 @@ public class OnboardingCalculationMethodFragment extends OnboardingBaseFragment 
     view.findViewById(R.id.next).setOnClickListener(this);
 
     if (mListener != null) {
-      ((AppCompatActivity) mListener).getSupportActionBar().setTitle("Configure Prayer Times");
+      ((AppCompatActivity) mListener).getSupportActionBar().setTitle(R.string.title_onboarding_calc_method);
     }
 
     TextView title = (TextView) view.findViewById(R.id.card_title);

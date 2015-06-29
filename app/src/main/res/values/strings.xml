@@ -4,6 +4,7 @@
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
 
+    <!-- Prayer time names -->
     <string name="fajr">Fajr</string>
     <string name="dhuhr">Dhuhr</string>
     <string name="asr">Asr</string>
@@ -15,21 +16,14 @@
     <string name="button_prev">\u2190 Previous</string>
     <string name="button_next">Next \u2192</string>
 
-    <string name="calc_method">Calculation Method</string>
-    <string name="calc_method_explain">
-        Please select the calculation method for Salaat in your area.
-        Muslim World League should work for most people.
-    </string>
-
     <string name="button_alarm_on">\u2192 Turn on alarm</string>
     <string name="button_alarm_off">\u2192 Turn off alarm</string>
     <plurals name="button_alarm">
         <item quantity="zero">@string/button_alarm_off</item>
         <item quantity="one">@string/button_alarm_on</item>
     </plurals>
-    <string name="title_activity_set_alarm">SetAlarmActivity</string>
-    <string name="title_activity_onboarding">OnboardingActivity</string>
 
+    <!-- Configure app screen -->
     <string name="config_title">Please take a moment to configure the Salaat times to your requirements.</string>
     <string name="explain_default_config">
         By default Salaat times are configured using Muslim World League calculation
@@ -39,6 +33,15 @@
         You can choose to use the default settings (don\'t worry you can change them later), or
         configure the Salaat times to your requirements below.
     </string>
+
+    <!-- Onboarding Calc method -->
+    <string name="calc_method">Calculation Method</string>
+    <string name="calc_method_explain">
+        Please select the calculation method for Salaat in your area.
+        Muslim World League should work for most people.
+    </string>
+
+    <string name="title_onboarding_calc_method">Configure Prayer Times</string>
     <string name="button_configure_now">Configure settings now \u2192</string>
     <string name="button_use_default">Use default settings \u2192</string>
     <string name="calc_method_karachi">KARACHI - University of Islamic Sciences</string>
@@ -48,4 +51,5 @@
     <string name="calc_method_egypt">EGYPT - Egyptian General Authority of Survey</string>
     <string name="calc_method_tehran">TEHRAN - Institute of Geophysics, University of Tehran</string>
     <string name="calc_method_jafari">JAFARI - Ithna Ashari</string>
+
 </resources>

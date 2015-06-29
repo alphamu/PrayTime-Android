@@ -18,7 +18,7 @@
         </activity>
         <activity
             android:name=".SetAlarmActivity"
-            android:label="@string/title_activity_set_alarm"
+            android:label=""
             android:parentActivityName=".SalaatTimesActivity" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
@@ -26,7 +26,7 @@
         </activity>
         <activity
             android:name=".OnboardingActivity"
-            android:label="@string/title_activity_onboarding" >
+            android:label="g" >
         </activity>
     </application>
 
