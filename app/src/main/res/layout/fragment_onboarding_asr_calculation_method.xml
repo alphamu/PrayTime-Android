@@ -1,13 +1,47 @@
-<LinearLayout
+<RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="380dp"
     android:orientation="vertical"
-    tools:context="com.alimuzaffar.ramadanalarm.fragments.OnboardingAsrCalculationMethodFragment">
+    tools:context=".fragments.OnboardingAsrCalculationMethodFragment">
 
-    <include layout="@layout/view_card_title"/>
+    <include
+        android:id="@+id/title"
+        layout="@layout/view_card_title"/>
 
-    <include layout="@layout/view_prev_next"/>
+    <TextView
+        android:id="@+id/explain"
+        style="@style/Widget.Explain.Separator"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/title"
+        android:text="@string/asr_method_explain"/>
 
-</LinearLayout>
+    <TextView
+        android:id="@+id/asr_shafii"
+        style="@style/Widget.TimeRow.Separator"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/explain"
+        android:singleLine="true"
+        android:tag="0"
+        android:text="@string/asr_method_shafii"/>
+
+    <TextView
+        android:id="@+id/asr_hanfi"
+        style="@style/Widget.TimeRow.Separator"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/asr_shafii"
+        android:singleLine="true"
+        android:tag="1"
+        android:text="@string/asr_method_hanfi"/>
+
+    <include
+        layout="@layout/view_prev_next"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"/>
+
+</RelativeLayout>

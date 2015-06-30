@@ -8,7 +8,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.alimuzaffar.ramadanalarm.AppSettings;
 import com.alimuzaffar.ramadanalarm.R;
@@ -124,7 +123,7 @@ public class OnboardingCalculationMethodFragment extends OnboardingBaseFragment 
     for (TextView t : options) {
       if (t.getId() == v.getId()) {
         AppSettings settings = AppSettings.getInstance(getActivity());
-        settings.setCalcMethodSetFor(mParam1, Integer.valueOf((String) t.getTag()));
+        settings.setCalcMethodFor(mParam1, Integer.valueOf((String) t.getTag()));
         t.setSelected(true);
         mListener.onOptionSelected();
       } else {

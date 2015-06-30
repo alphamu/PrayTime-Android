@@ -255,12 +255,16 @@ public class AppSettings {
     return getInt(getKeyFor(Key.CALC_METHOD, index), PrayTime.MWL);
   }
 
-  public void setCalcMethodSetFor(int index, int value) {
+  public void setCalcMethodFor(int index, int value) {
     set(getKeyFor(Key.CALC_METHOD, index), value);
   }
 
   public int getAsrMethodSetFor(int index) {
     return getInt(String.format(Key.ASR_METHOD, index), PrayTime.SHAFII);
+  }
+
+  public void setAsrMethodFor(int index, int value) {
+    set(getKeyFor(Key.ASR_METHOD, index), value);
   }
 
   public int getHighLatitudeAdjustmentFor(int index) {

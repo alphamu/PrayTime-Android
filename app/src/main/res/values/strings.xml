@@ -40,10 +40,16 @@
         Please select the calculation method for Salaat in your area.
         Muslim World League should work for most people.
     </string>
+    <string name="asr_method">Asr Juristic</string>
+    <string name="asr_method_explain">
+        Shafii is the standard most often used. Please select the method that best suits you.
+        If you are not sure, leave Shafii selected, you can always change it later.
+    </string>
 
     <string name="title_onboarding_calc_method">Configure Prayer Times</string>
     <string name="button_configure_now">Configure settings now \u2192</string>
     <string name="button_use_default">Use default settings \u2192</string>
+
     <string name="calc_method_karachi">KARACHI - University of Islamic Sciences</string>
     <string name="calc_method_isna">ISNA - Islamic Society of North America</string>
     <string name="calc_method_mwl">MWL - Muslim World League</string>
@@ -51,5 +57,8 @@
     <string name="calc_method_egypt">EGYPT - Egyptian General Authority of Survey</string>
     <string name="calc_method_tehran">TEHRAN - Institute of Geophysics, University of Tehran</string>
     <string name="calc_method_jafari">JAFARI - Ithna Ashari</string>
+
+    <string name="asr_method_shafii">Shafii (Standard)</string>
+    <string name="asr_method_hanfi">Hanfi</string>
 
 </resources>
