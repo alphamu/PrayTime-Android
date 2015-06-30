@@ -174,13 +174,13 @@
         </LinearLayout>
 
         <TextView
+            style="@style/Widget.Button.NextPrev"
             android:id="@+id/alarm"
             android:layout_width="match_parent"
             android:layout_height="48dp"
             android:gravity="center_vertical|end"
             android:paddingRight="@dimen/space"
-            android:text="@string/button_alarm_on"
-            android:textColor="@color/button_text_light"/>
+            android:text="@string/button_alarm_on"/>
     </LinearLayout>
     </ScrollView>
 
