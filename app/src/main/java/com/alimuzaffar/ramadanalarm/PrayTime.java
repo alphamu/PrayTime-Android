@@ -713,9 +713,9 @@ public class PrayTime {
 
   }
 
-  public static LinkedHashMap<String, String> getPrayerTimes(Context context) {
-    double latitude = -33.8736779;
-    double longitude = 151.196515;
+  public static LinkedHashMap<String, String> getPrayerTimes(Context context, double lat, double lng) {
+    double latitude = lat;
+    double longitude = lng;
 
     //Get NY time zone instance
     TimeZone defaultTz = TimeZone.getDefault();
