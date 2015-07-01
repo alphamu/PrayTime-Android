@@ -1,14 +1,9 @@
 package com.alimuzaffar.ramadanalarm;
 
-import android.app.Activity;
 import android.content.Intent;
-import android.content.IntentSender;
-import android.location.Location;
 import android.os.Bundle;
 import android.support.annotation.IdRes;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -16,37 +11,17 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.common.api.PendingResult;
-import com.google.android.gms.common.api.ResultCallback;
-import com.google.android.gms.common.api.Status;
-import com.google.android.gms.location.LocationListener;
-import com.google.android.gms.location.LocationRequest;
-import com.google.android.gms.location.LocationServices;
-import com.google.android.gms.location.LocationSettingsRequest;
-import com.google.android.gms.location.LocationSettingsResult;
-import com.google.android.gms.location.LocationSettingsStates;
-import com.google.android.gms.location.LocationSettingsStatusCodes;
-
 import java.util.LinkedHashMap;
 import java.util.TimeZone;
 
 
-public class SalaatTimesActivity extends AppCompatActivity implements
-    View.OnClickListener, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
+public class SalaatTimesActivity extends BaseActivity implements View.OnClickListener {
 
   public static final String EXTRA_ALARM_INDEX = "alarm_index";
-
-  public final int REQUEST_CHECK_SETTINGS = 101;
 
   ViewGroup mTimesContainer;
   TextView mConfigureNow;
   TextView mUseDefault;
-
-  GoogleApiClient mGoogleApiClient;
-  Location mLastLocation;
-  LocationRequest mLocationRequest;
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -81,7 +56,8 @@ public class SalaatTimesActivity extends AppCompatActivity implements
     }
   }
 
-  private void init() {
+  @Override
+  protected void init() {
     // In future releases we will add more cards.
     // Then we'll need to do this for each card.
     // For now it's included in the layout which
@@ -91,25 +67,25 @@ public class SalaatTimesActivity extends AppCompatActivity implements
     //Toolbar will now take on default Action Bar characteristics
     LinkedHashMap<String, String> prayerTimes = PrayTime.getPrayerTimes(this, mLastLocation.getLatitude(), mLastLocation.getLongitude());
 
-    TextView title = findView(R.id.card_title);
+    TextView title = (TextView) findViewById(R.id.card_title);
     title.setText(TimeZone.getDefault().getID());
 
-    TextView fajr = findView(R.id.fajr);
-    TextView dhuhr = findView(R.id.dhuhr);
-    TextView asr = findView(R.id.asr);
-    TextView maghrib = findView(R.id.maghrib);
-    TextView isha = findView(R.id.isha);
-    TextView sunrise = findView(R.id.sunrise);
-    TextView sunset = findView(R.id.sunset);
-    TextView alarm = findView(R.id.alarm);
+    TextView fajr = (TextView) findViewById(R.id.fajr);
+    TextView dhuhr = (TextView) findViewById(R.id.dhuhr);
+    TextView asr = (TextView) findViewById(R.id.asr);
+    TextView maghrib = (TextView) findViewById(R.id.maghrib);
+    TextView isha = (TextView) findViewById(R.id.isha);
+    TextView sunrise = (TextView) findViewById(R.id.sunrise);
+    TextView sunset = (TextView) findViewById(R.id.sunset);
+    TextView alarm = (TextView) findViewById(R.id.alarm);
 
-    fajr.setText(prayerTimes.get(fajr.getTag()));
-    dhuhr.setText(prayerTimes.get(dhuhr.getTag()));
-    asr.setText(prayerTimes.get(asr.getTag()));
-    maghrib.setText(prayerTimes.get(maghrib.getTag()));
-    isha.setText(prayerTimes.get(isha.getTag()));
-    sunrise.setText(prayerTimes.get(sunrise.getTag()));
-    sunset.setText(prayerTimes.get(sunset.getTag()));
+    fajr.setText(prayerTimes.get(String.valueOf(fajr.getTag())));
+    dhuhr.setText(prayerTimes.get(String.valueOf(dhuhr.getTag())));
+    asr.setText(prayerTimes.get(String.valueOf(asr.getTag())));
+    maghrib.setText(prayerTimes.get(String.valueOf(maghrib.getTag())));
+    isha.setText(prayerTimes.get(String.valueOf(isha.getTag())));
+    sunrise.setText(prayerTimes.get(String.valueOf(sunrise.getTag())));
+    sunset.setText(prayerTimes.get(String.valueOf(sunset.getTag())));
 
     //set text for the first card.
     setAlarmButtonText(alarm, 0);
@@ -137,10 +113,6 @@ public class SalaatTimesActivity extends AppCompatActivity implements
     }
 
     return super.onOptionsItemSelected(item);
-  }
-
-  <T extends View> T findView(@IdRes int resId) {
-    return (T) findViewById(resId);
   }
 
   private void setAlarmButtonText(TextView button, int index) {
@@ -178,7 +150,7 @@ public class SalaatTimesActivity extends AppCompatActivity implements
       mTimesContainer.removeAllViews();
       LayoutInflater inflater = LayoutInflater.from(this);
       inflater.inflate(R.layout.view_prayer_times, mTimesContainer);
-//      AppSettings.getInstance(this).set(AppSettings.Key.HAS_DEFAULT_SET, true);
+      AppSettings.getInstance(this).set(AppSettings.Key.HAS_DEFAULT_SET, true);
       if (mLastLocation != null) {
         init();
       }
@@ -191,119 +163,4 @@ public class SalaatTimesActivity extends AppCompatActivity implements
     startActivity(intent);
   }
 
-  protected void getLocation() {
-    mLastLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
-
-    if (mLastLocation == null) {
-      LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient, createLocationRequest(), new LocationListener() {
-        @Override
-        public void onLocationChanged(Location location) {
-          mLastLocation = location;
-          initAppAfterCheckingLocation();
-          LocationServices.FusedLocationApi.removeLocationUpdates(mGoogleApiClient, this);
-        }
-      });
-    } else if (mLastLocation != null) {
-      initAppAfterCheckingLocation();
-    }
-  }
-
-  protected void initAppAfterCheckingLocation() {
-    Log.d("SalaatTimesActivity", mLastLocation.getLatitude() + "," + mLastLocation.getLongitude());
-    if (AppSettings.getInstance(this).getBoolean(AppSettings.Key.HAS_DEFAULT_SET)) {
-      init();
-    }
-  }
-
-  protected synchronized void buildGoogleApiClient() {
-    mGoogleApiClient = new GoogleApiClient.Builder(this)
-        .addConnectionCallbacks(this)
-        .addOnConnectionFailedListener(this)
-        .addApi(LocationServices.API)
-        .build();
-
-    mGoogleApiClient.connect();
-  }
-
-  protected LocationRequest createLocationRequest() {
-    if (mLocationRequest == null) {
-      mLocationRequest = new LocationRequest();
-      mLocationRequest.setInterval(1000);
-      mLocationRequest.setFastestInterval(500);
-      mLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
-    }
-    return mLocationRequest;
-  }
-
-  protected void checkIfLocationServicesEnabled() {
-    LocationSettingsRequest.Builder builder = new LocationSettingsRequest.Builder()
-        .addLocationRequest(createLocationRequest());
-
-    PendingResult<LocationSettingsResult> result =
-        LocationServices.SettingsApi.checkLocationSettings(mGoogleApiClient, builder.build());
-
-    result.setResultCallback(new ResultCallback<LocationSettingsResult>() {
-      @Override
-      public void onResult(LocationSettingsResult result) {
-        final Status status = result.getStatus();
-        switch (status.getStatusCode()) {
-          case LocationSettingsStatusCodes.SUCCESS:
-            // All location settings are satisfied. The client can initialize location
-            // requests here.
-            getLocation();
-            break;
-          case LocationSettingsStatusCodes.RESOLUTION_REQUIRED:
-            // Location settings are not satisfied. But could be fixed by showing the user
-            // a dialog.
-            try {
-              // Show the dialog by calling startResolutionForResult(),
-              // and check the result in onActivityResult().
-              status.startResolutionForResult(SalaatTimesActivity.this, REQUEST_CHECK_SETTINGS);
-            } catch (IntentSender.SendIntentException e) {
-              // Ignore the error.
-            }
-            break;
-          case LocationSettingsStatusCodes.SETTINGS_CHANGE_UNAVAILABLE:
-            // Location settings are not satisfied. However, we have no way to fix the
-            // settings so we won't show the dialog.
-            break;
-        }
-      }
-    });
-  }
-
-  @Override
-  protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-    final LocationSettingsStates states = LocationSettingsStates.fromIntent(data);
-    switch (requestCode) {
-      case REQUEST_CHECK_SETTINGS:
-        switch (resultCode) {
-          case Activity.RESULT_OK:
-            // All required changes were successfully made
-            getLocation();
-            break;
-          case Activity.RESULT_CANCELED:
-            // The user was asked to change settings, but chose not to
-            break;
-          default:
-            break;
-        }
-        break;
-    }
-  }
-
-  @Override
-  public void onConnected(Bundle bundle) {
-      checkIfLocationServicesEnabled();
-  }
-
-  @Override
-  public void onConnectionSuspended(int i) {
-
-  }
-
-  @Override
-  public void onConnectionFailed(ConnectionResult connectionResult) {
-
-  }
 }
