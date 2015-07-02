@@ -1,27 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:layout_width="match_parent"
-              android:layout_height="match_parent"
-              android:orientation="horizontal">
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal">
 
     <TextView
         android:id="@+id/prev"
         style="@style/Widget.Button.NextPrev"
-        android:layout_width="0dp"
-        android:layout_height="48dp"
-        android:layout_weight="1"
-        android:gravity="center_vertical|start"
+        android:layout_width="wrap_content"
+        android:layout_alignParentLeft="true"
         android:paddingLeft="@dimen/space"
-        android:text="@string/button_prev"/>
+        android:text="@string/button_prev" />
 
     <TextView
         android:id="@+id/next"
         style="@style/Widget.Button.NextPrev"
-        android:layout_width="0dp"
-        android:layout_height="48dp"
-        android:layout_weight="1"
-        android:gravity="center_vertical|end"
-        android:paddingRight="@dimen/space"
-        android:text="@string/button_next"/>
+        android:layout_width="wrap_content"
+        android:layout_alignParentRight="true"
+        android:text="@string/button_next" />
 
-</LinearLayout>
+</RelativeLayout>

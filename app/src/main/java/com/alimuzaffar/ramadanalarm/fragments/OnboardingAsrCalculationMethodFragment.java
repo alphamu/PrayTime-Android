@@ -93,7 +93,7 @@ public class OnboardingAsrCalculationMethodFragment extends OnboardingBaseFragme
       mListener = (OnOnboardingOptionSelectedListener) activity;
     } catch (ClassCastException e) {
       throw new ClassCastException(activity.toString()
-          + " must implement OnFragmentInteractionListener");
+          + " must implement OnOnboardingOptionSelectedListener");
     }
   }
 

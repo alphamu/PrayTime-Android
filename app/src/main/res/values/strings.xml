@@ -15,6 +15,7 @@
 
     <string name="button_prev">\u2190 Previous</string>
     <string name="button_next">Next \u2192</string>
+    <string name="button_done">Done</string>
 
     <string name="button_alarm_on">\u2192 Turn on alarm</string>
     <string name="button_alarm_off">\u2192 Turn off alarm</string>
@@ -60,5 +61,19 @@
 
     <string name="asr_method_shafii">Shafii (Standard)</string>
     <string name="asr_method_hanfi">Hanfi</string>
+
+    <string name="time_title">Time format</string>
+    <string name="time_12">12 hours (Example: 01:00 pm)</string>
+    <string name="time_24">24 hours (Example: 13:00)</string>
+
+    <string name="high_latitude">High latitude adjustment</string>
+    <string name="high_latitude_explain">
+        For people living in higher latitudes, the prayer times can be incorrect.
+        If the prayer times seem incorrect, try changing this value.
+    </string>
+    <string name="high_lat_none">None</string>
+    <string name="high_lat_midnight">Midnight</string>
+    <string name="high_lat_one_seventh">One-seventh of night</string>
+    <string name="high_lat_angle_based">Angle based</string>
 
 </resources>

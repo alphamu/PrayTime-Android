@@ -1,13 +1,54 @@
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="@dimen/min_card_height"
     android:orientation="vertical"
-    tools:context="com.alimuzaffar.ramadanalarm.fragments.OnboardingAdjustmentHighLatitudesFragment">
+    tools:context=".fragments.OnboardingAdjustmentHighLatitudesFragment">
 
-    <include layout="@layout/view_card_title"/>
+    <include layout="@layout/view_card_title" />
 
-    <include layout="@layout/view_prev_next"/>
+    <TextView
+        android:id="@+id/explain"
+        style="@style/Widget.Explain.Separator"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/high_latitude_explain" />
+
+    <TextView
+        android:id="@+id/high_lat_none"
+        style="@style/Widget.Explain.Separator"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/high_lat_none" />
+
+    <TextView
+        android:id="@+id/high_lat_midnight"
+        style="@style/Widget.Explain.Separator"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/high_lat_midnight" />
+
+    <TextView
+        android:id="@+id/high_lat_one_seventh"
+        style="@style/Widget.Explain.Separator"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/high_lat_one_seventh" />
+
+    <TextView
+        android:id="@+id/high_lat_angle_based"
+        style="@style/Widget.Explain.Separator"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/high_lat_angle_based" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:gravity="bottom">
+
+        <include layout="@layout/view_prev_next" />
+    </LinearLayout>
 
 </LinearLayout>

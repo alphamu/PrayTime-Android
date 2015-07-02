@@ -87,6 +87,12 @@
 
     <style name="Widget.Button.NextPrev" parent="android:Widget">
         <item name="android:textColor">?attr/buttonTextColor</item>
+        <item name="android:padding">@dimen/space</item>
+        <item name="android:layout_height">@dimen/space_x5</item>
+        <item name="android:layout_width">@dimen/space_x6</item>
+        <item name="android:gravity">center</item>
+        <item name="android:background">@drawable/bg_button_background</item>
+        <item name="android:layout_margin">@dimen/space</item>
     </style>
 
     <style name="AppTheme.Toolbar" parent="ThemeOverlay.AppCompat.Dark.ActionBar">

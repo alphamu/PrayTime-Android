@@ -1,13 +1,37 @@
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="@dimen/min_card_height"
     android:orientation="vertical"
-    tools:context="com.alimuzaffar.ramadanalarm.fragments.OnboardingTimeFormatFragment">
+    tools:context=".fragments.OnboardingTimeFormatFragment">
 
-    <include layout="@layout/view_card_title"/>
+    <include layout="@layout/view_card_title" />
 
-    <include layout="@layout/view_prev_next"/>
+    <TextView
+        android:id="@+id/twelve"
+        style="@style/Widget.TimeRow.Separator"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:singleLine="true"
+        android:tag="1"
+        android:text="@string/time_12" />
+
+    <TextView
+        android:id="@+id/twenty_four"
+        style="@style/Widget.TimeRow.Separator"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:singleLine="true"
+        android:tag="0"
+        android:text="@string/time_24" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:gravity="bottom">
+
+        <include layout="@layout/view_prev_next" />
+    </LinearLayout>
 
 </LinearLayout>

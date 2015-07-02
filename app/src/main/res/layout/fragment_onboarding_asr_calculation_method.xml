@@ -1,47 +1,49 @@
-<RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="380dp"
+    android:layout_height="@dimen/min_card_height"
     android:orientation="vertical"
     tools:context=".fragments.OnboardingAsrCalculationMethodFragment">
 
     <include
         android:id="@+id/title"
-        layout="@layout/view_card_title"/>
+        layout="@layout/view_card_title" />
 
     <TextView
         android:id="@+id/explain"
         style="@style/Widget.Explain.Separator"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/title"
-        android:text="@string/asr_method_explain"/>
+        android:text="@string/asr_method_explain" />
 
     <TextView
         android:id="@+id/asr_shafii"
         style="@style/Widget.TimeRow.Separator"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/explain"
         android:singleLine="true"
         android:tag="0"
-        android:text="@string/asr_method_shafii"/>
+        android:text="@string/asr_method_shafii" />
 
     <TextView
         android:id="@+id/asr_hanfi"
         style="@style/Widget.TimeRow.Separator"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/asr_shafii"
         android:singleLine="true"
         android:tag="1"
-        android:text="@string/asr_method_hanfi"/>
+        android:text="@string/asr_method_hanfi" />
 
-    <include
-        layout="@layout/view_prev_next"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"/>
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:gravity="bottom">
 
-</RelativeLayout>
+        <include
+            layout="@layout/view_prev_next"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+    </LinearLayout>
+
+</LinearLayout>

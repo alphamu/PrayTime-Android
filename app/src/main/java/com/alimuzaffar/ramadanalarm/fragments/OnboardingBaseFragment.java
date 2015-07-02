@@ -10,7 +10,6 @@ import android.view.View;
  */
 public abstract class OnboardingBaseFragment extends Fragment implements View.OnClickListener {
 
-
   public OnboardingBaseFragment() {
     // Required empty public constructor
   }

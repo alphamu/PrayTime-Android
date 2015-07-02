@@ -6,7 +6,9 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
+import com.alimuzaffar.ramadanalarm.AppSettings;
 import com.alimuzaffar.ramadanalarm.R;
 
 /**
@@ -24,6 +26,8 @@ public class OnboardingAdjustmentHighLatitudesFragment extends OnboardingBaseFra
   private int mParam1 = 0;
 
   private OnOnboardingOptionSelectedListener mListener;
+
+  TextView [] views = new TextView[4];
 
   /**
    * Use this factory method to create a new instance of
@@ -56,7 +60,29 @@ public class OnboardingAdjustmentHighLatitudesFragment extends OnboardingBaseFra
   public View onCreateView(LayoutInflater inflater, ViewGroup container,
                            Bundle savedInstanceState) {
     // Inflate the layout for this fragment
-    return inflater.inflate(R.layout.fragment_onboarding_adjustment_high_latitudes, container, false);
+    View view = inflater.inflate(R.layout.fragment_onboarding_adjustment_high_latitudes, container, false);
+
+    view.findViewById(R.id.prev).setOnClickListener(this);
+    view.findViewById(R.id.next).setOnClickListener(this);
+
+    TextView title = (TextView) view.findViewById(R.id.card_title);
+    title.setText(R.string.high_latitude);
+
+    views[0] = (TextView) view.findViewById(R.id.high_lat_none);
+    views[1] = (TextView) view.findViewById(R.id.high_lat_midnight);
+    views[2] = (TextView) view.findViewById(R.id.high_lat_one_seventh);
+    views[3] = (TextView) view.findViewById(R.id.high_lat_angle_based);
+
+    AppSettings settings = AppSettings.getInstance(getActivity());
+    for (int i=0; i<views.length; i++) {
+      TextView tv = views[i];
+      tv.setOnClickListener(this);
+      if (settings.getHighLatitudeAdjustmentFor(mParam1) == i) {
+        tv.setSelected(true);
+      }
+    }
+
+    return view;
   }
 
   @Override
@@ -78,6 +104,18 @@ public class OnboardingAdjustmentHighLatitudesFragment extends OnboardingBaseFra
 
   @Override
   public void onClick(View v) {
+    if (v.getId() == R.id.next) {
+      mListener.onOptionSelected();
+
+    } else if (v.getId() == R.id.prev) {
+      getActivity().onBackPressed();
+
+    } else {
+      for (TextView tv : views) {
+        tv.setSelected(false);
+      }
+      v.setSelected(true);
+    }
 
   }
 }

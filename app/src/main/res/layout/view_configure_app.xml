@@ -38,16 +38,18 @@
                 android:id="@+id/configure_now"
                 style="@style/Widget.Button.NextPrev"
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/space_x6"
                 android:gravity="center_vertical"
+                android:layout_margin="0dp"
+                android:layout_marginTop="@dimen/space"
+                android:layout_marginBottom="@dimen/space"
                 android:text="@string/button_configure_now"/>
 
             <TextView
                 android:id="@+id/use_default"
                 style="@style/Widget.Button.NextPrev"
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/space_x6"
                 android:gravity="center_vertical"
+                android:layout_margin="0dp"
                 android:text="@string/button_use_default"/>
 
         </LinearLayout>

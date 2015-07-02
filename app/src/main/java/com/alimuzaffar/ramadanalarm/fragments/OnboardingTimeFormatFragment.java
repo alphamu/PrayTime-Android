@@ -6,7 +6,10 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
+import com.alimuzaffar.ramadanalarm.AppSettings;
+import com.alimuzaffar.ramadanalarm.PrayTime;
 import com.alimuzaffar.ramadanalarm.R;
 
 /**
@@ -21,16 +24,19 @@ public class OnboardingTimeFormatFragment extends OnboardingBaseFragment {
   // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
   private static final String ARG_PARAM1 = "param1";
 
-  private int mParam1;
+  private int mParam1 = 0;
 
-  private OnOnboardingOptionSelectedListener mListener;
+  protected OnOnboardingOptionSelectedListener mListener;
+
+  TextView m12h;
+  TextView m24h;
 
   /**
    * Use this factory method to create a new instance of
    * this fragment using the provided parameters.
    *
    * @param param1 Parameter 1.
-   * @return A new instance of fragment OnboardingTimeFormatFragment.
+   * @return A new instance of fragment OnboardingAsrCalculationMethod.
    */
   public static OnboardingTimeFormatFragment newInstance(int param1) {
     OnboardingTimeFormatFragment fragment = new OnboardingTimeFormatFragment();
@@ -57,8 +63,27 @@ public class OnboardingTimeFormatFragment extends OnboardingBaseFragment {
                            Bundle savedInstanceState) {
     // Inflate the layout for this fragment
     View view = inflater.inflate(R.layout.fragment_onboarding_time_format, container, false);
-    // should be the last, dont need this.
-    view.findViewById(R.id.next).setVisibility(View.INVISIBLE);
+
+    view.findViewById(R.id.prev).setOnClickListener(this);
+    TextView next = (TextView) view.findViewById(R.id.next);
+    next.setOnClickListener(this);
+    next.setText(R.string.button_done);
+
+    TextView title = (TextView) view.findViewById(R.id.card_title);
+    title.setText(R.string.time_title);
+
+    m12h = (TextView) view.findViewById(R.id.twelve);
+    m24h = (TextView) view.findViewById(R.id.twenty_four);
+    m12h.setOnClickListener(this);
+    m24h.setOnClickListener(this);
+
+    int method = AppSettings.getInstance(getActivity()).getAsrMethodSetFor(mParam1);
+    if (method == PrayTime.TIME_12) {
+      m12h.setSelected(true);
+    } else {
+      m24h.setSelected(true);
+    }
+
     return view;
   }
 
@@ -69,7 +94,7 @@ public class OnboardingTimeFormatFragment extends OnboardingBaseFragment {
       mListener = (OnOnboardingOptionSelectedListener) activity;
     } catch (ClassCastException e) {
       throw new ClassCastException(activity.toString()
-          + " must implement OnFragmentInteractionListener");
+              + " must implement OnOnboardingOptionSelectedListener");
     }
   }
 
@@ -81,6 +106,21 @@ public class OnboardingTimeFormatFragment extends OnboardingBaseFragment {
 
   @Override
   public void onClick(View v) {
-
+    AppSettings settings = AppSettings.getInstance(getActivity());
+    if (v.getId() == R.id.next) {
+      mListener.onOptionSelected();
+    } else if (v.getId() == R.id.prev) {
+      getActivity().onBackPressed();
+    } else if (v.getId() == m12h.getId()) {
+      m12h.setSelected(true);
+      m24h.setSelected(false);
+      settings.setTimeFormatFor(mParam1, PrayTime.SHAFII);
+      mListener.onOptionSelected();
+    } else if (v.getId() == m24h.getId()) {
+      m12h.setSelected(false);
+      m24h.setSelected(true);
+      settings.setTimeFormatFor(mParam1, PrayTime.HANAFI);
+      mListener.onOptionSelected();
+    }
   }
 }

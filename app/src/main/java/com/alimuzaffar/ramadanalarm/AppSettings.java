@@ -275,5 +275,9 @@ public class AppSettings {
     return getInt(getKeyFor(Key.TIME_FORMAT, index), PrayTime.TIME_12);
   }
 
+  public void setTimeFormatFor(int index, int format) {
+    set(getKeyFor(Key.TIME_FORMAT, index), format);
+  }
+
 
 }
