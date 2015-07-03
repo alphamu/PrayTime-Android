@@ -22,7 +22,7 @@ PLEASE DO NOT REMOVE THIS COPYRIGHT BLOCK.
 
 */
 
-package com.alimuzaffar.ramadanalarm;
+package com.alimuzaffar.ramadanalarm.utils;
 
 
 import android.content.Context;

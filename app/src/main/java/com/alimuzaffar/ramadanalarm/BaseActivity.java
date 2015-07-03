@@ -4,11 +4,13 @@ import android.Manifest;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.IntentSender;
+import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 
+import com.alimuzaffar.ramadanalarm.utils.PermissionUtil;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.PendingResult;
@@ -38,7 +40,7 @@ public abstract class BaseActivity extends AppCompatActivity implements
       initAppAfterCheckingLocation();
     } else {
       // UNCOMMENT TO SUPPORT ANDROID M RUNTIME PERMISSIONS
-      //requestPermissions(new String[]{Manifest.permission.ACCESS_COARSE_LOCATION}, REQUEST_LOCATION);
+      requestPermissions(new String[]{Manifest.permission.ACCESS_COARSE_LOCATION}, REQUEST_LOCATION);
     }
   }
 
@@ -175,7 +177,7 @@ public abstract class BaseActivity extends AppCompatActivity implements
   /**
    * Callback received when a permissions request has been completed.
    */
-/*
+
   // UNCOMMENT WHEN SUPPORTING ANDROID-M STYLE RUNTIME PERMISSIONS
   @Override
   public void onRequestPermissionsResult(int requestCode, String[] permissions,
@@ -193,7 +195,7 @@ public abstract class BaseActivity extends AppCompatActivity implements
       super.onRequestPermissionsResult(requestCode, permissions, grantResults);
     }
   }
-*/
+
 
   protected abstract void init();
 

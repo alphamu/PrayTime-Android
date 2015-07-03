@@ -54,8 +54,14 @@ public class OnboardingActivity extends AppCompatActivity implements OnOnboardin
 
   @Override
   public void onOptionSelected() {
-    if (mPager.getCurrentItem()+1 == mPagerAdapter.getCount()) {
-     AppSettings.getInstance(this).set(AppSettings.Key.HAS_DEFAULT_SET, true);
+    if (mPager.getCurrentItem() + 1 == mPagerAdapter.getCount()) {
+      AppSettings.getInstance(this).set(AppSettings.Key.HAS_DEFAULT_SET, true);
+      Intent data = new Intent();
+      if (getParent() == null) {
+        setResult(RESULT_OK, data);
+      } else {
+        getParent().setResult(RESULT_OK, data);
+      }
       finish();
     } else {
       mPager.setCurrentItem(mPager.getCurrentItem() + 1);

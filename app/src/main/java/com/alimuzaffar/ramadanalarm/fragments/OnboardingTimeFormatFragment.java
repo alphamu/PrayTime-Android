@@ -9,7 +9,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.alimuzaffar.ramadanalarm.AppSettings;
-import com.alimuzaffar.ramadanalarm.PrayTime;
+import com.alimuzaffar.ramadanalarm.utils.PrayTime;
 import com.alimuzaffar.ramadanalarm.R;
 
 /**

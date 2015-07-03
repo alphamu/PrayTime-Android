@@ -1,6 +1,7 @@
 package com.alimuzaffar.ramadanalarm;
 
 import android.content.Intent;
+import android.location.Location;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
@@ -9,6 +10,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+
+import com.alimuzaffar.ramadanalarm.utils.PrayTime;
 
 import java.util.LinkedHashMap;
 import java.util.TimeZone;
@@ -93,7 +96,6 @@ public class SalaatTimesActivity extends BaseActivity implements View.OnClickLis
   }
 
 
-
   @Override
   public boolean onCreateOptionsMenu(Menu menu) {
     // Inflate the menu; this adds items to the action bar if it is present.
@@ -169,7 +171,7 @@ public class SalaatTimesActivity extends BaseActivity implements View.OnClickLis
   protected void onActivityResult(int requestCode, int resultCode, Intent data) {
     if (requestCode == ONBOARDING_REQUEST) {
       if (resultCode == RESULT_OK) {
-
+        checkLocationPermissions();
       }
     } else {
       super.onActivityResult(requestCode, resultCode, data);

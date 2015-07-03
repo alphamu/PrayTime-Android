@@ -3,6 +3,8 @@ package com.alimuzaffar.ramadanalarm;
 import android.content.Context;
 import android.content.SharedPreferences;
 
+import com.alimuzaffar.ramadanalarm.utils.PrayTime;
+
 /*
  * A Singleton for managing your SharedPreferences.
  *
