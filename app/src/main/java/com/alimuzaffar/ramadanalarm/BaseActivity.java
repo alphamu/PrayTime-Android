@@ -1,10 +1,13 @@
 package com.alimuzaffar.ramadanalarm;
 
+import android.Manifest;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.IntentSender;
+import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 
@@ -24,14 +27,55 @@ import com.google.android.gms.location.LocationSettingsStatusCodes;
 public abstract class BaseActivity extends AppCompatActivity implements
     GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
 
+
   public final int REQUEST_CHECK_SETTINGS = 101;
+  public final int REQUEST_LOCATION = 103;
 
   GoogleApiClient mGoogleApiClient;
   Location mLastLocation;
-  LocationRequest mLocationRequest;
+  LocationRequest mCoarseLocationRequest;
 
-  protected void getLocation() {
-    mLastLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
+  protected void checkLocationPermissions() {
+    if (PermissionUtil.hasSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION)) {
+      initAppAfterCheckingLocation();
+    } else {
+      /*
+      // UNCOMMENT TO SUPPORT ANDROID M RUNTIME PERMISSIONS
+      requestPermissions(new String[]{Manifest.permission.ACCESS_COARSE_LOCATION}, REQUEST_LOCATION);
+      */
+    }
+  }
+
+  private void initAppAfterCheckingLocation() {
+    if (mGoogleApiClient == null) {
+      buildGoogleApiClient();
+    } else if (mLastLocation == null && mGoogleApiClient.isConnected()) {
+      // check for a location.
+      checkLocationAndInit();
+    } else if (mLastLocation == null && mGoogleApiClient.isConnecting()) {
+      // need to wait, this method will be called again after onConnect.
+    } else {
+      Log.d("SalaatTimesActivity", mLastLocation.getLatitude() + "," + mLastLocation.getLongitude());
+      if (AppSettings.getInstance(this).getBoolean(AppSettings.Key.HAS_DEFAULT_SET)) {
+        init();
+      }
+    }
+  }
+
+  private synchronized void buildGoogleApiClient() {
+    mGoogleApiClient = new GoogleApiClient.Builder(this)
+            .addConnectionCallbacks(this)
+            .addOnConnectionFailedListener(this)
+            .addApi(LocationServices.API)
+            .build();
+
+    mGoogleApiClient.connect();
+  }
+
+  private void checkLocationAndInit() {
+    if (mLastLocation == null) {
+      mLastLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
+    }
 
     if (mLastLocation == null) {
       LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient, createLocationRequest(), new LocationListener() {
@@ -47,34 +91,18 @@ public abstract class BaseActivity extends AppCompatActivity implements
     }
   }
 
-  protected void initAppAfterCheckingLocation() {
-    Log.d("SalaatTimesActivity", mLastLocation.getLatitude() + "," + mLastLocation.getLongitude());
-    if (AppSettings.getInstance(this).getBoolean(AppSettings.Key.HAS_DEFAULT_SET)) {
-      init();
+  private LocationRequest createLocationRequest() {
+    if (mCoarseLocationRequest == null) {
+      mCoarseLocationRequest = new LocationRequest();
+      mCoarseLocationRequest.setInterval(10000);
+      mCoarseLocationRequest.setFastestInterval(1000);
+      mCoarseLocationRequest.setNumUpdates(1);
+      mCoarseLocationRequest.setPriority(LocationRequest.PRIORITY_BALANCED_POWER_ACCURACY);
     }
+    return mCoarseLocationRequest;
   }
 
-  protected synchronized void buildGoogleApiClient() {
-    mGoogleApiClient = new GoogleApiClient.Builder(this)
-        .addConnectionCallbacks(this)
-        .addOnConnectionFailedListener(this)
-        .addApi(LocationServices.API)
-        .build();
-
-    mGoogleApiClient.connect();
-  }
-
-  protected LocationRequest createLocationRequest() {
-    if (mLocationRequest == null) {
-      mLocationRequest = new LocationRequest();
-      mLocationRequest.setInterval(1000);
-      mLocationRequest.setFastestInterval(500);
-      mLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
-    }
-    return mLocationRequest;
-  }
-
-  protected void checkIfLocationServicesEnabled() {
+  private void checkIfLocationServicesEnabled() {
     LocationSettingsRequest.Builder builder = new LocationSettingsRequest.Builder()
         .addLocationRequest(createLocationRequest());
 
@@ -89,7 +117,7 @@ public abstract class BaseActivity extends AppCompatActivity implements
           case LocationSettingsStatusCodes.SUCCESS:
             // All location settings are satisfied. The client can initialize location
             // requests here.
-            getLocation();
+            checkLocationAndInit();
             break;
           case LocationSettingsStatusCodes.RESOLUTION_REQUIRED:
             // Location settings are not satisfied. But could be fixed by showing the user
@@ -119,7 +147,7 @@ public abstract class BaseActivity extends AppCompatActivity implements
         switch (resultCode) {
           case Activity.RESULT_OK:
             // All required changes were successfully made
-            getLocation();
+            checkLocationAndInit();
             break;
           case Activity.RESULT_CANCELED:
             // The user was asked to change settings, but chose not to
@@ -145,6 +173,28 @@ public abstract class BaseActivity extends AppCompatActivity implements
   public void onConnectionFailed(ConnectionResult connectionResult) {
 
   }
+
+  /**
+   * Callback received when a permissions request has been completed.
+   */
+  /*
+  // UNCOMMENT WHEN SUPPORTING ANDROID-M STYLE RUNTIME PERMISSIONS
+  @Override
+  public void onRequestPermissionsResult(int requestCode, String[] permissions,
+                                         int[] grantResults) {
+
+    if (requestCode == REQUEST_LOCATION) {
+      if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+        checkLocationPermissions();
+      } else {
+        Log.i("BaseActivity", "LOCATION permission was NOT granted.");
+      }
+
+    }  else {
+      super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+    }
+  }
+  */
 
   protected abstract void init();
 }

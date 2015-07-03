@@ -54,7 +54,12 @@ public class OnboardingActivity extends AppCompatActivity implements OnOnboardin
 
   @Override
   public void onOptionSelected() {
-    mPager.setCurrentItem(mPager.getCurrentItem()+1);
+    if (mPager.getCurrentItem()+1 == mPagerAdapter.getCount()) {
+     AppSettings.getInstance(this).set(AppSettings.Key.HAS_DEFAULT_SET, true);
+      finish();
+    } else {
+      mPager.setCurrentItem(mPager.getCurrentItem() + 1);
+    }
   }
 
   private class ScreenSlidePagerAdapter extends FragmentStatePagerAdapter {

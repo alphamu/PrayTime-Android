@@ -2,7 +2,6 @@ package com.alimuzaffar.ramadanalarm;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.IdRes;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -18,6 +17,7 @@ import java.util.TimeZone;
 public class SalaatTimesActivity extends BaseActivity implements View.OnClickListener {
 
   public static final String EXTRA_ALARM_INDEX = "alarm_index";
+  public static final int ONBOARDING_REQUEST = 102;
 
   ViewGroup mTimesContainer;
   TextView mConfigureNow;
@@ -49,10 +49,8 @@ public class SalaatTimesActivity extends BaseActivity implements View.OnClickLis
   protected void onResume() {
     super.onResume();
 
-    if (mGoogleApiClient == null) {
-      buildGoogleApiClient();
-    } else if (mLastLocation == null) {
-      checkIfLocationServicesEnabled();
+    if (mLastLocation == null) {
+      checkLocationPermissions();
     }
   }
 
@@ -160,7 +158,17 @@ public class SalaatTimesActivity extends BaseActivity implements View.OnClickLis
   private void startOnboardingFor(int index) {
     Intent intent = new Intent(getApplicationContext(), OnboardingActivity.class);
     intent.putExtra(OnboardingActivity.EXTRA_CARD_INDEX, index);
-    startActivity(intent);
+    startActivityForResult(intent, ONBOARDING_REQUEST);
   }
 
+  @Override
+  protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+    if (requestCode == ONBOARDING_REQUEST) {
+      if (resultCode == RESULT_OK) {
+
+      }
+    } else {
+      super.onActivityResult(requestCode, resultCode, data);
+    }
+  }
 }
