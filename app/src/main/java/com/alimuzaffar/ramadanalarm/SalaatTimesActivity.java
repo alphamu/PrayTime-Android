@@ -2,6 +2,7 @@ package com.alimuzaffar.ramadanalarm;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -22,6 +23,8 @@ public class SalaatTimesActivity extends BaseActivity implements View.OnClickLis
   ViewGroup mTimesContainer;
   TextView mConfigureNow;
   TextView mUseDefault;
+
+  int settingsRetries = 0;
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -89,6 +92,8 @@ public class SalaatTimesActivity extends BaseActivity implements View.OnClickLis
     setAlarmButtonText(alarm, 0);
     setAlarmButtonClickListener(alarm, 0);
   }
+
+
 
   @Override
   public boolean onCreateOptionsMenu(Menu menu) {
@@ -169,6 +174,22 @@ public class SalaatTimesActivity extends BaseActivity implements View.OnClickLis
       }
     } else {
       super.onActivityResult(requestCode, resultCode, data);
+    }
+  }
+
+  @Override
+  protected void locationPermissionFailed() {
+    settingsRetries++;
+    if (settingsRetries >= 3) {
+      finish();
+    }
+  }
+
+  @Override
+  protected void locationSettingsFailed() {
+    settingsRetries++;
+    if (settingsRetries >= 3) {
+      finish();
     }
   }
 }

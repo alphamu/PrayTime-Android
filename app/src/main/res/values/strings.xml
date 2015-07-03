@@ -76,4 +76,19 @@
     <string name="high_lat_one_seventh">One-seventh of night</string>
     <string name="high_lat_angle_based">Angle based</string>
 
+    <!-- SNACK BAR -->
+    <string name="button_okay">Okay</string>
+    <string name="button_retry">Retry</string>
+
+    <!-- ERRORS -->
+    <string name="error_permission_location">
+        Your location is used to calculate Salaat times.\n
+        Click \'Okay\' to grant permission to access your location.
+    </string>
+
+    <string name="error_setting_location">
+        Your location in GPS coordinates is used to calculate Salaat times.\n
+        Without this, Salaat times will not be visible.
+    </string>
+
 </resources>

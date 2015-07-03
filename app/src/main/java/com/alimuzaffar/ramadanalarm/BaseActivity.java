@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.View;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -39,10 +40,8 @@ public abstract class BaseActivity extends AppCompatActivity implements
     if (PermissionUtil.hasSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION)) {
       initAppAfterCheckingLocation();
     } else {
-      /*
       // UNCOMMENT TO SUPPORT ANDROID M RUNTIME PERMISSIONS
-      requestPermissions(new String[]{Manifest.permission.ACCESS_COARSE_LOCATION}, REQUEST_LOCATION);
-      */
+      //requestPermissions(new String[]{Manifest.permission.ACCESS_COARSE_LOCATION}, REQUEST_LOCATION);
     }
   }
 
@@ -51,7 +50,7 @@ public abstract class BaseActivity extends AppCompatActivity implements
       buildGoogleApiClient();
     } else if (mLastLocation == null && mGoogleApiClient.isConnected()) {
       // check for a location.
-      checkLocationAndInit();
+      checkIfLocationServicesEnabled();
     } else if (mLastLocation == null && mGoogleApiClient.isConnecting()) {
       // need to wait, this method will be called again after onConnect.
     } else {
@@ -151,8 +150,10 @@ public abstract class BaseActivity extends AppCompatActivity implements
             break;
           case Activity.RESULT_CANCELED:
             // The user was asked to change settings, but chose not to
+            locationSettingsFailed();
             break;
           default:
+            locationSettingsFailed();
             break;
         }
         break;
@@ -177,7 +178,7 @@ public abstract class BaseActivity extends AppCompatActivity implements
   /**
    * Callback received when a permissions request has been completed.
    */
-  /*
+/*
   // UNCOMMENT WHEN SUPPORTING ANDROID-M STYLE RUNTIME PERMISSIONS
   @Override
   public void onRequestPermissionsResult(int requestCode, String[] permissions,
@@ -188,13 +189,18 @@ public abstract class BaseActivity extends AppCompatActivity implements
         checkLocationPermissions();
       } else {
         Log.i("BaseActivity", "LOCATION permission was NOT granted.");
+        locationPermissionFailed();
       }
 
-    }  else {
+    } else {
       super.onRequestPermissionsResult(requestCode, permissions, grantResults);
     }
   }
-  */
+*/
 
   protected abstract void init();
+
+  protected abstract void locationPermissionFailed();
+
+  protected abstract void locationSettingsFailed();
 }
