@@ -76,6 +76,24 @@
         <item name="android:textColor">?android:attr/textColorSecondary</item>
     </style>
 
+    <style name="Widget.TimeCol" parent="android:Widget">
+        <item name="android:paddingTop">@dimen/space_x2</item>
+        <item name="android:gravity">center_horizontal</item>
+        <item name="android:textColor">?android:attr/textColorSecondary</item>
+    </style>
+
+    <style name="Widget.TimeCol.Title" parent="android:Widget">
+        <item name="android:textSize">12sp</item>
+        <item name="android:textAllCaps">true</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:layout_marginBottom">@dimen/space</item>
+    </style>
+
+    <style name="Widget.TimeCol.Body" parent="android:Widget">
+        <item name="android:textSize">12sp</item>
+        <item name="android:textColor">?android:attr/textColorSecondary</item>
+    </style>
+
     <style name="Widget.TimeRow.Separator" parent="Widget.TimeRow">
         <item name="android:background">?attr/rowWithSeparatorBackground</item>
     </style>

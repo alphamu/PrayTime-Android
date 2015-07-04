@@ -453,9 +453,9 @@ public class PrayTime {
     double minutes = Math.floor((time - hours) * 60.0);
 
     if ((hours >= 0 && hours <= 9) && (minutes >= 0 && minutes <= 9)) {
-      result = "0" + hours + ":0" + Math.round(minutes);
+      result = hours + ":0" + Math.round(minutes);
     } else if ((hours >= 0 && hours <= 9)) {
-      result = "0" + hours + ":" + Math.round(minutes);
+      result = hours + ":" + Math.round(minutes);
     } else if ((minutes >= 0 && minutes <= 9)) {
       result = hours + ":0" + Math.round(minutes);
     } else {
@@ -486,10 +486,10 @@ public class PrayTime {
         hrs += 1;*/
     if (noSuffix == false) {
       if ((hours >= 0 && hours <= 9) && (minutes >= 0 && minutes <= 9)) {
-        result = "0" + hours + ":0" + Math.round(minutes) + " "
+        result = hours + ":0" + Math.round(minutes) + " "
             + suffix;
       } else if ((hours >= 0 && hours <= 9)) {
-        result = "0" + hours + ":" + Math.round(minutes) + " " + suffix;
+        result = hours + ":" + Math.round(minutes) + " " + suffix;
       } else if ((minutes >= 0 && minutes <= 9)) {
         result = hours + ":0" + Math.round(minutes) + " " + suffix;
       } else {
@@ -498,9 +498,9 @@ public class PrayTime {
 
     } else {
       if ((hours >= 0 && hours <= 9) && (minutes >= 0 && minutes <= 9)) {
-        result = "0" + hours + ":0" + Math.round(minutes);
+        result = hours + ":0" + Math.round(minutes);
       } else if ((hours >= 0 && hours <= 9)) {
-        result = "0" + hours + ":" + Math.round(minutes);
+        result = hours + ":" + Math.round(minutes);
       } else if ((minutes >= 0 && minutes <= 9)) {
         result = hours + ":0" + Math.round(minutes);
       } else {

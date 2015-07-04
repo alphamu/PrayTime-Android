@@ -8,6 +8,7 @@
     <dimen name="space_x5">40dp</dimen>
     <dimen name="space_x6">48dp</dimen>
     <dimen name="min_card_height">384dp</dimen>
+    <dimen name="card_width">320dp</dimen>
     <dimen name="activity_horizontal_margin">@dimen/space</dimen>
     <dimen name="activity_vertical_margin">@dimen/space</dimen>
 </resources>
