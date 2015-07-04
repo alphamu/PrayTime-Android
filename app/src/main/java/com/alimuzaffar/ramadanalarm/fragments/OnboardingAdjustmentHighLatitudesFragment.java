@@ -111,10 +111,16 @@ public class OnboardingAdjustmentHighLatitudesFragment extends OnboardingBaseFra
       getActivity().onBackPressed();
 
     } else {
-      for (TextView tv : views) {
-        tv.setSelected(false);
+      for (int i=0; i < views.length; i++) {
+        TextView tv = views[i];
+        if (tv.getId() == v.getId()) {
+          tv.setSelected(true);
+          AppSettings.getInstance(getActivity()).setHighLatitudeAdjustmentMethodFor(mParam1, i);
+        } else {
+          tv.setSelected(false);
+        }
       }
-      v.setSelected(true);
+      mListener.onOptionSelected();
     }
 
   }

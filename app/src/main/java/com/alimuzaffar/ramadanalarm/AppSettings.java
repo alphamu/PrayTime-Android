@@ -270,7 +270,11 @@ public class AppSettings {
   }
 
   public int getHighLatitudeAdjustmentFor(int index) {
-    return getInt(getKeyFor(Key.ADJUST_METHOD, index), PrayTime.MID_NIGHT);
+    return getInt(getKeyFor(Key.ADJUST_METHOD, index), PrayTime.NONE);
+  }
+
+  public void setHighLatitudeAdjustmentMethodFor(int index, int value) {
+    set(getKeyFor(Key.ADJUST_METHOD, index), value);
   }
 
   public int getTimeFormatFor(int index) {

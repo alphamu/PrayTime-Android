@@ -77,7 +77,7 @@ public class OnboardingTimeFormatFragment extends OnboardingBaseFragment {
     m12h.setOnClickListener(this);
     m24h.setOnClickListener(this);
 
-    int method = AppSettings.getInstance(getActivity()).getAsrMethodSetFor(mParam1);
+    int method = AppSettings.getInstance(getActivity()).getTimeFormatFor(mParam1);
     if (method == PrayTime.TIME_12) {
       m12h.setSelected(true);
     } else {
@@ -114,12 +114,12 @@ public class OnboardingTimeFormatFragment extends OnboardingBaseFragment {
     } else if (v.getId() == m12h.getId()) {
       m12h.setSelected(true);
       m24h.setSelected(false);
-      settings.setTimeFormatFor(mParam1, PrayTime.SHAFII);
+      settings.setTimeFormatFor(mParam1, PrayTime.TIME_12);
       mListener.onOptionSelected();
     } else if (v.getId() == m24h.getId()) {
       m12h.setSelected(false);
       m24h.setSelected(true);
-      settings.setTimeFormatFor(mParam1, PrayTime.HANAFI);
+      settings.setTimeFormatFor(mParam1, PrayTime.TIME_24);
       mListener.onOptionSelected();
     }
   }

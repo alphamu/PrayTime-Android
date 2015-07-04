@@ -1,9 +1,12 @@
 package com.alimuzaffar.ramadanalarm;
 
+import android.app.Activity;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -11,22 +14,23 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.alimuzaffar.ramadanalarm.fragments.LocationHelper;
 import com.alimuzaffar.ramadanalarm.utils.PrayTime;
 
 import java.util.LinkedHashMap;
 import java.util.TimeZone;
 
 
-public class SalaatTimesActivity extends BaseActivity implements View.OnClickListener {
-
-  public static final String EXTRA_ALARM_INDEX = "alarm_index";
-  public static final int ONBOARDING_REQUEST = 102;
+public class SalaatTimesActivity extends BaseActivity implements Constants, View.OnClickListener {
 
   ViewGroup mTimesContainer;
   TextView mConfigureNow;
   TextView mUseDefault;
 
   int settingsRetries = 0;
+
+  private LocationHelper mLocationHelper;
+  private Location mLastLocation = null;
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -48,18 +52,34 @@ public class SalaatTimesActivity extends BaseActivity implements View.OnClickLis
       mConfigureNow.setOnClickListener(this);
       mUseDefault.setOnClickListener(this);
     }
+
+    mLocationHelper =
+        (LocationHelper) getSupportFragmentManager().findFragmentByTag("location_fragment");
+
+    if(mLocationHelper == null) {
+      mLocationHelper = new LocationHelper();
+      getSupportFragmentManager().beginTransaction()
+          .add(mLocationHelper, "location_fragment").commit();
+    }
   }
 
   @Override
   protected void onResume() {
     super.onResume();
-
+/*    if (BuildConfig.DEBUG) {
+      double latitude = -33.8736779;
+      double longitude = 151.196515;
+      mLastLocation = new Location("gps");
+      mLastLocation.setLatitude(latitude);
+      mLastLocation.setLongitude(longitude);
+      init();
+    }
+*/
     if (mLastLocation == null) {
-      checkLocationPermissions();
+      fetchLocation();
     }
   }
 
-  @Override
   protected void init() {
     // In future releases we will add more cards.
     // Then we'll need to do this for each card.
@@ -169,28 +189,71 @@ public class SalaatTimesActivity extends BaseActivity implements View.OnClickLis
 
   @Override
   protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-    if (requestCode == ONBOARDING_REQUEST) {
+    if (requestCode == REQUEST_CHECK_SETTINGS) {
+      switch (resultCode) {
+        case Activity.RESULT_OK:
+          // All required changes were successfully made
+          fetchLocation();
+          break;
+        case Activity.RESULT_CANCELED:
+          // The user was asked to change settings, but chose not to
+          onLocationSettingsFailed();
+          break;
+        default:
+          onLocationSettingsFailed();
+          break;
+      }
+    } else if (requestCode == ONBOARDING_REQUEST) {
       if (resultCode == RESULT_OK) {
-        checkLocationPermissions();
+        mUseDefault.performClick();
       }
     } else {
       super.onActivityResult(requestCode, resultCode, data);
     }
   }
 
+  /**
+   * Callback received when a permissions request has been completed.
+   */
+  // UNCOMMENT WHEN SUPPORTING ANDROID-M STYLE RUNTIME PERMISSIONS
   @Override
-  protected void locationPermissionFailed() {
-    settingsRetries++;
-    if (settingsRetries >= 3) {
-      finish();
+  public void onRequestPermissionsResult(int requestCode, String[] permissions,
+                                         int[] grantResults) {
+
+    if (requestCode == REQUEST_LOCATION) {
+      if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+        fetchLocation();
+      } else {
+        Log.i("BaseActivity", "LOCATION permission was NOT granted.");
+        onLocationPermissionFailed();
+      }
+
+    } else {
+      super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+    }
+  }
+
+  private void fetchLocation() {
+    if (mLocationHelper != null) {
+      mLocationHelper.checkLocationPermissions();
     }
   }
 
   @Override
-  protected void locationSettingsFailed() {
-    settingsRetries++;
-    if (settingsRetries >= 3) {
-      finish();
+  public void onLocationPermissionFailed() {
+
+  }
+
+  @Override
+  public void onLocationSettingsFailed() {
+
+  }
+
+  @Override
+  public void onLocationChanged(Location location) {
+    mLastLocation = location;
+    if (AppSettings.getInstance(this).getBoolean(AppSettings.Key.HAS_DEFAULT_SET)) {
+      init();
     }
   }
 }
