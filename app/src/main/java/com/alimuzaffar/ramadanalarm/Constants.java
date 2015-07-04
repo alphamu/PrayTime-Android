@@ -1,9 +1,17 @@
 package com.alimuzaffar.ramadanalarm;
 
 public interface Constants {
+  // REQUEST CODES
   int REQUEST_CHECK_SETTINGS = 101;
+  int REQUEST_ONBOARDING = 102;
   int REQUEST_LOCATION = 103;
 
+  //EXTRAS
   String EXTRA_ALARM_INDEX = "alarm_index";
-  int ONBOARDING_REQUEST = 102;
+  String EXTRA_LAST_LOCATION = "last_location";
+
+  String CONTENT_FRAGMENT = "content_fragment";
+  String TIMES_FRAGMENT = "times_fragment";
+  String CONFIG_FRAGMENT = "config_fragment";
+  String LOCATION_FRAGMENT = "location_fragment";
 }

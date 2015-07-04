@@ -93,6 +93,9 @@
         <item name="android:gravity">center</item>
         <item name="android:background">@drawable/bg_button_background</item>
         <item name="android:layout_margin">@dimen/space</item>
+        <item name="android:textAllCaps">true</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textSize">12sp</item>
     </style>
 
     <style name="AppTheme.Toolbar" parent="ThemeOverlay.AppCompat.Dark.ActionBar">

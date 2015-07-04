@@ -19,8 +19,8 @@
         style="@style/Widget.TimeRow.Separator"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:tag="1"
         android:singleLine="true"
+        android:tag="1"
         android:text="@string/calc_method_karachi"/>
 
     <TextView
@@ -28,8 +28,8 @@
         style="@style/Widget.TimeRow.Separator"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:tag="2"
         android:singleLine="true"
+        android:tag="2"
         android:text="@string/calc_method_isna"/>
 
     <TextView
@@ -37,8 +37,8 @@
         style="@style/Widget.TimeRow.Separator"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:tag="3"
         android:singleLine="true"
+        android:tag="3"
         android:text="@string/calc_method_mwl"/>
 
     <TextView
@@ -46,8 +46,8 @@
         style="@style/Widget.TimeRow.Separator"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:tag="4"
         android:singleLine="true"
+        android:tag="4"
         android:text="@string/calc_method_makkah"/>
 
     <TextView
@@ -55,8 +55,8 @@
         style="@style/Widget.TimeRow.Separator"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:tag="5"
         android:singleLine="true"
+        android:tag="5"
         android:text="@string/calc_method_egypt"/>
 
     <TextView
@@ -64,8 +64,8 @@
         style="@style/Widget.TimeRow.Separator"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:tag="6"
         android:singleLine="true"
+        android:tag="6"
         android:text="@string/calc_method_tehran"/>
 
     <TextView
@@ -73,10 +73,17 @@
         style="@style/Widget.TimeRow.Separator"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:tag="0"
         android:singleLine="true"
+        android:tag="0"
         android:text="@string/calc_method_jafari"/>
 
-    <include layout="@layout/view_prev_next"/>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:gravity="bottom">
+
+        <include layout="@layout/view_prev_next"/>
+    </LinearLayout>
 
 </LinearLayout>

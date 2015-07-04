@@ -2,7 +2,7 @@
 <selector xmlns:android="http://schemas.android.com/apk/res/android">
     <item android:color="@color/teal_separator" android:state_pressed="true">
         <shape android:shape="rectangle">
-            <corners android:radius="@dimen/space" />
+            <corners android:radius="@dimen/space_half" />
             <solid android:color="@color/teal_separator" />
         </shape>
     </item>

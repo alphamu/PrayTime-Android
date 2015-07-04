@@ -27,6 +27,8 @@ package com.alimuzaffar.ramadanalarm.utils;
 
 import android.content.Context;
 
+import com.alimuzaffar.ramadanalarm.AppSettings;
+
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -713,7 +715,8 @@ public class PrayTime {
 
   }
 
-  public static LinkedHashMap<String, String> getPrayerTimes(Context context, double lat, double lng) {
+  public static LinkedHashMap<String, String> getPrayerTimes(Context context, int index, double lat, double lng) {
+    AppSettings settings = AppSettings.getInstance(context);
     double latitude = lat;
     double longitude = lng;
 
@@ -729,10 +732,10 @@ public class PrayTime {
     // Test Prayer times here
     PrayTime prayers = new PrayTime();
 
-    prayers.setTimeFormat(prayers.TIME_12);
-    prayers.setCalcMethod(prayers.MWL);
-    prayers.setAsrJuristic(prayers.SHAFII);
-    prayers.setAdjustHighLats(prayers.ANGLE_BASED);
+    prayers.setTimeFormat(settings.getTimeFormatFor(index));
+    prayers.setCalcMethod(settings.getCalcMethodSetFor(index));
+    prayers.setAsrJuristic(settings.getAsrMethodSetFor(index));
+    prayers.setAdjustHighLats(settings.getHighLatitudeAdjustmentFor(index));
 
     int[] offsets = {0, 0, 0, 0, 0, 0, 0}; // {Fajr,Sunrise,Dhuhr,Asr,Sunset,Maghrib,Isha}
     prayers.tune(offsets);

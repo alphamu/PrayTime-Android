@@ -17,8 +17,8 @@
     <string name="button_next">Next \u2192</string>
     <string name="button_done">Done</string>
 
-    <string name="button_alarm_on">\u2192 Turn on alarm</string>
-    <string name="button_alarm_off">\u2192 Turn off alarm</string>
+    <string name="button_alarm_on">Turn on alarm \u2192</string>
+    <string name="button_alarm_off">Turn off alarm \u2192</string>
     <plurals name="button_alarm">
         <item quantity="zero">@string/button_alarm_off</item>
         <item quantity="one">@string/button_alarm_on</item>
@@ -90,5 +90,8 @@
         Your location in GPS coordinates is used to calculate Salaat times.\n
         Without this, Salaat times will not be visible.
     </string>
+
+<!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 
 </resources>
