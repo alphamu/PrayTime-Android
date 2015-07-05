@@ -26,6 +26,7 @@
         <item name="colorPrimary">@color/teal_primary</item>
         <item name="colorPrimaryDark">@color/teal_primary_dark</item>
         <item name="colorAccent">@color/teal_accent</item>
+        <item name="android:selectableItemBackground">@drawable/bg_tab_teal</item>
         <!-- Custom app attributes -->
         <item name="separatorColor">@color/teal_separator</item>
         <item name="buttonTextColor">@color/button_text_teal_light</item>

@@ -285,5 +285,9 @@ public class AppSettings {
     set(getKeyFor(Key.TIME_FORMAT, index), format);
   }
 
+  public boolean isDefaultSet() {
+    return getBoolean(Key.HAS_DEFAULT_SET);
+  }
+
 
 }

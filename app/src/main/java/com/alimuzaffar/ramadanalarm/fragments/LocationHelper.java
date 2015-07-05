@@ -130,7 +130,7 @@ public class LocationHelper extends Fragment implements Constants, GoogleApiClie
   private LocationRequest createLocationRequest() {
     if (mCoarseLocationRequest == null) {
       mCoarseLocationRequest = new LocationRequest();
-      mCoarseLocationRequest.setInterval(10000);
+      mCoarseLocationRequest.setInterval(5000);
       mCoarseLocationRequest.setFastestInterval(1000);
       mCoarseLocationRequest.setNumUpdates(1);
       mCoarseLocationRequest.setPriority(LocationRequest.PRIORITY_BALANCED_POWER_ACCURACY);

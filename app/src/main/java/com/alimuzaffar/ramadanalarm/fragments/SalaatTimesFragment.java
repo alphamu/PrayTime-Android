@@ -62,6 +62,10 @@ public class SalaatTimesFragment extends Fragment implements Constants {
     // makes it easier to work with the layout editor.
     // inflater.inflate(R.layout.view_prayer_times, timesContainer, true);
 
+    if (mLastLocation == null) {
+      return;
+    }
+
     //Toolbar will now take on default Action Bar characteristics
     LinkedHashMap<String, String> prayerTimes =
         PrayTime.getPrayerTimes(getActivity(), mIndex, mLastLocation.getLatitude(), mLastLocation.getLongitude());

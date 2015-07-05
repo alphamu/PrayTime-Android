@@ -5,33 +5,31 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentStatePagerAdapter;
+import android.support.v4.view.ViewPager;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.TextView;
 
 import com.alimuzaffar.ramadanalarm.fragments.InitialConfigFragment;
+import com.alimuzaffar.ramadanalarm.fragments.KaabahLocatorFragment;
 import com.alimuzaffar.ramadanalarm.fragments.LocationHelper;
 import com.alimuzaffar.ramadanalarm.fragments.SalaatTimesFragment;
-import com.alimuzaffar.ramadanalarm.utils.PrayTime;
-
-import java.util.LinkedHashMap;
-import java.util.TimeZone;
+import com.alimuzaffar.ramadanalarm.widget.SlidingTabLayout;
 
 
 public class SalaatTimesActivity extends BaseActivity implements Constants, View.OnClickListener, InitialConfigFragment.OnOptionSelectedListener {
 
-  ViewGroup mTimesContainer;
-  TextView mUseDefault;
-
   private LocationHelper mLocationHelper;
-  private SalaatTimesFragment mTimesFragment;
-  private InitialConfigFragment mConfigFragment;
   private Location mLastLocation = null;
+
+  private ViewPager mPager;
+  private ScreenSlidePagerAdapter mAdapter;
+  private SlidingTabLayout mTabs;
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -41,16 +39,33 @@ public class SalaatTimesActivity extends BaseActivity implements Constants, View
     Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
     setSupportActionBar(toolbar);
 
-    mTimesContainer = (ViewGroup) findViewById(R.id.times_container);
     mLocationHelper = (LocationHelper) getSupportFragmentManager().findFragmentByTag(LOCATION_FRAGMENT);
 
-    if (!AppSettings.getInstance(this).getBoolean(AppSettings.Key.HAS_DEFAULT_SET)) {
-      mConfigFragment = (InitialConfigFragment) getSupportFragmentManager().findFragmentByTag(CONFIG_FRAGMENT);
-      if (mConfigFragment == null) {
-        mConfigFragment = InitialConfigFragment.newInstance();
-        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, mConfigFragment, CONFIG_FRAGMENT).commit();
+    // Creating The ViewPagerAdapter and Passing Fragment Manager, Titles fot the Tabs and Number Of Tabs.
+    mAdapter = new ScreenSlidePagerAdapter(getSupportFragmentManager(),0);
+
+    // Assigning ViewPager View and setting the adapter
+    mPager = (ViewPager) findViewById(R.id.pager);
+    mPager.setAdapter(mAdapter);
+
+    // Assiging the Sliding Tab Layout View
+    mTabs = (SlidingTabLayout) findViewById(R.id.tabs);
+    mTabs.setDistributeEvenly(true); // To make the Tabs Fixed set this true, This makes the tabs Space Evenly in Available width
+
+    // Setting Custom Color for the Scroll bar indicator of the Tab View
+/*
+    mTabs.setCustomTabColorizer(new SlidingTabLayout.TabColorizer() {
+      @Override
+      public int getIndicatorColor(int position) {
+        return getResources().getColor(R.color.teal_accent);
       }
-    }
+    });
+*/
+    mTabs.setSelectedIndicatorColors(getResources().getColor(R.color.teal_accent));
+    mTabs.setTextColor(R.color.teal_primary_light);
+
+    // Setting the ViewPager For the SlidingTabsLayout
+    mTabs.setViewPager(mPager);
 
     if(mLocationHelper == null) {
       mLocationHelper = LocationHelper.newInstance();
@@ -65,6 +80,17 @@ public class SalaatTimesActivity extends BaseActivity implements Constants, View
     if (mLastLocation == null) {
       fetchLocation();
     }
+  }
+
+  @Override
+  protected void onDestroy() {
+    //Just to be sure memory is cleaned up.
+    mPager = null;
+    mAdapter = null;
+    mTabs = null;
+    mLastLocation = null;
+
+    super.onDestroy();
   }
 
   @Override
@@ -93,22 +119,6 @@ public class SalaatTimesActivity extends BaseActivity implements Constants, View
   @Override
   public void onClick(View v) {
 
-  }
-
-  private void initTimes() {
-    if (AppSettings.getInstance(this).getBoolean(AppSettings.Key.HAS_DEFAULT_SET)) {
-      mTimesFragment = (SalaatTimesFragment) getSupportFragmentManager().findFragmentByTag(TIMES_FRAGMENT);
-
-      if (mTimesFragment == null) {
-        mTimesFragment = SalaatTimesFragment.newInstance(0, mLastLocation);
-      } else {
-        mTimesFragment.setLocation(mLastLocation);
-      }
-
-      if (!mTimesFragment.isAdded()) {
-        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, mTimesFragment, TIMES_FRAGMENT).commit();
-      }
-    }
   }
 
   private void startOnboardingFor(int index) {
@@ -181,7 +191,9 @@ public class SalaatTimesActivity extends BaseActivity implements Constants, View
   @Override
   public void onLocationChanged(Location location) {
     mLastLocation = location;
-    initTimes();
+    // NOT THE BEST SOLUTION, THINK OF SOMETHING ELSE
+    mAdapter = new ScreenSlidePagerAdapter(getSupportFragmentManager(),0);
+    mPager.setAdapter(mAdapter);
   }
 
   @Override
@@ -192,7 +204,50 @@ public class SalaatTimesActivity extends BaseActivity implements Constants, View
   @Override
   public void onUseDefaultSelected() {
     if (mLastLocation != null) {
-      initTimes();
+      // NOT THE BEST SOLUTION, THINK OF SOMETHING ELSE
+      mAdapter = new ScreenSlidePagerAdapter(getSupportFragmentManager(),0);
+      mPager.setAdapter(mAdapter);
     }
+  }
+
+
+  private class ScreenSlidePagerAdapter extends FragmentStatePagerAdapter {
+
+    private int mCardIndex;
+
+    public ScreenSlidePagerAdapter(FragmentManager fm, int index) {
+      super(fm);
+      mCardIndex = index;
+    }
+
+    @Override
+    public Fragment getItem(int position) {
+      switch (position) {
+        case 0:
+          if (AppSettings.getInstance(getApplicationContext()).isDefaultSet()) {
+            return SalaatTimesFragment.newInstance(mCardIndex, mLastLocation);
+          } else {
+            return InitialConfigFragment.newInstance();
+          }
+        case 1:
+          return KaabahLocatorFragment.newInstance(mLastLocation);
+      }
+      return null;
+    }
+
+    @Override
+    public int getCount() {
+      return 2;
+    }
+
+    @Override
+    public CharSequence getPageTitle(int position) {
+      if (position == 0) {
+        return getString(R.string.salaat_times);
+      } else {
+        return getString(R.string.kaabah_position);
+      }
+    }
+
   }
 }
