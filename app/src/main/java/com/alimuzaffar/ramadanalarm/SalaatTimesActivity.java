@@ -1,8 +1,11 @@
 package com.alimuzaffar.ramadanalarm;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
+import android.content.res.Configuration;
 import android.location.Location;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -13,10 +16,12 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.Surface;
 import android.view.View;
+import android.view.WindowManager;
 
 import com.alimuzaffar.ramadanalarm.fragments.InitialConfigFragment;
-import com.alimuzaffar.ramadanalarm.fragments.KaabahLocatorFragment;
+import com.alimuzaffar.ramadanalarm.fragments.KaabaLocatorFragment;
 import com.alimuzaffar.ramadanalarm.fragments.LocationHelper;
 import com.alimuzaffar.ramadanalarm.fragments.SalaatTimesFragment;
 import com.alimuzaffar.ramadanalarm.widget.SlidingTabLayout;
@@ -35,6 +40,7 @@ public class SalaatTimesActivity extends BaseActivity implements Constants, View
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_salaat_times);
+    lockOrientation(this);
 
     Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
     setSupportActionBar(toolbar);
@@ -192,7 +198,7 @@ public class SalaatTimesActivity extends BaseActivity implements Constants, View
   public void onLocationChanged(Location location) {
     mLastLocation = location;
     // NOT THE BEST SOLUTION, THINK OF SOMETHING ELSE
-    mAdapter = new ScreenSlidePagerAdapter(getSupportFragmentManager(),0);
+    mAdapter = new ScreenSlidePagerAdapter(getSupportFragmentManager(), 0);
     mPager.setAdapter(mAdapter);
   }
 
@@ -208,6 +214,17 @@ public class SalaatTimesActivity extends BaseActivity implements Constants, View
       mAdapter = new ScreenSlidePagerAdapter(getSupportFragmentManager(),0);
       mPager.setAdapter(mAdapter);
     }
+  }
+
+  /** Locks the device window in actual screen mode. */
+  public static void lockOrientation(Activity activity) {
+    final int orientation = activity.getResources().getConfiguration().orientation;
+    activity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LOCKED);
+  }
+
+  /** Unlocks the device window in user defined screen mode. */
+  public static void unlockOrientation(Activity activity) {
+    activity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_USER);
   }
 
 
@@ -230,7 +247,7 @@ public class SalaatTimesActivity extends BaseActivity implements Constants, View
             return InitialConfigFragment.newInstance();
           }
         case 1:
-          return KaabahLocatorFragment.newInstance(mLastLocation);
+          return KaabaLocatorFragment.newInstance(mLastLocation);
       }
       return null;
     }
@@ -245,9 +262,8 @@ public class SalaatTimesActivity extends BaseActivity implements Constants, View
       if (position == 0) {
         return getString(R.string.salaat_times);
       } else {
-        return getString(R.string.kaabah_position);
+        return getString(R.string.kaaba_position);
       }
     }
-
   }
 }

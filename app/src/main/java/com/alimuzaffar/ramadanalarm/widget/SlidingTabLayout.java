@@ -18,6 +18,7 @@ package com.alimuzaffar.ramadanalarm.widget;
 
 import android.content.Context;
 import android.graphics.Typeface;
+import android.support.annotation.ColorInt;
 import android.support.annotation.ColorRes;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
@@ -151,8 +152,8 @@ public class SlidingTabLayout extends HorizontalScrollView {
     mTabViewTextViewId = textViewId;
   }
 
-  public void setTextColor(@ColorRes int color) {
-    mTextColor = color;
+  public void setTextColor(@ColorRes int colorResId) {
+    mTextColor = colorResId;
   }
 
   /**

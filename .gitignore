@@ -30,3 +30,5 @@ proguard/
 .idea/
 *.iml
 
+#File to holds secret strings
+app/src/main/res/values/secret.xml
