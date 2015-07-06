@@ -7,14 +7,14 @@
     <fragment
         android:id="@+id/map"
         class="com.google.android.gms.maps.SupportMapFragment"
+        xmlns:map="http://schemas.android.com/apk/res-auto"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
-
-    <ImageView
-        android:layout_gravity="center"
-        android:id="@+id/compass"
-        android:src="@drawable/compass"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        android:layout_height="match_parent"
+        map:uiCompass="true"
+        map:uiRotateGestures="false"
+        map:uiScrollGestures="true"
+        map:uiTiltGestures="false"
+        map:uiZoomControls="false"
+        map:uiZoomGestures="true"/>
 
 </FrameLayout>

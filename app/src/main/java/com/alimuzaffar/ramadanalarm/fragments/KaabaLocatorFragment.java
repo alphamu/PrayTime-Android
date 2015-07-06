@@ -14,9 +14,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.Animation;
-import android.view.animation.RotateAnimation;
-import android.widget.ImageView;
 
 import com.alimuzaffar.ramadanalarm.BuildConfig;
 import com.alimuzaffar.ramadanalarm.Constants;
@@ -25,6 +22,8 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
+import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.PolylineOptions;
@@ -38,13 +37,13 @@ public class KaabaLocatorFragment extends Fragment implements Constants, OnMapRe
   SupportMapFragment mMapFragment;
   GoogleMap mMap;
 
-  private float currentDegree = 0f;
+//  private float currentDegree = 0f;
   private SensorManager mSensorManager;
 
   private float[] mRotationMatrix = new float[16];
   private float[] mValues = new float[3];
 
-  private ImageView mCompass;
+  private boolean mRegistered = false;
 
   public KaabaLocatorFragment() {
     // Required empty public constructor
@@ -79,7 +78,6 @@ public class KaabaLocatorFragment extends Fragment implements Constants, OnMapRe
     View view = inflater.inflate(R.layout.fragment_kaaba_locator, container, false);
     mMapFragment = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.map);
     mMapFragment.getMapAsync(this);
-    mCompass = (ImageView) view.findViewById(R.id.compass);
 
     return view;
   }
@@ -98,28 +96,33 @@ public class KaabaLocatorFragment extends Fragment implements Constants, OnMapRe
       return;
     }
 
+    registerRotationListener();
+
     LatLng startPosition = new LatLng(mLastLocation.getLatitude(), mLastLocation.getLongitude());
     //21.4224698,39.8262066
     LatLng kaaba = new LatLng(21.4224698, 39.8262066);
 
     mMap.setMyLocationEnabled(true);
     mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(startPosition, 13));
-    mMap.getUiSettings().setCompassEnabled(true);
-    mMap.getUiSettings().setRotateGesturesEnabled(false);
+    mMap.getUiSettings().setCompassEnabled(false);
+    //mMap.getUiSettings().setRotateGesturesEnabled(false);
+
+    mMap.clear();
 
     mMap.addMarker(new MarkerOptions()
-            .title(getString(R.string.kaaba))
-            .position(kaaba));
+        .title(getString(R.string.kaaba))
+        .position(kaaba));
 
     mMap.addMarker(new MarkerOptions()
-            .title(getString(R.string.current_location))
-            .position(startPosition));
+        .icon(BitmapDescriptorFactory.fromResource(R.drawable.compass))
+        .title(getString(R.string.current_location))
+        .position(startPosition));
 
     // Polylines are useful for marking paths and routes on the map.
     mMap.addPolyline(new PolylineOptions().geodesic(true)
-            .add(startPosition)  // user position
-            .add(kaaba)
-            .color(Color.RED));  // Kaabah
+        .add(startPosition)  // user position
+        .add(kaaba)
+        .color(Color.RED));  // Kaabah
 
   }
 
@@ -131,15 +134,29 @@ public class KaabaLocatorFragment extends Fragment implements Constants, OnMapRe
   @Override
   public void onResume() {
     super.onResume();
-    mSensorManager.registerListener(this, mSensorManager.getDefaultSensor(Sensor.TYPE_ROTATION_VECTOR), SensorManager.SENSOR_DELAY_FASTEST);
+
+    registerRotationListener();
   }
 
   @Override
   public void onPause() {
     super.onPause();
-    mSensorManager.unregisterListener(this);
+    unregisterRotationListener();
   }
 
+  private void registerRotationListener() {
+    if (mMap != null && mLastLocation != null && !mRegistered) {
+      mSensorManager.registerListener(this, mSensorManager.getDefaultSensor(Sensor.TYPE_ROTATION_VECTOR), SensorManager.SENSOR_DELAY_UI);
+      mRegistered = true;
+    }
+  }
+
+  private void unregisterRotationListener() {
+    if (mRegistered) {
+      mSensorManager.unregisterListener(this);
+      mRegistered = false;
+    }
+  }
 
   @Override
   public void onSensorChanged(SensorEvent event) {
@@ -155,28 +172,31 @@ public class KaabaLocatorFragment extends Fragment implements Constants, OnMapRe
     }
     */
 
-    float bearing = 0;
+    float bearing = 0f;
 
     if (mMap != null) {
       bearing = Double.valueOf(mMap.getCameraPosition().bearing).floatValue();
-      System.out.println("Bearing = "+bearing);
     }
-
 
     // get the angle around the z-axis rotated
     float degree = Double.valueOf(Math.toDegrees(mValues[0])).floatValue();
-    if (BuildConfig.DEBUG) {
-      System.out.println("degrees " + -degree);
-    }
 
-
-    //tvHeading.setText("Heading: " + Float.toString(degree) + " degrees");
-
-    if (mCompass == null) {
+    if (Math.round(bearing) == Math.round(degree)) {
+      System.out.println("bearing and degrees are the same.");
       return;
     }
 
+    if (BuildConfig.DEBUG) {
+      System.out.println("degrees " + degree + ", bearing " + bearing);
+    }
+
+    //tvHeading.setText("Heading: " + Float.toString(degree) + " degrees");
+
+    CameraPosition cameraPosition = mMap.getCameraPosition();
+    CameraPosition newPosition = new CameraPosition(cameraPosition.target, cameraPosition.zoom, cameraPosition.tilt, degree);
+    mMap.moveCamera(CameraUpdateFactory.newCameraPosition(newPosition));
     // create a rotation animation (reverse turn degree degrees)
+    /*
     RotateAnimation ra = new RotateAnimation(
             currentDegree,
             -degree-180,
@@ -193,6 +213,7 @@ public class KaabaLocatorFragment extends Fragment implements Constants, OnMapRe
     // Start the animation
     mCompass.startAnimation(ra);
     currentDegree = -degree-180;
+    */
   }
 
   @Override

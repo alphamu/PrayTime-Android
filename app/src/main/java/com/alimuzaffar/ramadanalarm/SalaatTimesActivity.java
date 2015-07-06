@@ -67,8 +67,8 @@ public class SalaatTimesActivity extends BaseActivity implements Constants, View
       }
     });
 */
-    mTabs.setSelectedIndicatorColors(getResources().getColor(R.color.teal_accent));
-    mTabs.setTextColor(R.color.teal_primary_light);
+    mTabs.setSelectedIndicatorColors(getResources().getColor(android.R.color.primary_text_dark));
+    mTabs.setTextColor(android.R.color.primary_text_dark);
 
     // Setting the ViewPager For the SlidingTabsLayout
     mTabs.setViewPager(mPager);

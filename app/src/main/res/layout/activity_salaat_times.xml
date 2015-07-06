@@ -8,8 +8,7 @@
     <include
         layout="@layout/toolbar"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"/>
+        android:layout_height="wrap_content" />
 
     <com.alimuzaffar.ramadanalarm.widget.SlidingTabLayout
         android:id="@+id/tabs"

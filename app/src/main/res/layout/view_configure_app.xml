@@ -5,7 +5,10 @@
     xmlns:card_view="http://schemas.android.com/apk/res-auto"
     android:layout_width="@dimen/card_width"
     android:layout_height="wrap_content"
-    card_view:cardCornerRadius="4dp">
+    android:layout_gravity="center_horizontal"
+    android:layout_marginTop="@dimen/space_half"
+    card_view:cardCornerRadius="4dp"
+    card_view:cardElevation="@dimen/space_half">
 
     <ScrollView
         android:layout_width="match_parent"
@@ -37,18 +40,18 @@
                 android:id="@+id/configure_now"
                 style="@style/Widget.Button.NextPrev"
                 android:layout_width="match_parent"
-                android:gravity="center_vertical"
                 android:layout_margin="0dp"
-                android:layout_marginTop="@dimen/space"
                 android:layout_marginBottom="@dimen/space"
+                android:layout_marginTop="@dimen/space"
+                android:gravity="center_vertical"
                 android:text="@string/button_configure_now"/>
 
             <TextView
                 android:id="@+id/use_default"
                 style="@style/Widget.Button.NextPrev"
                 android:layout_width="match_parent"
-                android:gravity="center_vertical"
                 android:layout_margin="0dp"
+                android:gravity="center_vertical"
                 android:text="@string/button_use_default"/>
 
         </LinearLayout>
