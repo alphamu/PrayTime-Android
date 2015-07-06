@@ -103,8 +103,9 @@ public class KaabaLocatorFragment extends Fragment implements Constants, OnMapRe
     LatLng kaaba = new LatLng(21.4224698, 39.8262066);
 
     mMap.setMyLocationEnabled(true);
-    mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(startPosition, 13));
+    mMap.getUiSettings().setMyLocationButtonEnabled(true);
     mMap.getUiSettings().setCompassEnabled(false);
+    mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(startPosition, 13));
     //mMap.getUiSettings().setRotateGesturesEnabled(false);
 
     mMap.clear();
