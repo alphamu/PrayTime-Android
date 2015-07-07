@@ -20,6 +20,7 @@ import com.alimuzaffar.ramadanalarm.Constants;
 import com.alimuzaffar.ramadanalarm.R;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.GoogleMapOptions;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
@@ -76,10 +77,33 @@ public class KaabaLocatorFragment extends Fragment implements Constants, OnMapRe
                            Bundle savedInstanceState) {
     // Inflate the layout for this fragment
     View view = inflater.inflate(R.layout.fragment_kaaba_locator, container, false);
-    mMapFragment = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.map);
-    mMapFragment.getMapAsync(this);
-
     return view;
+  }
+
+  public void showMap() {
+    if (mMapFragment == null) {
+      mMapFragment = (SupportMapFragment) getFragmentManager().findFragmentByTag("map_fragment");
+    }
+    if (mMapFragment == null) {
+      GoogleMapOptions options = new GoogleMapOptions()
+              .rotateGesturesEnabled(false)
+              .tiltGesturesEnabled(false)
+              .compassEnabled(true)
+              .zoomControlsEnabled(false)
+              .zoomGesturesEnabled(true)
+              .scrollGesturesEnabled(true);
+      mMapFragment = SupportMapFragment.newInstance(options);
+    }
+    if (mMap == null) {
+      getFragmentManager().beginTransaction().add(R.id.map_container, mMapFragment, "map_fragment").commit();
+      mMapFragment.getMapAsync(this);
+    } else {
+      registerRotationListener();
+    }
+  }
+
+  public void hideMap() {
+    unregisterRotationListener();
   }
 
   @Override
@@ -90,7 +114,7 @@ public class KaabaLocatorFragment extends Fragment implements Constants, OnMapRe
     }
   }
 
-  public void initMap() {
+  private void initMap() {
     if (mMap == null && mLastLocation == null) {
       Log.w("KabaaLocatorFragment", "Ignoring since mMap or mLastLocation is null");
       return;
@@ -135,7 +159,6 @@ public class KaabaLocatorFragment extends Fragment implements Constants, OnMapRe
   @Override
   public void onResume() {
     super.onResume();
-
     registerRotationListener();
   }
 

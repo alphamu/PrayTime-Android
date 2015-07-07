@@ -27,7 +27,7 @@ import com.alimuzaffar.ramadanalarm.fragments.SalaatTimesFragment;
 import com.alimuzaffar.ramadanalarm.widget.SlidingTabLayout;
 
 
-public class SalaatTimesActivity extends BaseActivity implements Constants, View.OnClickListener, InitialConfigFragment.OnOptionSelectedListener {
+public class SalaatTimesActivity extends BaseActivity implements Constants, View.OnClickListener, InitialConfigFragment.OnOptionSelectedListener, ViewPager.OnPageChangeListener {
 
   private LocationHelper mLocationHelper;
   private Location mLastLocation = null;
@@ -53,6 +53,7 @@ public class SalaatTimesActivity extends BaseActivity implements Constants, View
     // Assigning ViewPager View and setting the adapter
     mPager = (ViewPager) findViewById(R.id.pager);
     mPager.setAdapter(mAdapter);
+    mPager.addOnPageChangeListener(this);
 
     // Assiging the Sliding Tab Layout View
     mTabs = (SlidingTabLayout) findViewById(R.id.tabs);
@@ -91,6 +92,7 @@ public class SalaatTimesActivity extends BaseActivity implements Constants, View
   @Override
   protected void onDestroy() {
     //Just to be sure memory is cleaned up.
+    mPager.removeOnPageChangeListener(this);
     mPager = null;
     mAdapter = null;
     mTabs = null;
@@ -227,9 +229,28 @@ public class SalaatTimesActivity extends BaseActivity implements Constants, View
     activity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_USER);
   }
 
+  @Override
+  public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+  }
+
+  @Override
+  public void onPageSelected(int position) {
+    if (position == 1) {
+      mAdapter.mKaabaFragment.showMap();
+    } else {
+      mAdapter.mKaabaFragment.hideMap();
+    }
+  }
+
+  @Override
+  public void onPageScrollStateChanged(int state) {
+
+  }
+
 
   private class ScreenSlidePagerAdapter extends FragmentStatePagerAdapter {
-
+    public KaabaLocatorFragment mKaabaFragment;
     private int mCardIndex;
 
     public ScreenSlidePagerAdapter(FragmentManager fm, int index) {
@@ -247,7 +268,7 @@ public class SalaatTimesActivity extends BaseActivity implements Constants, View
             return InitialConfigFragment.newInstance();
           }
         case 1:
-          return KaabaLocatorFragment.newInstance(mLastLocation);
+          return mKaabaFragment = KaabaLocatorFragment.newInstance(mLastLocation);
       }
       return null;
     }

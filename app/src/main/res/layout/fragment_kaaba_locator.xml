@@ -1,20 +1,8 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-             xmlns:tools="http://schemas.android.com/tools"
-             android:layout_width="match_parent"
-             android:layout_height="match_parent"
-             tools:context=".fragments.KaabaLocator">
-
-    <fragment
-        android:id="@+id/map"
-        class="com.google.android.gms.maps.SupportMapFragment"
-        xmlns:map="http://schemas.android.com/apk/res-auto"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        map:uiCompass="true"
-        map:uiRotateGestures="false"
-        map:uiScrollGestures="true"
-        map:uiTiltGestures="false"
-        map:uiZoomControls="false"
-        map:uiZoomGestures="true"/>
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/map_container"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".fragments.KaabaLocator">
 
 </FrameLayout>
