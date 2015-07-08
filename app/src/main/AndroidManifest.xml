@@ -38,6 +38,18 @@
             android:label="" >
         </activity>
 
+        <receiver android:name=".scheduler.PassiveLocationChangedReceiver"/>
+        <receiver android:name=".scheduler.SalaatAlarmReceiver" />
+
+        <receiver android:name=".scheduler.SalaatBootReceiver"
+                  android:enabled="false">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+            </intent-filter>
+        </receiver>
+        <service android:name=".scheduler.SalaatSchedulingService" />
+
+
         <meta-data
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />

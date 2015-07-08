@@ -127,13 +127,13 @@ public class PrayTime {
     offsets[5] = 0;
     offsets[6] = 0;
 
-        /*
-         *
-         * fa : fajr angle ms : maghrib selector (0 = angle; 1 = minutes after
-         * sunset) mv : maghrib parameter value (in angle or minutes) is : isha
-         * selector (0 = angle; 1 = minutes after maghrib) iv : isha parameter
-         * value (in angle or minutes)
-         */
+    /*
+     *
+     * fa : fajr angle ms : maghrib selector (0 = angle; 1 = minutes after
+     * sunset) mv : maghrib parameter value (in angle or minutes) is : isha
+     * selector (0 = angle; 1 = minutes after maghrib) iv : isha parameter
+     * value (in angle or minutes)
+     */
     methodParams = new HashMap<Integer, double[]>();
 
     // JAFARI
@@ -382,7 +382,7 @@ public class PrayTime {
 
   // return prayer times for a given date
   public ArrayList<String> getPrayerTimes(Calendar date, double latitude,
-                                           double longitude, double tZone) {
+                                          double longitude, double tZone) {
 
     int year = date.get(Calendar.YEAR);
     int month = date.get(Calendar.MONTH);
@@ -484,29 +484,21 @@ public class PrayTime {
         /*hours = (hours + 12) - 1;
         int hrs = (int) hours % 12;
         hrs += 1;*/
-    if (noSuffix == false) {
-      if ((hours >= 0 && hours <= 9) && (minutes >= 0 && minutes <= 9)) {
-        result = hours + ":0" + Math.round(minutes) + " "
-            + suffix;
-      } else if ((hours >= 0 && hours <= 9)) {
-        result = hours + ":" + Math.round(minutes) + " " + suffix;
-      } else if ((minutes >= 0 && minutes <= 9)) {
-        result = hours + ":0" + Math.round(minutes) + " " + suffix;
-      } else {
-        result = hours + ":" + Math.round(minutes) + " " + suffix;
-      }
 
+    if ((hours >= 0 && hours <= 9) && (minutes >= 0 && minutes <= 9)) {
+      result = hours + ":0" + Math.round(minutes);
+    } else if ((hours >= 0 && hours <= 9)) {
+      result = hours + ":" + Math.round(minutes);
+    } else if ((minutes >= 0 && minutes <= 9)) {
+      result = hours + ":0" + Math.round(minutes);
     } else {
-      if ((hours >= 0 && hours <= 9) && (minutes >= 0 && minutes <= 9)) {
-        result = hours + ":0" + Math.round(minutes);
-      } else if ((hours >= 0 && hours <= 9)) {
-        result = hours + ":" + Math.round(minutes);
-      } else if ((minutes >= 0 && minutes <= 9)) {
-        result = hours + ":0" + Math.round(minutes);
-      } else {
-        result = hours + ":" + Math.round(minutes);
-      }
+      result = hours + ":" + Math.round(minutes);
     }
+
+    if (!noSuffix) {
+      result += " " + suffix;
+    }
+
     return result;
 
   }

@@ -2,9 +2,12 @@ package com.alimuzaffar.ramadanalarm.fragments;
 
 import android.Manifest;
 import android.app.Activity;
+import android.app.PendingIntent;
+import android.content.Context;
 import android.content.Intent;
 import android.content.IntentSender;
 import android.location.Location;
+import android.location.LocationManager;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -32,7 +35,7 @@ public class LocationHelper extends Fragment implements Constants, GoogleApiClie
 
   private LocationCallback mCallback;
   private BaseActivity mActivity;
-  private boolean mLoationPermissionDenied;
+  private static boolean sLoationPermissionDenied;
 
 
   public static LocationHelper newInstance() {
@@ -77,7 +80,7 @@ public class LocationHelper extends Fragment implements Constants, GoogleApiClie
       // UNCOMMENT TO SUPPORT ANDROID M RUNTIME PERMISSIONS
 //      Intent intent = mActivity.getPackageManager().buildRequestPermissionsIntent(new String[]{Manifest.permission.ACCESS_FINE_LOCATION});
 //      startActivityForResult(intent, REQUEST_LOCATION);
-      if (!mLoationPermissionDenied) {
+      if (!sLoationPermissionDenied) {
         ((BaseActivity) getActivity()).requestPermissionsProxy(new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, REQUEST_LOCATION);
       }
     }
@@ -91,7 +94,7 @@ public class LocationHelper extends Fragment implements Constants, GoogleApiClie
         // check for a location.
         checkIfLocationServicesEnabled();
       } //else if (mGoogleApiClient.isConnecting()) {
-        //do nothing
+      //do nothing
       //}
     } else {
       Log.d("SalaatTimesActivity", sLastLocation.getLatitude() + "," + sLastLocation.getLongitude());
@@ -177,6 +180,7 @@ public class LocationHelper extends Fragment implements Constants, GoogleApiClie
       }
     });
   }
+
   @Override
   public void onActivityResult(int requestCode, int resultCode, Intent data) {
     //final LocationSettingsStates states = LocationSettingsStates.fromIntent(data);
@@ -215,7 +219,11 @@ public class LocationHelper extends Fragment implements Constants, GoogleApiClie
   }
 
   public void setLoationPermissionDenied(boolean mLoationPermissionDenied) {
-    this.mLoationPermissionDenied = mLoationPermissionDenied;
+    this.sLoationPermissionDenied = mLoationPermissionDenied;
+  }
+
+  public static boolean isLoationPermissionDenied() {
+    return sLoationPermissionDenied;
   }
 
   /**
@@ -241,9 +249,45 @@ public class LocationHelper extends Fragment implements Constants, GoogleApiClie
   }
 */
 
+
+  // NOT SURE WHERE THIS CODE GOES, BUT ITS NEEDED SO THAT WE CAN BE NOTIFIED
+  // OF SEVERE LOCATION CHANGES BY THE USER, SO THAT WE CAN RE-CALCULATE THE
+  // SALAAT TIMES AND UPDATE THE ALARMS.
+  // ALSO HAVE TO HANDLE CANCELING OF UPDATES IF THE USER REVOKES PERMISSION
+  // THROUGH SETTINGS
+  // IMPORTANT: THIS SHOULD NEEDS TO BE SET AGAIN IN THE BOOT RECEIVER.
+  /*
+  Intent passiveIntent = new Intent(context, PassiveLocationChangedReceiver.class);
+  PendingIntent locationListenerPassivePendingIntent = PendingIntent.getActivity(getActivity(), 0, passiveIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+  locationUpdateRequester.requestPassiveLocationUpdates(getActivity(), locationListenerPassivePendingIntent);
+   */
+  public void requestPassiveLocationUpdates(Context context, PendingIntent pendingIntent) {
+    long oneHourInMillis = 3600000;
+    float fiftyKinMeters = 50000.0f;
+
+    LocationManager locationManager = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
+    try {
+      locationManager.requestLocationUpdates(LocationManager.PASSIVE_PROVIDER,
+          oneHourInMillis, fiftyKinMeters, pendingIntent);
+    } catch (SecurityException se) {
+      //do nothing. We should always have permision in order to reach this screen.
+    }
+  }
+
+  public void removePassiveLocationUpdates(Context context, PendingIntent pendingIntent) {
+    LocationManager locationManager = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
+    try {
+      locationManager.removeUpdates(pendingIntent);
+    } catch (SecurityException se) {
+      //do nothing. We should always have permision in order to reach this screen.
+    }
+  }
+
   public interface LocationCallback {
     void onLocationPermissionFailed();
+
     void onLocationSettingsFailed();
+
     void onLocationChanged(Location location);
   }
 
