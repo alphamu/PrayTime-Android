@@ -1,11 +1,9 @@
 package com.alimuzaffar.ramadanalarm;
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
-import android.content.res.Configuration;
 import android.location.Location;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -16,9 +14,7 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.Surface;
 import android.view.View;
-import android.view.WindowManager;
 
 import com.alimuzaffar.ramadanalarm.fragments.InitialConfigFragment;
 import com.alimuzaffar.ramadanalarm.fragments.KaabaLocatorFragment;
@@ -188,7 +184,7 @@ public class SalaatTimesActivity extends BaseActivity implements Constants, View
 
   @Override
   public void onLocationPermissionFailed() {
-
+    mLocationHelper.setLoationPermissionDenied(true);
   }
 
   @Override

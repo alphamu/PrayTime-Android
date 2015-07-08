@@ -1,8 +1,8 @@
 apply plugin: 'com.android.application'
 
 android {
-//    compileSdkVersion "android-MNC"
-    compileSdkVersion 22
+    compileSdkVersion "android-MNC"
+//    compileSdkVersion 22
     buildToolsVersion "22.0.1"
 
     defaultConfig {

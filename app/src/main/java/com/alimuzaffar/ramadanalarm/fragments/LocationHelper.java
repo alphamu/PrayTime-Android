@@ -32,6 +32,7 @@ public class LocationHelper extends Fragment implements Constants, GoogleApiClie
 
   private LocationCallback mCallback;
   private BaseActivity mActivity;
+  private boolean mLoationPermissionDenied;
 
 
   public static LocationHelper newInstance() {
@@ -76,7 +77,9 @@ public class LocationHelper extends Fragment implements Constants, GoogleApiClie
       // UNCOMMENT TO SUPPORT ANDROID M RUNTIME PERMISSIONS
 //      Intent intent = mActivity.getPackageManager().buildRequestPermissionsIntent(new String[]{Manifest.permission.ACCESS_FINE_LOCATION});
 //      startActivityForResult(intent, REQUEST_LOCATION);
-      ((BaseActivity) getActivity()).requestPermissionsProxy(new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, REQUEST_LOCATION);
+      if (!mLoationPermissionDenied) {
+        ((BaseActivity) getActivity()).requestPermissionsProxy(new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, REQUEST_LOCATION);
+      }
     }
   }
 
@@ -209,6 +212,10 @@ public class LocationHelper extends Fragment implements Constants, GoogleApiClie
   @Override
   public void onConnectionFailed(ConnectionResult connectionResult) {
 
+  }
+
+  public void setLoationPermissionDenied(boolean mLoationPermissionDenied) {
+    this.mLoationPermissionDenied = mLoationPermissionDenied;
   }
 
   /**
