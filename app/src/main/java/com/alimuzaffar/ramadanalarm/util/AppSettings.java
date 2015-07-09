@@ -1,9 +1,7 @@
-package com.alimuzaffar.ramadanalarm;
+package com.alimuzaffar.ramadanalarm.util;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-
-import com.alimuzaffar.ramadanalarm.utils.PrayTime;
 
 /*
  * A Singleton for managing your SharedPreferences.
@@ -53,6 +51,8 @@ public class AppSettings {
     public static final String ASR_METHOD = "asr_method_for_%d";
     public static final String ADJUST_METHOD = "adjust_high_latitudes_method_for_%d";
     public static final String TIME_FORMAT = "time_format_for_%d";
+    public static final String LAT_FOR = "lat_for_%d";
+    public static final String LNG_FOR = "lng_for_%d";
 
   }
 
@@ -253,6 +253,10 @@ public class AppSettings {
     return getBoolean(getKeyFor(Key.IS_ALARM_SET, index));
   }
 
+  public void setAlarmFor(int index, boolean alarmOn) {
+    set(getKeyFor(Key.IS_ALARM_SET, index), alarmOn);
+  }
+
   public int getCalcMethodSetFor(int index) {
     return getInt(getKeyFor(Key.CALC_METHOD, index), PrayTime.MWL);
   }
@@ -283,6 +287,23 @@ public class AppSettings {
 
   public void setTimeFormatFor(int index, int format) {
     set(getKeyFor(Key.TIME_FORMAT, index), format);
+  }
+
+  public double getLatFor(int index) {
+    return getDouble(getKeyFor(Key.LAT_FOR, index));
+  }
+
+  public double getLngFor(int index) {
+    return getDouble(getKeyFor(Key.LNG_FOR, index));
+  }
+
+
+  public void setLatFor(int index, double lat) {
+    set(getKeyFor(Key.LAT_FOR, index), lat);
+  }
+
+  public void setLngFor(int index, double lng) {
+    set(getKeyFor(Key.LNG_FOR, index), lng);
   }
 
   public boolean isDefaultSet() {

@@ -4,6 +4,8 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 
+import com.alimuzaffar.ramadanalarm.util.AppSettings;
+
 /**
  * This BroadcastReceiver automatically (re)starts the alarm when the device is
  * rebooted. This receiver is set to be disabled (android:enabled="false") in the
@@ -17,8 +19,16 @@ public class SalaatBootReceiver extends BroadcastReceiver {
 
   @Override
   public void onReceive(Context context, Intent intent) {
-    if (intent.getAction().equals("android.intent.action.BOOT_COMPLETED")) {
+    String action = intent.getAction();
+    if (action.equals("android.intent.action.BOOT_COMPLETED")) {
       alarm.setAlarm(context);
+    } else if (action.equals("android.intent.action.TIMEZONE_CHANGED") || action.equals("android.intent.action.TIME_SET")) {
+      // Our location could have changed, which means time calculations may be different
+      // now so cancel the alarm and set it again.
+//      if (AppSettings.getInstance(context).isAlarmSetFor(0)) {
+//        alarm.cancelAlarm(context);
+//        alarm.setAlarm(context);
+//      }
     }
   }
 }

@@ -1,5 +1,9 @@
 package com.alimuzaffar.ramadanalarm;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Locale;
+
 public interface Constants {
   // REQUEST CODES
   int REQUEST_CHECK_SETTINGS = 101;
@@ -14,4 +18,8 @@ public interface Constants {
   String TIMES_FRAGMENT = "times_fragment";
   String CONFIG_FRAGMENT = "config_fragment";
   String LOCATION_FRAGMENT = "location_fragment";
+
+  String EXTRA_PRAYER_NAME = "prayer_name";
+
+  public static final DateFormat TIME = new SimpleDateFormat("HH:mm", Locale.getDefault());
 }

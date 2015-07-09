@@ -5,6 +5,9 @@ import android.content.Context;
 import android.content.Intent;
 import android.location.Location;
 import android.location.LocationManager;
+import android.support.v7.app.AppCompatActivity;
+
+import com.alimuzaffar.ramadanalarm.util.AppSettings;
 
 /**
  * This Receiver class is used to listen for Broadcast Intents that announce
@@ -15,6 +18,7 @@ import android.location.LocationManager;
 public class PassiveLocationChangedReceiver extends BroadcastReceiver {
   
   protected static String TAG = "PassiveLocationChangedReceiver";
+  SalaatAlarmReceiver alarm = new SalaatAlarmReceiver();
   
   /**
    * When a new location is received, extract it from the Intent and use
@@ -31,7 +35,15 @@ public class PassiveLocationChangedReceiver extends BroadcastReceiver {
     if (intent.hasExtra(key)) {
       // This update came from Passive provider, so we can extract the location
       // directly.
-      location = (Location)intent.getExtras().get(key);      
+      location = (Location)intent.getExtras().get(key);
+      if (location != null) {
+        AppSettings.getInstance(context).setLatFor(0, location.getLatitude());
+        AppSettings.getInstance(context).setLngFor(0, location.getLongitude());
+        if (AppSettings.getInstance(context).isAlarmSetFor(0)) {
+          alarm.cancelAlarm(context);
+          alarm.setAlarm(context);
+        }
+      }
     }
   }
 }

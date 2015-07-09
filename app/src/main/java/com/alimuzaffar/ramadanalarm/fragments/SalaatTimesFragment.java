@@ -10,11 +10,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.alimuzaffar.ramadanalarm.AppSettings;
+import com.alimuzaffar.ramadanalarm.scheduler.SalaatAlarmReceiver;
+import com.alimuzaffar.ramadanalarm.util.AppSettings;
 import com.alimuzaffar.ramadanalarm.Constants;
 import com.alimuzaffar.ramadanalarm.R;
 import com.alimuzaffar.ramadanalarm.SetAlarmActivity;
-import com.alimuzaffar.ramadanalarm.utils.PrayTime;
+import com.alimuzaffar.ramadanalarm.util.PrayTime;
 
 import java.util.LinkedHashMap;
 import java.util.TimeZone;
@@ -108,9 +109,21 @@ public class SalaatTimesFragment extends Fragment implements Constants {
 
       @Override
       public void onClick(View v) {
-        Intent intent = new Intent(getActivity(), SetAlarmActivity.class);
-        intent.putExtra(EXTRA_ALARM_INDEX, index);
-        startActivity(intent);
+//        Intent intent = new Intent(getActivity(), SetAlarmActivity.class);
+//        intent.putExtra(EXTRA_ALARM_INDEX, index);
+//        startActivity(intent);
+        AppSettings settings = AppSettings.getInstance(getActivity());
+        settings.setLatFor(mIndex, mLastLocation.getLatitude());
+        settings.setLngFor(mIndex, mLastLocation.getLongitude());
+        SalaatAlarmReceiver sar = new SalaatAlarmReceiver();
+        if (settings.isAlarmSetFor(mIndex)) {
+          sar.cancelAlarm(getActivity());
+          settings.setAlarmFor(mIndex, false);
+        } else {
+          sar.setAlarm(getActivity());
+          settings.setAlarmFor(mIndex, true);
+        }
+        setAlarmButtonText((TextView) v, mIndex);
       }
 
       public View.OnClickListener init(int index) {

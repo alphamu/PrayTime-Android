@@ -14,7 +14,7 @@
 * limitations under the License.
 */
 
-package com.alimuzaffar.ramadanalarm.utils;
+package com.alimuzaffar.ramadanalarm.util;
 
 import android.content.pm.PackageManager;
 import android.os.Build;

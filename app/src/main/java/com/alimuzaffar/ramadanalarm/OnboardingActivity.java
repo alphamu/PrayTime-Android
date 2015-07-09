@@ -15,6 +15,7 @@ import com.alimuzaffar.ramadanalarm.fragments.OnboardingAdjustmentHighLatitudesF
 import com.alimuzaffar.ramadanalarm.fragments.OnboardingAsrCalculationMethodFragment;
 import com.alimuzaffar.ramadanalarm.fragments.OnboardingCalculationMethodFragment;
 import com.alimuzaffar.ramadanalarm.fragments.OnboardingTimeFormatFragment;
+import com.alimuzaffar.ramadanalarm.util.AppSettings;
 
 public class OnboardingActivity extends AppCompatActivity implements OnOnboardingOptionSelectedListener {
 

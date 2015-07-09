@@ -22,12 +22,10 @@ PLEASE DO NOT REMOVE THIS COPYRIGHT BLOCK.
 
 */
 
-package com.alimuzaffar.ramadanalarm.utils;
+package com.alimuzaffar.ramadanalarm.util;
 
 
 import android.content.Context;
-
-import com.alimuzaffar.ramadanalarm.AppSettings;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -708,14 +706,18 @@ public class PrayTime {
   }
 
   public static LinkedHashMap<String, String> getPrayerTimes(Context context, int index, double lat, double lng) {
+    return getPrayerTimes(context, index, lat, lng, -1);
+  }
+
+  public static LinkedHashMap<String, String> getPrayerTimes(Context context, int index, double lat, double lng, int timeFormat) {
     AppSettings settings = AppSettings.getInstance(context);
     double latitude = lat;
     double longitude = lng;
 
-    //Get NY time zone instance
+    //Get time zone instance
     TimeZone defaultTz = TimeZone.getDefault();
 
-    //Get NY calendar object with current date/time
+    //Get calendar object with current date/time
     Calendar defaultCalc = Calendar.getInstance(defaultTz);
 
     //Get offset from UTC, accounting for DST
@@ -724,7 +726,11 @@ public class PrayTime {
     // Test Prayer times here
     PrayTime prayers = new PrayTime();
 
-    prayers.setTimeFormat(settings.getTimeFormatFor(index));
+    if (timeFormat == -1) {
+      prayers.setTimeFormat(settings.getTimeFormatFor(index));
+    } else {
+      prayers.setTimeFormat(timeFormat);
+    }
     prayers.setCalcMethod(settings.getCalcMethodSetFor(index));
     prayers.setAsrJuristic(settings.getAsrMethodSetFor(index));
     prayers.setAdjustHighLats(settings.getHighLatitudeAdjustmentFor(index));

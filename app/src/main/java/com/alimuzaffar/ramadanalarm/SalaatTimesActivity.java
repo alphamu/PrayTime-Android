@@ -20,6 +20,7 @@ import com.alimuzaffar.ramadanalarm.fragments.InitialConfigFragment;
 import com.alimuzaffar.ramadanalarm.fragments.KaabaLocatorFragment;
 import com.alimuzaffar.ramadanalarm.fragments.LocationHelper;
 import com.alimuzaffar.ramadanalarm.fragments.SalaatTimesFragment;
+import com.alimuzaffar.ramadanalarm.util.AppSettings;
 import com.alimuzaffar.ramadanalarm.widget.SlidingTabLayout;
 
 
