@@ -1,15 +1,16 @@
 package com.alimuzaffar.ramadanalarm;
 
+import android.Manifest;
 import android.app.Activity;
+import android.app.Fragment;
+import android.app.FragmentManager;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
@@ -21,10 +22,14 @@ import com.alimuzaffar.ramadanalarm.fragments.KaabaLocatorFragment;
 import com.alimuzaffar.ramadanalarm.fragments.LocationHelper;
 import com.alimuzaffar.ramadanalarm.fragments.SalaatTimesFragment;
 import com.alimuzaffar.ramadanalarm.util.AppSettings;
+import com.alimuzaffar.ramadanalarm.util.PermissionUtil;
+import com.alimuzaffar.ramadanalarm.widget.FragmentStatePagerAdapter;
 import com.alimuzaffar.ramadanalarm.widget.SlidingTabLayout;
 
 
-public class SalaatTimesActivity extends BaseActivity implements Constants, View.OnClickListener, InitialConfigFragment.OnOptionSelectedListener, ViewPager.OnPageChangeListener {
+public class SalaatTimesActivity extends AppCompatActivity implements Constants,
+    View.OnClickListener, InitialConfigFragment.OnOptionSelectedListener, ViewPager.OnPageChangeListener,
+    LocationHelper.LocationCallback {
 
   private LocationHelper mLocationHelper;
   private Location mLastLocation = null;
@@ -42,10 +47,10 @@ public class SalaatTimesActivity extends BaseActivity implements Constants, View
     Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
     setSupportActionBar(toolbar);
 
-    mLocationHelper = (LocationHelper) getSupportFragmentManager().findFragmentByTag(LOCATION_FRAGMENT);
+    mLocationHelper = (LocationHelper) getFragmentManager().findFragmentByTag(LOCATION_FRAGMENT);
 
     // Creating The ViewPagerAdapter and Passing Fragment Manager, Titles fot the Tabs and Number Of Tabs.
-    mAdapter = new ScreenSlidePagerAdapter(getSupportFragmentManager(),0);
+    mAdapter = new ScreenSlidePagerAdapter(getFragmentManager(),0);
 
     // Assigning ViewPager View and setting the adapter
     mPager = (ViewPager) findViewById(R.id.pager);
@@ -73,7 +78,7 @@ public class SalaatTimesActivity extends BaseActivity implements Constants, View
 
     if(mLocationHelper == null) {
       mLocationHelper = LocationHelper.newInstance();
-      getSupportFragmentManager().beginTransaction().add(mLocationHelper, LOCATION_FRAGMENT).commit();
+      getFragmentManager().beginTransaction().add(mLocationHelper, LOCATION_FRAGMENT).commit();
     }
   }
 
@@ -160,32 +165,10 @@ public class SalaatTimesActivity extends BaseActivity implements Constants, View
   /**
    * Callback received when a permissions request has been completed.
    */
-  @Override
-  public void onRequestPermissionsResult(int requestCode, String[] permissions,
-                                         int[] grantResults) {
-
-    if (requestCode == REQUEST_LOCATION) {
-      if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-        fetchLocation();
-      } else {
-        Log.i("BaseActivity", "LOCATION permission was NOT granted.");
-        onLocationPermissionFailed();
-      }
-
-    } else {
-      super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-    }
-  }
-
   private void fetchLocation() {
     if (mLocationHelper != null) {
       mLocationHelper.checkLocationPermissions();
     }
-  }
-
-  @Override
-  public void onLocationPermissionFailed() {
-    mLocationHelper.setLoationPermissionDenied(true);
   }
 
   @Override
@@ -197,7 +180,7 @@ public class SalaatTimesActivity extends BaseActivity implements Constants, View
   public void onLocationChanged(Location location) {
     mLastLocation = location;
     // NOT THE BEST SOLUTION, THINK OF SOMETHING ELSE
-    mAdapter = new ScreenSlidePagerAdapter(getSupportFragmentManager(), 0);
+    mAdapter = new ScreenSlidePagerAdapter(getFragmentManager(), 0);
     mPager.setAdapter(mAdapter);
   }
 
@@ -210,7 +193,7 @@ public class SalaatTimesActivity extends BaseActivity implements Constants, View
   public void onUseDefaultSelected() {
     if (mLastLocation != null) {
       // NOT THE BEST SOLUTION, THINK OF SOMETHING ELSE
-      mAdapter = new ScreenSlidePagerAdapter(getSupportFragmentManager(),0);
+      mAdapter = new ScreenSlidePagerAdapter(getFragmentManager(),0);
       mPager.setAdapter(mAdapter);
     }
   }
@@ -228,15 +211,17 @@ public class SalaatTimesActivity extends BaseActivity implements Constants, View
 
   @Override
   public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-
   }
 
   @Override
   public void onPageSelected(int position) {
     if (position == 1) {
-      mAdapter.mKaabaFragment.showMap();
+      if (mAdapter.mKaabaLocatorFragment != null &&
+          PermissionUtil.hasSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
+        mAdapter.mKaabaLocatorFragment.showMap();
+      }
     } else {
-      mAdapter.mKaabaFragment.hideMap();
+      mAdapter.mKaabaLocatorFragment.hideMap();
     }
   }
 
@@ -245,10 +230,9 @@ public class SalaatTimesActivity extends BaseActivity implements Constants, View
 
   }
 
-
   private class ScreenSlidePagerAdapter extends FragmentStatePagerAdapter {
-    public KaabaLocatorFragment mKaabaFragment;
     private int mCardIndex;
+    public KaabaLocatorFragment mKaabaLocatorFragment;
 
     public ScreenSlidePagerAdapter(FragmentManager fm, int index) {
       super(fm);
@@ -265,7 +249,7 @@ public class SalaatTimesActivity extends BaseActivity implements Constants, View
             return InitialConfigFragment.newInstance();
           }
         case 1:
-          return mKaabaFragment = KaabaLocatorFragment.newInstance(mLastLocation);
+          return mKaabaLocatorFragment = KaabaLocatorFragment.newInstance(mLastLocation);
       }
       return null;
     }

@@ -91,11 +91,15 @@
         Without this, Salaat times will not be visible.
     </string>
 
-<!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="salaat_times">Salaat times</string>
     <string name="kaaba_position">Kaaba position</string>
     <string name="current_location">Current location</string>
     <string name="kaaba">Kaaba</string>
+
+    <string name="permission_write_external_required">
+        Kaaba locator requires Google Maps which requires permission to write to external storage.\n\n
+        If you click \'continue\', you will be prompted to grant permissions to write to external storage.
+    </string>
+    <string name="button_continue">Continue \u2192</string>
 
 </resources>

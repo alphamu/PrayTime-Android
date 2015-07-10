@@ -1,7 +1,10 @@
 package com.alimuzaffar.ramadanalarm.fragments;
 
 
+import android.Manifest;
 import android.app.Activity;
+import android.app.Fragment;
+import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
@@ -9,7 +12,6 @@ import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.location.Location;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,11 +20,12 @@ import android.view.ViewGroup;
 import com.alimuzaffar.ramadanalarm.BuildConfig;
 import com.alimuzaffar.ramadanalarm.Constants;
 import com.alimuzaffar.ramadanalarm.R;
+import com.alimuzaffar.ramadanalarm.util.PermissionUtil;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.GoogleMapOptions;
+import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.OnMapReadyCallback;
-import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
@@ -35,7 +38,7 @@ import com.google.android.gms.maps.model.PolylineOptions;
 public class KaabaLocatorFragment extends Fragment implements Constants, OnMapReadyCallback, SensorEventListener {
 
   Location mLastLocation;
-  SupportMapFragment mMapFragment;
+  MapFragment mMapFragment;
   GoogleMap mMap;
 
 //  private float currentDegree = 0f;
@@ -45,6 +48,7 @@ public class KaabaLocatorFragment extends Fragment implements Constants, OnMapRe
   private float[] mValues = new float[3];
 
   private boolean mRegistered = false;
+  private static boolean sWriterExternalPermissionDenied;
 
   public KaabaLocatorFragment() {
     // Required empty public constructor
@@ -77,12 +81,33 @@ public class KaabaLocatorFragment extends Fragment implements Constants, OnMapRe
                            Bundle savedInstanceState) {
     // Inflate the layout for this fragment
     View view = inflater.inflate(R.layout.fragment_kaaba_locator, container, false);
+    view.findViewById(R.id.grant).setOnClickListener(new View.OnClickListener() {
+      @Override
+      public void onClick(View v) {
+        checkPermissions();
+      }
+    });
     return view;
   }
 
+  private boolean checkPermissions() {
+    if (!PermissionUtil.hasSelfPermission(getActivity(), Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
+      if (!sWriterExternalPermissionDenied) {
+        requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, REQUEST_WRITE_EXTERNAL);
+      } else {
+        // Perhaps inform the user why they aren't seeing anything.
+      }
+      return false;
+    }
+    return true;
+  }
+
   public void showMap() {
+    if (!PermissionUtil.hasSelfPermission(getActivity(), Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
+      throw new IllegalStateException("WRITE_EXTERNAL_STORAGE permission should be granted before this method is called.");
+    }
     if (mMapFragment == null) {
-      mMapFragment = (SupportMapFragment) getFragmentManager().findFragmentByTag("map_fragment");
+      mMapFragment = (MapFragment) getFragmentManager().findFragmentByTag("map_fragment");
     }
     if (mMapFragment == null) {
       GoogleMapOptions options = new GoogleMapOptions()
@@ -92,9 +117,10 @@ public class KaabaLocatorFragment extends Fragment implements Constants, OnMapRe
               .zoomControlsEnabled(false)
               .zoomGesturesEnabled(true)
               .scrollGesturesEnabled(true);
-      mMapFragment = SupportMapFragment.newInstance(options);
+      mMapFragment = MapFragment.newInstance(options);
     }
-    if (mMap == null) {
+    if (mMap == null && !mMapFragment.isAdded()) {
+      ((ViewGroup) getView().findViewById(R.id.map_container)).removeAllViews();
       getFragmentManager().beginTransaction().add(R.id.map_container, mMapFragment, "map_fragment").commit();
       mMapFragment.getMapAsync(this);
     } else {
@@ -243,5 +269,25 @@ public class KaabaLocatorFragment extends Fragment implements Constants, OnMapRe
   @Override
   public void onAccuracyChanged(Sensor sensor, int accuracy) {
 
+  }
+
+  /**
+   * Callback received when a permissions request has been completed.
+   */
+  @Override
+  public void onRequestPermissionsResult(int requestCode, String[] permissions,
+                                         int[] grantResults) {
+
+    if (requestCode == REQUEST_WRITE_EXTERNAL) {
+      if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+
+      } else {
+        Log.i("BaseActivity", "LOCATION permission was NOT granted.");
+        sWriterExternalPermissionDenied = true;
+      }
+
+    } else {
+      getActivity().onRequestPermissionsResult(requestCode, permissions, grantResults);
+    }
   }
 }

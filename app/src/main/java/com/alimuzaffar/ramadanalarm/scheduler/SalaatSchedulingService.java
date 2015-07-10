@@ -7,13 +7,12 @@ import android.content.Context;
 import android.content.Intent;
 import android.support.v4.app.NotificationCompat;
 
-import com.alimuzaffar.ramadanalarm.BaseActivity;
 import com.alimuzaffar.ramadanalarm.Constants;
 import com.alimuzaffar.ramadanalarm.R;
+import com.alimuzaffar.ramadanalarm.SalaatTimesActivity;
 import com.alimuzaffar.ramadanalarm.util.AppSettings;
 import com.alimuzaffar.ramadanalarm.util.PrayTime;
 
-import java.sql.Time;
 import java.util.Calendar;
 import java.util.LinkedHashMap;
 import java.util.TimeZone;
@@ -79,7 +78,7 @@ public class SalaatSchedulingService extends IntentService implements Constants 
         this.getSystemService(Context.NOTIFICATION_SERVICE);
 
     PendingIntent contentIntent = PendingIntent.getActivity(this, 0,
-        new Intent(this, BaseActivity.class), 0);
+        new Intent(this, SalaatTimesActivity.class), 0);
 
     NotificationCompat.Builder mBuilder =
         new NotificationCompat.Builder(this)

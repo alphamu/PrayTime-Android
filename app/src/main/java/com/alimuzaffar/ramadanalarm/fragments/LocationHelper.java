@@ -2,17 +2,17 @@ package com.alimuzaffar.ramadanalarm.fragments;
 
 import android.Manifest;
 import android.app.Activity;
+import android.app.Fragment;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentSender;
+import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationManager;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.util.Log;
 
-import com.alimuzaffar.ramadanalarm.BaseActivity;
 import com.alimuzaffar.ramadanalarm.Constants;
 import com.alimuzaffar.ramadanalarm.util.PermissionUtil;
 import com.google.android.gms.common.ConnectionResult;
@@ -34,7 +34,7 @@ public class LocationHelper extends Fragment implements Constants, GoogleApiClie
   LocationRequest mCoarseLocationRequest;
 
   private LocationCallback mCallback;
-  private BaseActivity mActivity;
+  private Activity mActivity;
   private static boolean sLoationPermissionDenied;
 
 
@@ -55,7 +55,7 @@ public class LocationHelper extends Fragment implements Constants, GoogleApiClie
   @Override
   public void onAttach(Activity activity) {
     super.onAttach(activity);
-    if (activity instanceof LocationCallback && activity instanceof BaseActivity) {
+    if (activity instanceof LocationCallback) {
       mCallback = (LocationCallback) activity;
     } else {
       throw new IllegalArgumentException("activity must extend BaseActivity and implement LocationHelper.LocationCallback");
@@ -74,14 +74,14 @@ public class LocationHelper extends Fragment implements Constants, GoogleApiClie
   }
 
   public void checkLocationPermissions() {
-    if (PermissionUtil.hasSelfPermission((BaseActivity) getActivity(), Manifest.permission.ACCESS_FINE_LOCATION)) {
+    if (PermissionUtil.hasSelfPermission(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION)) {
       initAppAfterCheckingLocation();
     } else {
       // UNCOMMENT TO SUPPORT ANDROID M RUNTIME PERMISSIONS
 //      Intent intent = mActivity.getPackageManager().buildRequestPermissionsIntent(new String[]{Manifest.permission.ACCESS_FINE_LOCATION});
 //      startActivityForResult(intent, REQUEST_LOCATION);
       if (!sLoationPermissionDenied) {
-        ((BaseActivity) getActivity()).requestPermissionsProxy(new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, REQUEST_LOCATION);
+        requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, REQUEST_LOCATION);
       }
     }
   }
@@ -229,8 +229,6 @@ public class LocationHelper extends Fragment implements Constants, GoogleApiClie
   /**
    * Callback received when a permissions request has been completed.
    */
-  // UNCOMMENT WHEN SUPPORTING ANDROID-M STYLE RUNTIME PERMISSIONS
-  /*
   @Override
   public void onRequestPermissionsResult(int requestCode, String[] permissions,
                                          int[] grantResults) {
@@ -240,14 +238,14 @@ public class LocationHelper extends Fragment implements Constants, GoogleApiClie
         checkLocationPermissions();
       } else {
         Log.i("BaseActivity", "LOCATION permission was NOT granted.");
-        mCallback.onLocationPermissionFailed();
+        setLoationPermissionDenied(true);
       }
 
     } else {
-      getActivity().onRequestPermissionsResult(requestCode, permissions, grantResults);
+      super.onRequestPermissionsResult(requestCode, permissions, grantResults);
     }
   }
-*/
+
 
 
   // NOT SURE WHERE THIS CODE GOES, BUT ITS NEEDED SO THAT WE CAN BE NOTIFIED
@@ -284,10 +282,7 @@ public class LocationHelper extends Fragment implements Constants, GoogleApiClie
   }
 
   public interface LocationCallback {
-    void onLocationPermissionFailed();
-
     void onLocationSettingsFailed();
-
     void onLocationChanged(Location location);
   }
 

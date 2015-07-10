@@ -9,6 +9,7 @@ public interface Constants {
   int REQUEST_CHECK_SETTINGS = 101;
   int REQUEST_ONBOARDING = 102;
   int REQUEST_LOCATION = 103;
+  int REQUEST_WRITE_EXTERNAL = 103;
 
   //EXTRAS
   String EXTRA_ALARM_INDEX = "alarm_index";

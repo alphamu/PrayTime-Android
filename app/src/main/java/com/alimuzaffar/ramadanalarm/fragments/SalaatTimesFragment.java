@@ -1,20 +1,18 @@
 package com.alimuzaffar.ramadanalarm.fragments;
 
 
-import android.content.Intent;
+import android.app.Fragment;
 import android.location.Location;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.alimuzaffar.ramadanalarm.scheduler.SalaatAlarmReceiver;
-import com.alimuzaffar.ramadanalarm.util.AppSettings;
 import com.alimuzaffar.ramadanalarm.Constants;
 import com.alimuzaffar.ramadanalarm.R;
-import com.alimuzaffar.ramadanalarm.SetAlarmActivity;
+import com.alimuzaffar.ramadanalarm.scheduler.SalaatAlarmReceiver;
+import com.alimuzaffar.ramadanalarm.util.AppSettings;
 import com.alimuzaffar.ramadanalarm.util.PrayTime;
 
 import java.util.LinkedHashMap;

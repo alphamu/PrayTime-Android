@@ -16,10 +16,9 @@
 
 package com.alimuzaffar.ramadanalarm.util;
 
+import android.app.Activity;
 import android.content.pm.PackageManager;
 import android.os.Build;
-
-import com.alimuzaffar.ramadanalarm.BaseActivity;
 
 /**
  * Utility class that wraps access to the runtime permissions API in M and provides basic helper
@@ -31,7 +30,7 @@ public abstract class PermissionUtil {
      * Check that all given permissions have been granted by verifying that each entry in the
      * given array is of the value {@link PackageManager#PERMISSION_GRANTED}.
      *
-     * @see BaseActivity#onRequestPermissionsResult(int, String[], int[])
+     * @see Activity#onRequestPermissionsResult(int, String[], int[])
      */
     public static boolean verifyPermissions(int[] grantResults) {
         // Verify that each required permission has been granted, otherwise return false.
@@ -47,9 +46,9 @@ public abstract class PermissionUtil {
      * Returns true if the Activity has access to all given permissions.
      * Always returns true on platforms below M.
      *
-     * @see BaseActivity#checkSelfPermission(String)
+     * @see Activity#checkSelfPermission(String)
      */
-    public static boolean hasSelfPermission(BaseActivity activity, String[] permissions) {
+    public static boolean hasSelfPermission(Activity activity, String[] permissions) {
         // Below Android M all permissions are granted at install time and are already available.
         if (!isMNC()) {
             return true;
@@ -68,9 +67,9 @@ public abstract class PermissionUtil {
      * Returns true if the Activity has access to a given permission.
      * Always returns true on platforms below M.
      *
-     * @see BaseActivity#checkSelfPermission(String)
+     * @see Activity#checkSelfPermission(String)
      */
-    public static boolean hasSelfPermission(BaseActivity activity, String permission) {
+    public static boolean hasSelfPermission(Activity activity, String permission) {
         // Below Android M all permissions are granted at install time and are already available.
         if (!isMNC()) {
             return true;

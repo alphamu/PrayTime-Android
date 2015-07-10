@@ -1,10 +1,9 @@
 package com.alimuzaffar.ramadanalarm;
 
+import android.app.Fragment;
+import android.app.FragmentManager;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
@@ -16,6 +15,7 @@ import com.alimuzaffar.ramadanalarm.fragments.OnboardingAsrCalculationMethodFrag
 import com.alimuzaffar.ramadanalarm.fragments.OnboardingCalculationMethodFragment;
 import com.alimuzaffar.ramadanalarm.fragments.OnboardingTimeFormatFragment;
 import com.alimuzaffar.ramadanalarm.util.AppSettings;
+import com.alimuzaffar.ramadanalarm.widget.FragmentStatePagerAdapter;
 
 public class OnboardingActivity extends AppCompatActivity implements OnOnboardingOptionSelectedListener {
 
@@ -36,7 +36,7 @@ public class OnboardingActivity extends AppCompatActivity implements OnOnboardin
     Intent intent = getIntent();
     mCardIndex = intent.getIntExtra(EXTRA_CARD_INDEX, 0);
     mPager = (ViewPager) findViewById(R.id.pager);
-    mPagerAdapter = new ScreenSlidePagerAdapter(getSupportFragmentManager(), mCardIndex);
+    mPagerAdapter = new ScreenSlidePagerAdapter(getFragmentManager(), mCardIndex);
     mPager.setAdapter(mPagerAdapter);
   }
 
