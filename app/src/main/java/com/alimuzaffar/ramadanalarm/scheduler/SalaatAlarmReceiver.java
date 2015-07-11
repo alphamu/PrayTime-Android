@@ -10,6 +10,8 @@ import android.support.v4.content.WakefulBroadcastReceiver;
 import android.util.Log;
 
 import com.alimuzaffar.ramadanalarm.Constants;
+import com.alimuzaffar.ramadanalarm.R;
+import com.alimuzaffar.ramadanalarm.RingAlarmActivity;
 import com.alimuzaffar.ramadanalarm.util.AppSettings;
 import com.alimuzaffar.ramadanalarm.util.PrayTime;
 
@@ -51,13 +53,22 @@ public class SalaatAlarmReceiver extends WakefulBroadcastReceiver implements Con
          * In this example, we simply create a new intent to deliver to the service.
          * This intent holds an extra identifying the wake lock.
          */
+    String prayerName = intent.getStringExtra(EXTRA_PRAYER_NAME);
     AppSettings settings = AppSettings.getInstance(context);
     if (settings.isAlarmSetFor(0)) {
       Intent service = new Intent(context, SalaatSchedulingService.class);
+      service.putExtra(EXTRA_PRAYER_NAME, prayerName);
 
       // Start the service, keeping the device awake while it is launching.
       startWakefulService(context, service);
       // END_INCLUDE(alarm_onreceive)
+
+      // START THE ALARM ACTIVITY
+      Intent newIntent = new Intent(context, RingAlarmActivity.class);
+      Log.d("SalaatAlarmReceiver", "Alarm Receiver Got " + prayerName);
+      newIntent.putExtra(EXTRA_PRAYER_NAME, prayerName);
+      newIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+      context.startActivity(newIntent);
 
       //SET THE NEXT ALARM
       setAlarm(context);
@@ -92,6 +103,7 @@ public class SalaatAlarmReceiver extends WakefulBroadcastReceiver implements Con
     AppSettings settings = AppSettings.getInstance(context);
 
     boolean nextAlarmFound = false;
+    String nameOfPrayerFound = null;
     for (String prayer : prayerTimes.keySet()) {
       if (!isAlarmEnabledForPrayer(settings, prayer, alarmIndex)) {
         continue;
@@ -101,6 +113,7 @@ public class SalaatAlarmReceiver extends WakefulBroadcastReceiver implements Con
 
       if (then.after(now)) {
         // this is the alarm to set
+        nameOfPrayerFound = prayer;
         nextAlarmFound = true;
         break;
       }
@@ -116,6 +129,7 @@ public class SalaatAlarmReceiver extends WakefulBroadcastReceiver implements Con
 
         if (then.before(now)) {
           // this is the next day.
+          nameOfPrayerFound = prayer;
           nextAlarmFound = true;
           then.add(Calendar.DAY_OF_YEAR, 1);
           break;
@@ -127,10 +141,11 @@ public class SalaatAlarmReceiver extends WakefulBroadcastReceiver implements Con
       return; //something went wrong, abort!
     }
 
-    alarmIntent = PendingIntent.getBroadcast(context, 0, intent, 0);
+    nameOfPrayerFound = getPrayerNameFromIndex(context, getPrayerIndexFromName(nameOfPrayerFound));
+    intent.putExtra(EXTRA_PRAYER_NAME, nameOfPrayerFound);
+    alarmIntent = PendingIntent.getBroadcast(context, ALARM_ID, intent, 0);
 
-    alarmMgr.set(AlarmManager.RTC_WAKEUP,
-        then.getTimeInMillis(), alarmIntent);
+    alarmMgr.set(AlarmManager.RTC_WAKEUP, then.getTimeInMillis(), alarmIntent);
 
     // Enable {@code SampleBootReceiver} to automatically restart the alarm when the
     // device is rebooted.
@@ -154,7 +169,7 @@ public class SalaatAlarmReceiver extends WakefulBroadcastReceiver implements Con
     if (alarmMgr != null) {
       if (alarmIntent == null) {
         Intent intent = new Intent(context, SalaatAlarmReceiver.class);
-        alarmIntent = PendingIntent.getBroadcast(context, 0, intent, 0);
+        alarmIntent = PendingIntent.getBroadcast(context, ALARM_ID, intent, 0);
       }
       alarmMgr.cancel(alarmIntent);
     }
@@ -218,6 +233,28 @@ public class SalaatAlarmReceiver extends WakefulBroadcastReceiver implements Con
         break;
     }
     return key;
+  }
+
+  private String getPrayerNameFromIndex(Context context, int prayerIndex) {
+    String prayerName = null;
+    switch (prayerIndex) {
+      case 0:
+        prayerName = context.getString(R.string.fajr);
+        break;
+      case 1:
+        prayerName = context.getString(R.string.dhuhr);
+        break;
+      case 2:
+        prayerName = context.getString(R.string.asr);
+        break;
+      case 3:
+        prayerName = context.getString(R.string.maghrib);
+        break;
+      case 4:
+        prayerName = context.getString(R.string.isha);
+        break;
+    }
+    return prayerName;
   }
 
   private boolean isAlarmEnabledForPrayer(AppSettings settings, String prayer, int alarmIndex) {

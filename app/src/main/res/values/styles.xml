@@ -48,6 +48,10 @@
         <item name="rowWithSeparatorBackground">@drawable/bg_table_row_light</item>
     </style>
 
+    <style name="AppTheme.Teal.Dark" parent="Theme.AppCompat.NoActionBar">
+
+    </style>
+
     <style name="Widget.CardContent" parent="android:Widget">
         <item name="android:paddingLeft">16dp</item>
         <item name="android:paddingRight">16dp</item>

@@ -42,29 +42,10 @@ public class SalaatSchedulingService extends IntentService implements Constants 
   protected void onHandleIntent(Intent intent) {
     // BEGIN_INCLUDE(service_onhandle)
 
-    String prayerName = "";
-
-    double lat = AppSettings.getInstance(getApplicationContext()).getLatFor(0);
-    double lng = AppSettings.getInstance(getApplicationContext()).getLngFor(0);
-    LinkedHashMap<String, String> prayerTimes = PrayTime.getPrayerTimes(getApplicationContext(), 0, lat, lng, PrayTime.TIME_24);
+    String prayerName = intent.getStringExtra(EXTRA_PRAYER_NAME);
 
     Calendar now = Calendar.getInstance(TimeZone.getDefault());
     now.setTimeInMillis(System.currentTimeMillis());
-
-    Calendar alarm = Calendar.getInstance(TimeZone.getDefault());
-    for (String prayer : prayerTimes.keySet()) {
-      String[] time = prayerTimes.get(prayer).split(":");
-      alarm.set(Calendar.HOUR_OF_DAY, Integer.valueOf(time[0]));
-      alarm.set(Calendar.MINUTE, Integer.valueOf(time[1]));
-      alarm.set(Calendar.SECOND, 0);
-      alarm.set(Calendar.MILLISECOND, 0);
-
-      //if within 5 minutes of the prayer time
-      if (Math.abs(alarm.getTimeInMillis() - now.getTimeInMillis()) < (60000 * 5)) {
-        prayerName = prayer;
-        break;
-      }
-    }
 
     sendNotification(String.format("%2$tl:%2$tM %1$s time", prayerName, now), "This is a test notification for " + prayerName);
     // Release the wake lock provided by the BroadcastReceiver.
