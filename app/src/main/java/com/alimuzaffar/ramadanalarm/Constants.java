@@ -9,7 +9,8 @@ public interface Constants {
   int REQUEST_CHECK_SETTINGS = 101;
   int REQUEST_ONBOARDING = 102;
   int REQUEST_LOCATION = 103;
-  int REQUEST_WRITE_EXTERNAL = 103;
+  int REQUEST_WRITE_EXTERNAL = 104;
+  int REQUEST_SET_ALARM = 105;
 
   //EXTRAS
   String EXTRA_ALARM_INDEX = "alarm_index";
@@ -23,4 +24,5 @@ public interface Constants {
   String EXTRA_PRAYER_NAME = "prayer_name";
 
   public static final DateFormat TIME = new SimpleDateFormat("HH:mm", Locale.getDefault());
+
 }

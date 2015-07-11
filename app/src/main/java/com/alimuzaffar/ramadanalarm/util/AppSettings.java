@@ -45,12 +45,22 @@ public class AppSettings {
 	   * 
 	   * String: SAMPLE_KEY, SAMPLE_STR or just SAMPLE
 	   */
+    //ALARM RELATED
     public static final String IS_ALARM_SET = "is_alarm_set_for_%d";
+    public static final String IS_FAJR_ALARM_SET = "is_fajr_alarm_set_for_%d";
+    public static final String IS_DHUHR_ALARM_SET = "is_dhuhr_alarm_set_for_%d";
+    public static final String IS_ASR_ALARM_SET = "is_asr_alarm_set_for_%d";
+    public static final String IS_MAGHRIB_ALARM_SET = "is_maghrib_alarm_set_for_%d";
+    public static final String IS_ISHA_ALARM_SET = "is_isha_alarm_set_for_%d";
+
+    //CONFIG RELATED
     public static final String HAS_DEFAULT_SET = "has_default_set";
     public static final String CALC_METHOD = "calc_method_for_%d";
     public static final String ASR_METHOD = "asr_method_for_%d";
     public static final String ADJUST_METHOD = "adjust_high_latitudes_method_for_%d";
     public static final String TIME_FORMAT = "time_format_for_%d";
+
+    //LOCATION RELATED
     public static final String LAT_FOR = "lat_for_%d";
     public static final String LNG_FOR = "lng_for_%d";
 

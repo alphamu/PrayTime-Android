@@ -5,4 +5,5 @@
     <attr name="buttonTextColor" format="color" />
     <attr name="cardTitleBackground" format="reference" />
     <attr name="rowWithSeparatorBackground" format="reference" />
+    <attr name="cellWithSeparatorBackground" format="reference" />
 </resources>

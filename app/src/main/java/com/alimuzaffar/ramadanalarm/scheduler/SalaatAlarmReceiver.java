@@ -51,14 +51,17 @@ public class SalaatAlarmReceiver extends WakefulBroadcastReceiver implements Con
          * In this example, we simply create a new intent to deliver to the service.
          * This intent holds an extra identifying the wake lock.
          */
-    Intent service = new Intent(context, SalaatSchedulingService.class);
+    AppSettings settings = AppSettings.getInstance(context);
+    if (settings.isAlarmSetFor(0)) {
+      Intent service = new Intent(context, SalaatSchedulingService.class);
 
-    // Start the service, keeping the device awake while it is launching.
-    startWakefulService(context, service);
-    // END_INCLUDE(alarm_onreceive)
+      // Start the service, keeping the device awake while it is launching.
+      startWakefulService(context, service);
+      // END_INCLUDE(alarm_onreceive)
 
-    //SET THE NEXT ALARM
-    setAlarm(context);
+      //SET THE NEXT ALARM
+      setAlarm(context);
+    }
   }
 
   // BEGIN_INCLUDE(set_alarm)
@@ -77,23 +80,24 @@ public class SalaatAlarmReceiver extends WakefulBroadcastReceiver implements Con
     now.setTimeInMillis(System.currentTimeMillis());
     // Set the alarm's trigger time to 8:30 a.m.
 
+    int alarmIndex = 0;
+
     Calendar then = Calendar.getInstance(TimeZone.getDefault());
     then.setTimeInMillis(System.currentTimeMillis());
 
-    double lat = AppSettings.getInstance(context).getLatFor(0);
-    double lng = AppSettings.getInstance(context).getLngFor(0);
-    LinkedHashMap<String, String> prayerTimes = PrayTime.getPrayerTimes(context, 0, lat, lng, PrayTime.TIME_24);
+    double lat = AppSettings.getInstance(context).getLatFor(alarmIndex);
+    double lng = AppSettings.getInstance(context).getLngFor(alarmIndex);
+    LinkedHashMap<String, String> prayerTimes = PrayTime.getPrayerTimes(context, alarmIndex, lat, lng, PrayTime.TIME_24);
+
+    AppSettings settings = AppSettings.getInstance(context);
 
     boolean nextAlarmFound = false;
     for (String prayer : prayerTimes.keySet()) {
-      if (prayer.equalsIgnoreCase("sunrise") || prayer.equalsIgnoreCase("sunset")) {
+      if (!isAlarmEnabledForPrayer(settings, prayer, alarmIndex)) {
         continue;
       }
-      String [] time = prayerTimes.get(prayer).split(":");
-      then.set(Calendar.HOUR_OF_DAY, Integer.valueOf(time[0]));
-      then.set(Calendar.MINUTE, Integer.valueOf(time[1]));
-      then.set(Calendar.SECOND, 0);
-      then.set(Calendar.MILLISECOND, 0);
+
+      then = getCalendarFromPrayerTime(then, prayerTimes.get(prayer));
 
       if (then.after(now)) {
         // this is the alarm to set
@@ -104,14 +108,11 @@ public class SalaatAlarmReceiver extends WakefulBroadcastReceiver implements Con
 
     if (!nextAlarmFound) {
       for (String prayer : prayerTimes.keySet()) {
-        if (prayer.equalsIgnoreCase("sunrise") || prayer.equalsIgnoreCase("sunset")) {
+        if (!isAlarmEnabledForPrayer(settings, prayer, alarmIndex)) {
           continue;
         }
-        String [] time = prayerTimes.get(prayer).split(":");
-        then.set(Calendar.HOUR_OF_DAY, Integer.valueOf(time[0]));
-        then.set(Calendar.MINUTE, Integer.valueOf(time[1]));
-        then.set(Calendar.SECOND, 0);
-        then.set(Calendar.MILLISECOND, 0);
+
+        then = getCalendarFromPrayerTime(then, prayerTimes.get(prayer));
 
         if (then.before(now)) {
           // this is the next day.
@@ -177,5 +178,64 @@ public class SalaatAlarmReceiver extends WakefulBroadcastReceiver implements Con
       Log.e("SalaatAlarmReceiver", "ERROR PARSING TIME");
       return null;
     }
+  }
+
+  private int getPrayerIndexFromName(String prayerName) {
+    String name = prayerName.toLowerCase();
+    char index = name.charAt(0);
+    switch (index) {
+      case 'f':
+        return 0;
+      case 'd':
+        return 1;
+      case 'a':
+        return 2;
+      case 'm':
+        return 3;
+      case 'i':
+        return 4;
+    }
+    return -1;
+  }
+
+  private String getPrayerKeyFromIndex(AppSettings settings, int prayerIndex, int index) {
+    String key = null;
+    switch (prayerIndex) {
+      case 0:
+        key = settings.getKeyFor(AppSettings.Key.IS_FAJR_ALARM_SET, index);
+        break;
+      case 1:
+        key = settings.getKeyFor(AppSettings.Key.IS_DHUHR_ALARM_SET, index);
+        break;
+      case 2:
+        key = settings.getKeyFor(AppSettings.Key.IS_ASR_ALARM_SET, index);
+        break;
+      case 3:
+        key = settings.getKeyFor(AppSettings.Key.IS_MAGHRIB_ALARM_SET, index);
+        break;
+      case 4:
+        key = settings.getKeyFor(AppSettings.Key.IS_ISHA_ALARM_SET, index);
+        break;
+    }
+    return key;
+  }
+
+  private boolean isAlarmEnabledForPrayer(AppSettings settings, String prayer, int alarmIndex) {
+    if (prayer.equalsIgnoreCase("sunrise") || prayer.equalsIgnoreCase("sunset")) {
+      return false;
+    }
+
+    int prayerIndex = getPrayerIndexFromName(prayer);
+    String key = getPrayerKeyFromIndex(settings, prayerIndex, alarmIndex);
+    return settings.getBoolean(key);
+  }
+
+  private Calendar getCalendarFromPrayerTime(Calendar cal, String prayerTime) {
+    String[] time =prayerTime.split(":");
+    cal.set(Calendar.HOUR_OF_DAY, Integer.valueOf(time[0]));
+    cal.set(Calendar.MINUTE, Integer.valueOf(time[1]));
+    cal.set(Calendar.SECOND, 0);
+    cal.set(Calendar.MILLISECOND, 0);
+    return cal;
   }
 }

@@ -32,6 +32,7 @@
         <item name="buttonTextColor">@color/button_text_teal_light</item>
         <item name="cardTitleBackground">@drawable/bg_card_title_teal_light</item>
         <item name="rowWithSeparatorBackground">@drawable/bg_table_row_teal_light</item>
+        <item name="cellWithSeparatorBackground">@drawable/bg_table_cell_teal_light</item>
     </style>
 
 
@@ -98,6 +99,10 @@
 
     <style name="Widget.TimeRow.Separator" parent="Widget.TimeRow">
         <item name="android:background">?attr/rowWithSeparatorBackground</item>
+    </style>
+
+    <style name="Widget.AlarmRow" parent="Widget.TimeRow">
+        <item name="android:background">?attr/cellWithSeparatorBackground</item>
     </style>
 
     <style name="Widget.Explain.Separator" parent="Widget.TimeRow">
