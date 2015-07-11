@@ -86,6 +86,9 @@ public class SalaatAlarmReceiver extends WakefulBroadcastReceiver implements Con
 
     boolean nextAlarmFound = false;
     for (String prayer : prayerTimes.keySet()) {
+      if (prayer.equalsIgnoreCase("sunrise") || prayer.equalsIgnoreCase("sunset")) {
+        continue;
+      }
       String [] time = prayerTimes.get(prayer).split(":");
       then.set(Calendar.HOUR_OF_DAY, Integer.valueOf(time[0]));
       then.set(Calendar.MINUTE, Integer.valueOf(time[1]));
@@ -101,6 +104,9 @@ public class SalaatAlarmReceiver extends WakefulBroadcastReceiver implements Con
 
     if (!nextAlarmFound) {
       for (String prayer : prayerTimes.keySet()) {
+        if (prayer.equalsIgnoreCase("sunrise") || prayer.equalsIgnoreCase("sunset")) {
+          continue;
+        }
         String [] time = prayerTimes.get(prayer).split(":");
         then.set(Calendar.HOUR_OF_DAY, Integer.valueOf(time[0]));
         then.set(Calendar.MINUTE, Integer.valueOf(time[1]));
