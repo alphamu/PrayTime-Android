@@ -25,10 +25,10 @@ public class SalaatBootReceiver extends BroadcastReceiver {
     } else if (action.equals("android.intent.action.TIMEZONE_CHANGED") || action.equals("android.intent.action.TIME_SET")) {
       // Our location could have changed, which means time calculations may be different
       // now so cancel the alarm and set it again.
-//      if (AppSettings.getInstance(context).isAlarmSetFor(0)) {
-//        alarm.cancelAlarm(context);
-//        alarm.setAlarm(context);
-//      }
+      if (AppSettings.getInstance(context).isAlarmSetFor(0)) {
+        alarm.cancelAlarm(context);
+        alarm.setAlarm(context);
+      }
     }
   }
 }

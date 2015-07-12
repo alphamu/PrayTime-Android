@@ -106,4 +106,11 @@ public class RingAlarmActivity extends AppCompatActivity implements Constants, V
   public void onClick(View v) {
     stopAlarm();
   }
+
+
+  @Override
+  public void onBackPressed() {
+    //Do nothing since we want to force the user
+    //to click the alarm button.
+  }
 }

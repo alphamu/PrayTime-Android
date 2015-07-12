@@ -12,7 +12,8 @@ public interface Constants {
   int REQUEST_WRITE_EXTERNAL = 104;
   int REQUEST_SET_ALARM = 105;
 
-  final int ALARM_ID = 1010;
+  int ALARM_ID = 1010;
+  int PASSIVE_LOCATION_ID = 1011;
 
   long ONE_MINUTE = 60000;
   long FIVE_MINUTES = ONE_MINUTE * 5;
@@ -21,6 +22,7 @@ public interface Constants {
   String EXTRA_ALARM_INDEX = "alarm_index";
   String EXTRA_LAST_LOCATION = "last_location";
   String EXTRA_PRAYER_NAME = "prayer_name";
+  String EXTRA_PRAYER_TIME = "prayer_time";
 
   String CONTENT_FRAGMENT = "content_fragment";
   String TIMES_FRAGMENT = "times_fragment";

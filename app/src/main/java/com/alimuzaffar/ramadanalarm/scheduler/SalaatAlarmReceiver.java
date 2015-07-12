@@ -6,6 +6,7 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.location.LocationManager;
 import android.support.v4.content.WakefulBroadcastReceiver;
 import android.util.Log;
 
@@ -54,22 +55,27 @@ public class SalaatAlarmReceiver extends WakefulBroadcastReceiver implements Con
          * This intent holds an extra identifying the wake lock.
          */
     String prayerName = intent.getStringExtra(EXTRA_PRAYER_NAME);
+    long prayerTime = intent.getLongExtra(EXTRA_PRAYER_TIME, -1);
+
+    boolean timePassed = (prayerTime != -1 && Math.abs(System.currentTimeMillis() - prayerTime) > FIVE_MINUTES);
+
     AppSettings settings = AppSettings.getInstance(context);
     if (settings.isAlarmSetFor(0)) {
-      Intent service = new Intent(context, SalaatSchedulingService.class);
-      service.putExtra(EXTRA_PRAYER_NAME, prayerName);
+      if (!timePassed) {
+        Intent service = new Intent(context, SalaatSchedulingService.class);
+        service.putExtra(EXTRA_PRAYER_NAME, prayerName);
 
-      // Start the service, keeping the device awake while it is launching.
-      startWakefulService(context, service);
-      // END_INCLUDE(alarm_onreceive)
+        // Start the service, keeping the device awake while it is launching.
+        startWakefulService(context, service);
+        // END_INCLUDE(alarm_onreceive)
 
-      // START THE ALARM ACTIVITY
-      Intent newIntent = new Intent(context, RingAlarmActivity.class);
-      Log.d("SalaatAlarmReceiver", "Alarm Receiver Got " + prayerName);
-      newIntent.putExtra(EXTRA_PRAYER_NAME, prayerName);
-      newIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-      context.startActivity(newIntent);
-
+        // START THE ALARM ACTIVITY
+        Intent newIntent = new Intent(context, RingAlarmActivity.class);
+        Log.d("SalaatAlarmReceiver", "Alarm Receiver Got " + prayerName);
+        newIntent.putExtra(EXTRA_PRAYER_NAME, prayerName);
+        newIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        context.startActivity(newIntent);
+      }
       //SET THE NEXT ALARM
       setAlarm(context);
     }
@@ -143,9 +149,15 @@ public class SalaatAlarmReceiver extends WakefulBroadcastReceiver implements Con
 
     nameOfPrayerFound = getPrayerNameFromIndex(context, getPrayerIndexFromName(nameOfPrayerFound));
     intent.putExtra(EXTRA_PRAYER_NAME, nameOfPrayerFound);
-    alarmIntent = PendingIntent.getBroadcast(context, ALARM_ID, intent, 0);
+    intent.putExtra(EXTRA_PRAYER_TIME, then.getTimeInMillis());
+    alarmIntent = PendingIntent.getBroadcast(context, ALARM_ID, intent, PendingIntent.FLAG_CANCEL_CURRENT);
 
     alarmMgr.set(AlarmManager.RTC_WAKEUP, then.getTimeInMillis(), alarmIntent);
+
+    // SET PASSIVE LOCATION RECEIVER
+    Intent passiveIntent = new Intent(context, PassiveLocationChangedReceiver.class);
+    PendingIntent locationListenerPassivePendingIntent = PendingIntent.getActivity(context, PASSIVE_LOCATION_ID, passiveIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+    requestPassiveLocationUpdates(context, locationListenerPassivePendingIntent);
 
     // Enable {@code SampleBootReceiver} to automatically restart the alarm when the
     // device is rebooted.
@@ -166,12 +178,20 @@ public class SalaatAlarmReceiver extends WakefulBroadcastReceiver implements Con
   // BEGIN_INCLUDE(cancel_alarm)
   public void cancelAlarm(Context context) {
     // If the alarm has been set, cancel it.
+    if (alarmMgr == null) {
+      alarmMgr = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+    }
     if (alarmMgr != null) {
       if (alarmIntent == null) {
         Intent intent = new Intent(context, SalaatAlarmReceiver.class);
-        alarmIntent = PendingIntent.getBroadcast(context, ALARM_ID, intent, 0);
+        alarmIntent = PendingIntent.getBroadcast(context, ALARM_ID, intent, PendingIntent.FLAG_CANCEL_CURRENT);
       }
       alarmMgr.cancel(alarmIntent);
+
+      //REMOVE PASSIVE LOCATION RECEIVER
+      Intent passiveIntent = new Intent(context, PassiveLocationChangedReceiver.class);
+      PendingIntent locationListenerPassivePendingIntent = PendingIntent.getActivity(context, PASSIVE_LOCATION_ID, passiveIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+      removePassiveLocationUpdates(context, locationListenerPassivePendingIntent);
     }
 
     // Disable {@code SampleBootReceiver} so that it doesn't automatically restart the
@@ -185,13 +205,27 @@ public class SalaatAlarmReceiver extends WakefulBroadcastReceiver implements Con
   }
   // END_INCLUDE(cancel_alarm)
 
-  private Date getDateFromString(String timeStr) {
+
+  public void requestPassiveLocationUpdates(Context context, PendingIntent pendingIntent) {
+    long oneHourInMillis = 1000 * 60 * 60;
+    long fiftyKinMeters = 50000;
+
+    LocationManager locationManager = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
     try {
-      Date time = TIME.parse(timeStr);
-      return time;
-    } catch (ParseException pe) {
-      Log.e("SalaatAlarmReceiver", "ERROR PARSING TIME");
-      return null;
+      locationManager.requestLocationUpdates(LocationManager.PASSIVE_PROVIDER,
+          oneHourInMillis, fiftyKinMeters, pendingIntent);
+    } catch (SecurityException se) {
+      Log.w("SetAlarmReceiver", se.getMessage(), se);
+      //do nothing. We should always have permision in order to reach this screen.
+    }
+  }
+
+  public void removePassiveLocationUpdates(Context context, PendingIntent pendingIntent) {
+    LocationManager locationManager = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
+    try {
+      locationManager.removeUpdates(pendingIntent);
+    } catch (SecurityException se) {
+      //do nothing. We should always have permision in order to reach this screen.
     }
   }
 
