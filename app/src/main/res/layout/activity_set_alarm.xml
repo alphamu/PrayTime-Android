@@ -36,7 +36,7 @@
                 android:button="@null"
                 android:drawableRight="?android:attr/listChoiceIndicatorMultiple"
                 android:padding="@dimen/space"
-                android:text="Turn on Alarm"/>
+                android:text="@string/turn_on_alarm"/>
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -121,6 +121,125 @@
                     android:text="@string/isha"/>
 
             </LinearLayout>
+
+            <CheckBox
+                android:id="@+id/ramadan"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:button="@null"
+                android:drawableRight="?android:attr/listChoiceIndicatorMultiple"
+                android:paddingLeft="@dimen/space"
+                android:paddingRight="@dimen/space"
+                android:paddingTop="@dimen/space"
+                android:text="Turn on Ramadan options"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/space_x2"
+                android:paddingLeft="@dimen/space"
+                android:paddingRight="@dimen/space"
+                android:text="Be notified before Suhoor or Iftar and display prayers in the alarm screen.\nThis option is only available if alarm is turned on."/>
+
+            <LinearLayout
+                android:id="@+id/suhoor_alarm"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:visibility="gone"
+                android:weightSum="3">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="2"
+                    android:padding="@dimen/space"
+                    android:text="Notify me before Suhoor"/>
+
+                <Spinner
+                    android:id="@+id/suhoor_offset"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:entries="@array/alarm_before"
+                    android:spinnerMode="dropdown"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/iftar_alarm"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:visibility="gone"
+                android:weightSum="3">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="2"
+                    android:padding="@dimen/space"
+                    android:text="Notify me before Iftar"/>
+
+                <Spinner
+                    android:id="@+id/iftar_offset"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:entries="@array/alarm_before"
+                    android:spinnerMode="dropdown"/>
+            </LinearLayout>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/space"
+                android:text="Ringtone options"
+                android:textSize="14sp"
+                android:textStyle="bold"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="?attr/separatorColor"/>
+
+            <CheckBox
+                android:id="@+id/ascending_alarm"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:button="@null"
+                android:drawableRight="?android:attr/listChoiceIndicatorMultiple"
+                android:paddingLeft="@dimen/space"
+                android:paddingRight="@dimen/space"
+                android:paddingTop="@dimen/space"
+                android:text="Ascending alarm"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/space_x2"
+                android:paddingLeft="@dimen/space"
+                android:paddingRight="@dimen/space"
+                android:text="Volume starts off low and increases every 10 seconds to gently wake you up."/>
+
+            <CheckBox
+                android:id="@+id/random_ringtone"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:button="@null"
+                android:drawableRight="?android:attr/listChoiceIndicatorMultiple"
+                android:padding="@dimen/space"
+                android:text="Random ringtone"/>
+
+            <TextView
+                android:id="@+id/ringtone"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:background="@drawable/bg_button_background_grey_sharp"
+                android:clickable="true"
+                android:gravity="center_vertical"
+                android:padding="@dimen/space"
+                android:text="Select a ringtone"
+                android:textColor="?android:attr/textColorPrimary"/>
 
         </LinearLayout>
     </ScrollView>

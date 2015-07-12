@@ -101,9 +101,17 @@
         If you click \'continue\', you will be prompted to grant permissions to write to external storage.
     </string>
     <string name="button_continue">Continue \u2192</string>
-    <string name="title_activity_ring_alarm">RingAlarmActivity</string>
     <string name="turn_off_alarm">Turn off alarm</string>
+    <string name="turn_on_alarm">Turn on alarm</string>
     <string name="set_alarm">Set alarm</string>
     <string name="prayer_name_time">%s time.</string>
+
+    <string-array name="alarm_before">
+        <item>Off</item>
+        <item>15 mins</item>
+        <item>30 mins</item>
+        <item>45 mins</item>
+        <item>1 hour</item>
+    </string-array>
 
 </resources>

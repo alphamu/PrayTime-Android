@@ -13,6 +13,9 @@ import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.alimuzaffar.ramadanalarm.util.AlarmUtils;
+import com.alimuzaffar.ramadanalarm.util.ScreenUtils;
+
 public class RingAlarmActivity extends AppCompatActivity implements Constants, View.OnClickListener {
 
   private Button mAlarmOff;
@@ -28,6 +31,8 @@ public class RingAlarmActivity extends AppCompatActivity implements Constants, V
         WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED |
         WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON |
         WindowManager.LayoutParams.FLAG_FULLSCREEN);
+
+    ScreenUtils.lockOrientation(this);
 
     setContentView(R.layout.activity_ring_alarm);
 
@@ -47,13 +52,13 @@ public class RingAlarmActivity extends AppCompatActivity implements Constants, V
   }
 
   private void playAlarm() throws Exception {
-    Uri alert = getAlarmRingtoneUri();
+    Uri alert = AlarmUtils.getAlarmRingtoneUri();
     mMediaPlayer = new MediaPlayer();
     mMediaPlayer.setDataSource(this, alert);
     final AudioManager audioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
 
     if (audioManager.getStreamVolume(AudioManager.STREAM_ALARM) == 0) {
-      int volume = getAlarmVolumeFromPercentage(audioManager, 50f);
+      int volume = AlarmUtils.getAlarmVolumeFromPercentage(audioManager, 50f);
       audioManager.setStreamVolume(AudioManager.STREAM_ALARM, volume, 0);
     }
 
@@ -75,36 +80,19 @@ public class RingAlarmActivity extends AppCompatActivity implements Constants, V
     if (mMediaPlayer != null) {
       mMediaPlayer.stop();
       mMediaPlayer.release();
+      mMediaPlayer = null;
     }
     if (mAutoStop != null) {
       mAlarmOff.removeCallbacks(mAutoStop);
+      mAutoStop = null;
     }
-
-    finish();
   }
 
-  private Uri getAlarmRingtoneUri() {
-    Uri alert = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_ALARM);
-    if (alert == null) {
-      // alert is null, using backup
-      alert = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
-      if (alert == null) { // I can't see this ever being null (as always
-        // have a default notification) but just incase
-        // alert backup is null, using 2nd backup
-        alert = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_RINGTONE);
-      }
-    }
-    return alert;
-  }
-
-  public static int getAlarmVolumeFromPercentage(AudioManager audioManager, float percentage) {
-    int volume = (int) Math.ceil((double) audioManager.getStreamMaxVolume(AudioManager.STREAM_ALARM) * (percentage / 100.0d));
-    return volume;
-  }
 
   @Override
   public void onClick(View v) {
     stopAlarm();
+    finish();
   }
 
 
@@ -113,4 +101,11 @@ public class RingAlarmActivity extends AppCompatActivity implements Constants, V
     //Do nothing since we want to force the user
     //to click the alarm button.
   }
+
+  @Override
+  protected void onDestroy() {
+    stopAlarm();
+    super.onDestroy();
+  }
+
 }

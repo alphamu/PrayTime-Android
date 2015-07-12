@@ -52,6 +52,13 @@ public class AppSettings {
     public static final String IS_ASR_ALARM_SET = "is_asr_alarm_set_for_%d";
     public static final String IS_MAGHRIB_ALARM_SET = "is_maghrib_alarm_set_for_%d";
     public static final String IS_ISHA_ALARM_SET = "is_isha_alarm_set_for_%d";
+    public static final String IS_RAMADAN = "is_ramadan";
+    public static final String SUHOOR_OFFSET = "suhoor_offset";
+    public static final String IFTAR_OFFSET = "iftar_offset";
+    public static final String IS_ASCENDING_ALARM = "is_ascending_alarm";
+    public static final String IS_RANDOM_ALARM = "is_random_alarm";
+    public static final String SELECTED_RINGTONE = "ringtone_selected";
+
 
     //CONFIG RELATED
     public static final String HAS_DEFAULT_SET = "has_default_set";

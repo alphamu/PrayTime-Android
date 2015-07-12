@@ -15,6 +15,7 @@ import com.alimuzaffar.ramadanalarm.fragments.OnboardingAsrCalculationMethodFrag
 import com.alimuzaffar.ramadanalarm.fragments.OnboardingCalculationMethodFragment;
 import com.alimuzaffar.ramadanalarm.fragments.OnboardingTimeFormatFragment;
 import com.alimuzaffar.ramadanalarm.util.AppSettings;
+import com.alimuzaffar.ramadanalarm.util.ScreenUtils;
 import com.alimuzaffar.ramadanalarm.widget.FragmentStatePagerAdapter;
 
 public class OnboardingActivity extends AppCompatActivity implements OnOnboardingOptionSelectedListener {
@@ -29,6 +30,7 @@ public class OnboardingActivity extends AppCompatActivity implements OnOnboardin
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
+    ScreenUtils.lockOrientation(this);
     setContentView(R.layout.activity_onboarding);
     Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
     setSupportActionBar(toolbar);

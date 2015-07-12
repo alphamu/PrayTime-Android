@@ -23,6 +23,7 @@ import com.alimuzaffar.ramadanalarm.fragments.LocationHelper;
 import com.alimuzaffar.ramadanalarm.fragments.SalaatTimesFragment;
 import com.alimuzaffar.ramadanalarm.util.AppSettings;
 import com.alimuzaffar.ramadanalarm.util.PermissionUtil;
+import com.alimuzaffar.ramadanalarm.util.ScreenUtils;
 import com.alimuzaffar.ramadanalarm.widget.FragmentStatePagerAdapter;
 import com.alimuzaffar.ramadanalarm.widget.SlidingTabLayout;
 
@@ -42,7 +43,7 @@ public class SalaatTimesActivity extends AppCompatActivity implements Constants,
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_salaat_times);
-    lockOrientation(this);
+    ScreenUtils.lockOrientation(this);
 
     Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
     setSupportActionBar(toolbar);
@@ -196,17 +197,6 @@ public class SalaatTimesActivity extends AppCompatActivity implements Constants,
       mAdapter = new ScreenSlidePagerAdapter(getFragmentManager(),0);
       mPager.setAdapter(mAdapter);
     }
-  }
-
-  /** Locks the device window in actual screen mode. */
-  public static void lockOrientation(Activity activity) {
-    final int orientation = activity.getResources().getConfiguration().orientation;
-    activity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LOCKED);
-  }
-
-  /** Unlocks the device window in user defined screen mode. */
-  public static void unlockOrientation(Activity activity) {
-    activity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_USER);
   }
 
   @Override
