@@ -3,6 +3,7 @@ package com.alimuzaffar.ramadanalarm;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
@@ -22,6 +23,8 @@ public class SetAlarmActivity extends AppCompatActivity implements Constants,
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_set_alarm);
+    Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+    setSupportActionBar(toolbar);
 
     mAlarm = (CheckBox) findViewById(R.id.alarm);
 

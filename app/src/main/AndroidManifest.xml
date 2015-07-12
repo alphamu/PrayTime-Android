@@ -42,7 +42,6 @@
         <activity
             android:name=".RingAlarmActivity"
             android:excludeFromRecents="true"
-            android:label="@string/title_activity_ring_alarm"
             android:launchMode="singleTask"
             android:screenOrientation="user"
             android:theme="@style/AppTheme.Teal.Dark"/>
@@ -56,6 +55,7 @@
                 <action android:name="android.intent.action.BOOT_COMPLETED"/>
                 <action android:name="android.intent.action.TIMEZONE_CHANGED"/>
                 <action android:name="android.intent.action.TIME_SET"/>
+                <action android:name="android.intent.action.MY_PACKAGE_REPLACED"/>
             </intent-filter>
         </receiver>
 

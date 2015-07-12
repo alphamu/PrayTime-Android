@@ -22,7 +22,9 @@ public class SalaatBootReceiver extends BroadcastReceiver {
     String action = intent.getAction();
     if (action.equals("android.intent.action.BOOT_COMPLETED")) {
       alarm.setAlarm(context);
-    } else if (action.equals("android.intent.action.TIMEZONE_CHANGED") || action.equals("android.intent.action.TIME_SET")) {
+    } else if (action.equals("android.intent.action.TIMEZONE_CHANGED") ||
+        action.equals("android.intent.action.TIME_SET") ||
+        action.equals("android.intent.action.MY_PACKAGE_REPLACED")) {
       // Our location could have changed, which means time calculations may be different
       // now so cancel the alarm and set it again.
       if (AppSettings.getInstance(context).isAlarmSetFor(0)) {
