@@ -192,7 +192,7 @@ public class SetAlarmActivity extends AppCompatActivity implements Constants,
       @Override
       public void onClick(View v) {
         final List<String> ringtoneKeys = new ArrayList<>(mRingtonesMap.keySet());
-        String ringtoneUri = AlarmUtils.getAlarmRingtoneUri().toString();
+        String ringtoneUri = settings.getString(AppSettings.Key.SELECTED_RINGTONE, "");
         int selected = -1;
         for (int i = 0; i < ringtoneKeys.size(); i++) {
           String ring = ringtoneKeys.get(i);
@@ -217,6 +217,7 @@ public class SetAlarmActivity extends AppCompatActivity implements Constants,
               }
               mMediaPlayer.setDataSource(SetAlarmActivity.this, mLastSelectedRingtone);
               mMediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
+              mMediaPlayer.setLooping(false);
               mMediaPlayer.prepare();
               mMediaPlayer.start();
             } catch (IOException ioe) {
@@ -227,9 +228,10 @@ public class SetAlarmActivity extends AppCompatActivity implements Constants,
         }, new DialogInterface.OnClickListener() { //ok
           @Override
           public void onClick(DialogInterface dialog, int which) {
-            if (mMediaPlayer != null && mMediaPlayer.isPlaying()) {
+            if (mMediaPlayer != null) {
               mMediaPlayer.stop();
               mMediaPlayer.release();
+              mMediaPlayer = null;
             }
             settings.set(AppSettings.Key.SELECTED_RINGTONE, mLastSelectedRingtone.toString());
             dialog.dismiss();
@@ -237,9 +239,10 @@ public class SetAlarmActivity extends AppCompatActivity implements Constants,
         }, new DialogInterface.OnClickListener() { //cancel
           @Override
           public void onClick(DialogInterface dialog, int which) {
-            if (mMediaPlayer != null && mMediaPlayer.isPlaying()) {
+            if (mMediaPlayer != null) {
               mMediaPlayer.stop();
               mMediaPlayer.release();
+              mMediaPlayer = null;
             }
             dialog.dismiss();
           }

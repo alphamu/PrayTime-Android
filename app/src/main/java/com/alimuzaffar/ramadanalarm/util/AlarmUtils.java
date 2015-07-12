@@ -2,6 +2,7 @@ package com.alimuzaffar.ramadanalarm.util;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.database.Cursor;
 import android.media.AudioManager;
@@ -13,10 +14,20 @@ import java.util.Collection;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-/**
- * Created by Ali on 12/07/2015.
- */
 public class AlarmUtils {
+
+  public static Uri getRandomRingtone(Context context) {
+    Uri alert = null;
+    RingtoneManager ringtoneManager = new RingtoneManager(context);
+    ringtoneManager.setType(RingtoneManager.TYPE_ALARM);
+    int count = ringtoneManager.getCursor().getCount();
+    int attempts = 0;
+    do {
+      int random = (int) Math.random() * (count + 1);
+      alert = ringtoneManager.getRingtoneUri(random);
+    } while (alert == null && ++attempts < 5);
+    return alert;
+  }
 
   public static Uri getAlarmRingtoneUri() {
     Uri alert = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_ALARM);
@@ -53,7 +64,7 @@ public class AlarmUtils {
     return list;
   }
 
-  public static void getRingtonesDialog(Activity activity, Collection<String> items, int selected, DialogInterface.OnClickListener itemClickListener, DialogInterface.OnClickListener okClickListener, DialogInterface.OnClickListener cancelClickListener) {
+  public static void getRingtonesDialog(Activity activity, Collection<String> items, int selected, DialogInterface.OnClickListener itemClickListener, DialogInterface.OnClickListener okClickListener, final DialogInterface.OnClickListener cancelClickListener) {
     AlertDialog.Builder builderSingle = new AlertDialog.Builder(activity);
     builderSingle.setTitle("Select Ringtone");
     final ArrayAdapter<String> arrayAdapter = new ArrayAdapter<>(activity, android.R.layout.select_dialog_singlechoice);
@@ -64,6 +75,9 @@ public class AlarmUtils {
     builderSingle.setPositiveButton(android.R.string.ok, okClickListener);
 
     builderSingle.setSingleChoiceItems(arrayAdapter, selected, itemClickListener);
+
+    builderSingle.setCancelable(false);
+
     builderSingle.show();
   }
 }

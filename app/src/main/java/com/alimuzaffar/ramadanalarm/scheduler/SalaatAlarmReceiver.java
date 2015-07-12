@@ -19,10 +19,12 @@ import com.alimuzaffar.ramadanalarm.util.PrayTime;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.TimeZone;
 
 /**
@@ -102,15 +104,35 @@ public class SalaatAlarmReceiver extends WakefulBroadcastReceiver implements Con
     Calendar then = Calendar.getInstance(TimeZone.getDefault());
     then.setTimeInMillis(System.currentTimeMillis());
 
-    double lat = AppSettings.getInstance(context).getLatFor(alarmIndex);
-    double lng = AppSettings.getInstance(context).getLngFor(alarmIndex);
-    LinkedHashMap<String, String> prayerTimes = PrayTime.getPrayerTimes(context, alarmIndex, lat, lng, PrayTime.TIME_24);
-
     AppSettings settings = AppSettings.getInstance(context);
+
+    double lat = settings.getLatFor(alarmIndex);
+    double lng = settings.getLngFor(alarmIndex);
+    LinkedHashMap<String, String> prayerTimes = PrayTime.getPrayerTimes(context, alarmIndex, lat, lng, PrayTime.TIME_24);
+    List<String> prayerNames = new ArrayList<>(prayerTimes.keySet());
+    if (settings.getBoolean(AppSettings.Key.IS_RAMADAN)) {
+      int suhoorOffset = settings.getInt(AppSettings.Key.SUHOOR_OFFSET);
+      int iftarOffset = settings.getInt(AppSettings.Key.IFTAR_OFFSET);
+      Calendar currentTime = Calendar.getInstance(TimeZone.getDefault());
+      currentTime.setTimeInMillis(System.currentTimeMillis());
+      if (suhoorOffset > 0) {
+        long time = suhoorOffset * 15 * 60 * 1000;
+        currentTime = getCalendarFromPrayerTime(currentTime, prayerTimes.get("Faji"));
+        currentTime.setTimeInMillis(currentTime.getTimeInMillis() - time);
+      }
+
+      if (iftarOffset > 0) {
+        long time = iftarOffset * 15 * 60 * 1000;
+        currentTime = getCalendarFromPrayerTime(currentTime, prayerTimes.get("Maghrib"));
+        currentTime.setTimeInMillis(currentTime.getTimeInMillis() - time);
+      }
+
+
+    }
 
     boolean nextAlarmFound = false;
     String nameOfPrayerFound = null;
-    for (String prayer : prayerTimes.keySet()) {
+    for (String prayer : prayerNames) {
       if (!isAlarmEnabledForPrayer(settings, prayer, alarmIndex)) {
         continue;
       }
@@ -126,7 +148,7 @@ public class SalaatAlarmReceiver extends WakefulBroadcastReceiver implements Con
     }
 
     if (!nextAlarmFound) {
-      for (String prayer : prayerTimes.keySet()) {
+      for (String prayer : prayerNames) {
         if (!isAlarmEnabledForPrayer(settings, prayer, alarmIndex)) {
           continue;
         }
@@ -302,7 +324,7 @@ public class SalaatAlarmReceiver extends WakefulBroadcastReceiver implements Con
   }
 
   private Calendar getCalendarFromPrayerTime(Calendar cal, String prayerTime) {
-    String[] time =prayerTime.split(":");
+    String[] time = prayerTime.split(":");
     cal.set(Calendar.HOUR_OF_DAY, Integer.valueOf(time[0]));
     cal.set(Calendar.MINUTE, Integer.valueOf(time[1]));
     cal.set(Calendar.SECOND, 0);
