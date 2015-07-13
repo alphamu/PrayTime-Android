@@ -31,7 +31,6 @@ public class SalaatSchedulingService extends IntentService implements Constants 
 
   public static final String TAG = "Scheduling Demo";
   // An ID used to post the notification.
-  public static final int NOTIFICATION_ID = 1;
   // The Google home page URL from which the app fetches content.
   // You can find a list of other Google domains with possible doodles here:
   // http://en.wikipedia.org/wiki/List_of_Google_domains
@@ -47,7 +46,11 @@ public class SalaatSchedulingService extends IntentService implements Constants 
     Calendar now = Calendar.getInstance(TimeZone.getDefault());
     now.setTimeInMillis(System.currentTimeMillis());
 
-    sendNotification(String.format("%2$tl:%2$tM %1$s time", prayerName, now), "This is a test notification for " + prayerName);
+    String formatString = "%2$tl:%2$tM %2$tp %1$s";
+    if (AppSettings.getInstance(this).getTimeFormatFor(0) == PrayTime.TIME_24) {
+      formatString = "%2$tk:%2$tM %1$s";
+    }
+    sendNotification(String.format(formatString, prayerName, now), getString(R.string.test_notification_body, prayerName));
     // Release the wake lock provided by the BroadcastReceiver.
     SalaatAlarmReceiver.completeWakefulIntent(intent);
     // END_INCLUDE(service_onhandle)

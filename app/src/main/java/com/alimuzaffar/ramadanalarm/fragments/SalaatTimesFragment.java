@@ -14,6 +14,7 @@ import android.widget.TextView;
 import com.alimuzaffar.ramadanalarm.Constants;
 import com.alimuzaffar.ramadanalarm.R;
 import com.alimuzaffar.ramadanalarm.SetAlarmActivity;
+import com.alimuzaffar.ramadanalarm.scheduler.RamadanAlarmReceiver;
 import com.alimuzaffar.ramadanalarm.scheduler.SalaatAlarmReceiver;
 import com.alimuzaffar.ramadanalarm.util.AppSettings;
 import com.alimuzaffar.ramadanalarm.util.PrayTime;
@@ -140,11 +141,20 @@ public class SalaatTimesFragment extends Fragment implements Constants {
       if (resultCode == Activity.RESULT_OK) {
         setAlarmButtonText(mAlarm, mIndex);
 
+        AppSettings settings = AppSettings.getInstance(getActivity());
+
         SalaatAlarmReceiver sar = new SalaatAlarmReceiver();
-        boolean isAlarmSet = AppSettings.getInstance(getActivity()).isAlarmSetFor(mIndex);
+        boolean isAlarmSet = settings.isAlarmSetFor(mIndex);
         sar.cancelAlarm(getActivity());
         if (isAlarmSet) {
           sar.setAlarm(getActivity());
+        }
+
+        RamadanAlarmReceiver rar = new RamadanAlarmReceiver();
+        boolean isRamadanAlarmSet = settings.getBoolean(AppSettings.Key.IS_RAMADAN);
+        rar.cancelAlarm(getActivity());
+        if (isRamadanAlarmSet) {
+          rar.setAlarm(getActivity());
         }
       }
     } else {

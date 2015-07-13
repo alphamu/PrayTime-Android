@@ -12,7 +12,7 @@ import com.alimuzaffar.ramadanalarm.util.AppSettings;
 /**
  * Created by Ali on 12/07/2015.
  */
-public class SetAlarmRamadanHelper implements CompoundButton.OnCheckedChangeListener, AdapterView.OnItemSelectedListener {
+public class SetAlarmRamadanHelper implements CompoundButton.OnCheckedChangeListener {
   AppSettings mSettings;
 
   SetAlarmActivity mActivity;
@@ -80,16 +80,6 @@ public class SetAlarmRamadanHelper implements CompoundButton.OnCheckedChangeList
       mSettings.set(AppSettings.Key.SUHOOR_OFFSET, 0);
       mSettings.set(AppSettings.Key.IFTAR_OFFSET, 0);
     }
-
-  }
-
-  @Override
-  public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-
-  }
-
-  @Override
-  public void onNothingSelected(AdapterView<?> parent) {
 
   }
 }

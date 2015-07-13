@@ -105,6 +105,9 @@
     <string name="turn_on_alarm">Turn on alarm</string>
     <string name="set_alarm">Set alarm</string>
     <string name="prayer_name_time">%s time.</string>
+    <string name="test_notification_body">This is a test notification for %s.</string>
+    <string name="alarm_timed_out">%s alarm timed out after 5 minutes.</string>
+    <string name="alarm_timed_out_only">Alarm timed out after 5 minutes.</string>
 
     <string-array name="alarm_before">
         <item>Off</item>

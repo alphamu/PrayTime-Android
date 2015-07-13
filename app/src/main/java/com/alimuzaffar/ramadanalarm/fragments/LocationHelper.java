@@ -122,7 +122,9 @@ public class LocationHelper extends Fragment implements Constants, GoogleApiClie
         @Override
         public void onLocationChanged(Location location) {
           sLastLocation = location;
+          if (mCallback != null) {
           mCallback.onLocationChanged(sLastLocation);
+          }
           initAppAfterCheckingLocation();
           LocationServices.FusedLocationApi.removeLocationUpdates(mGoogleApiClient, this);
         }
@@ -193,10 +195,14 @@ public class LocationHelper extends Fragment implements Constants, GoogleApiClie
             break;
           case Activity.RESULT_CANCELED:
             // The user was asked to change settings, but chose not to
+            if (mCallback != null) {
             mCallback.onLocationSettingsFailed();
+            }
             break;
           default:
+            if (mCallback != null) {
             mCallback.onLocationSettingsFailed();
+            }
             break;
         }
         break;

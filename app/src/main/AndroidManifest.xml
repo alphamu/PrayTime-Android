@@ -48,6 +48,7 @@
 
         <receiver android:name=".scheduler.PassiveLocationChangedReceiver" />
         <receiver android:name=".scheduler.SalaatAlarmReceiver"/>
+        <receiver android:name=".scheduler.RamadanAlarmReceiver"/>
         <receiver
             android:name=".scheduler.SalaatBootReceiver"
             android:enabled="false">

@@ -110,25 +110,6 @@ public class SalaatAlarmReceiver extends WakefulBroadcastReceiver implements Con
     double lng = settings.getLngFor(alarmIndex);
     LinkedHashMap<String, String> prayerTimes = PrayTime.getPrayerTimes(context, alarmIndex, lat, lng, PrayTime.TIME_24);
     List<String> prayerNames = new ArrayList<>(prayerTimes.keySet());
-    if (settings.getBoolean(AppSettings.Key.IS_RAMADAN)) {
-      int suhoorOffset = settings.getInt(AppSettings.Key.SUHOOR_OFFSET);
-      int iftarOffset = settings.getInt(AppSettings.Key.IFTAR_OFFSET);
-      Calendar currentTime = Calendar.getInstance(TimeZone.getDefault());
-      currentTime.setTimeInMillis(System.currentTimeMillis());
-      if (suhoorOffset > 0) {
-        long time = suhoorOffset * 15 * 60 * 1000;
-        currentTime = getCalendarFromPrayerTime(currentTime, prayerTimes.get("Faji"));
-        currentTime.setTimeInMillis(currentTime.getTimeInMillis() - time);
-      }
-
-      if (iftarOffset > 0) {
-        long time = iftarOffset * 15 * 60 * 1000;
-        currentTime = getCalendarFromPrayerTime(currentTime, prayerTimes.get("Maghrib"));
-        currentTime.setTimeInMillis(currentTime.getTimeInMillis() - time);
-      }
-
-
-    }
 
     boolean nextAlarmFound = false;
     String nameOfPrayerFound = null;

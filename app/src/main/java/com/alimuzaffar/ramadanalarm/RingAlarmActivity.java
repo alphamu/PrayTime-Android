@@ -1,12 +1,16 @@
 package com.alimuzaffar.ramadanalarm;
 
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.Context;
+import android.content.Intent;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.support.v4.app.NotificationCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.util.Log;
@@ -17,9 +21,12 @@ import android.widget.TextView;
 
 import com.alimuzaffar.ramadanalarm.util.AlarmUtils;
 import com.alimuzaffar.ramadanalarm.util.AppSettings;
+import com.alimuzaffar.ramadanalarm.util.PrayTime;
 import com.alimuzaffar.ramadanalarm.util.ScreenUtils;
 
 import java.lang.ref.WeakReference;
+import java.util.Calendar;
+import java.util.TimeZone;
 
 public class RingAlarmActivity extends AppCompatActivity implements Constants, View.OnClickListener {
 
@@ -30,6 +37,9 @@ public class RingAlarmActivity extends AppCompatActivity implements Constants, V
   int mOriginalVolume = -1;
   AudioManager mAudioManager;
   AscendingAlarmHandler mAscHandler;
+  String mPrayerNameString = null;
+
+  private NotificationManager mNotificationManager;
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -46,8 +56,21 @@ public class RingAlarmActivity extends AppCompatActivity implements Constants, V
 
     setVolumeControlStream(AudioManager.STREAM_ALARM);
 
+    Calendar now = Calendar.getInstance(TimeZone.getDefault());
+    now.setTimeInMillis(System.currentTimeMillis());
+
     mPrayerName = (TextView) findViewById(R.id.prayer_name);
-    mPrayerName.setText(getString(R.string.prayer_name_time, getIntent().getStringExtra(EXTRA_PRAYER_NAME)));
+    mPrayerNameString = getIntent().getStringExtra(EXTRA_PRAYER_NAME);
+
+    if (getIntent().hasExtra(EXTRA_PRE_ALARM_FLAG)) {
+      String formatString = "%2$tl:%2$tM %2$tp %1$s";
+      if (AppSettings.getInstance(this).getTimeFormatFor(0) == PrayTime.TIME_24) {
+        formatString = "%2$tk:%2$tM %1$s";
+      }
+      mPrayerName.setText(String.format(formatString, mPrayerNameString, now));
+    } else {
+      mPrayerName.setText(getString(R.string.prayer_name_time, mPrayerNameString));
+    }
 
     mAlarmOff = (Button) findViewById(R.id.alarm_off);
     mAlarmOff.setOnClickListener(this);
@@ -105,6 +128,7 @@ public class RingAlarmActivity extends AppCompatActivity implements Constants, V
     mAlarmOff.postDelayed(mAutoStop = new Runnable() {
       @Override
       public void run() {
+        sendNotification();
         mAlarmOff.performClick();
       }
     }, FIVE_MINUTES);
@@ -155,6 +179,35 @@ public class RingAlarmActivity extends AppCompatActivity implements Constants, V
   protected void onDestroy() {
     stopAlarm();
     super.onDestroy();
+  }
+
+  // Post a notification indicating whether a doodle was found.
+  private void sendNotification() {
+    Calendar now = Calendar.getInstance(TimeZone.getDefault());
+    now.setTimeInMillis(System.currentTimeMillis());
+
+    String formatString = " %1$tl:%1$tM %1$tp " + getString(R.string.alarm_timed_out, mPrayerName);
+    if (AppSettings.getInstance(this).getTimeFormatFor(0) == PrayTime.TIME_24) {
+      formatString = "%1$tk:%1$tM " + getString(R.string.alarm_timed_out, mPrayerName);
+    }
+    String title = getString(R.string.alarm_timed_out_only);
+    String body = String.format(formatString, now);
+
+    mNotificationManager = (NotificationManager)
+        this.getSystemService(Context.NOTIFICATION_SERVICE);
+
+    PendingIntent contentIntent = PendingIntent.getActivity(this, 0, new Intent(this, SalaatTimesActivity.class), PendingIntent.FLAG_CANCEL_CURRENT);
+
+    NotificationCompat.Builder mBuilder =
+        new NotificationCompat.Builder(this)
+            .setSmallIcon(R.mipmap.ic_launcher)
+            .setContentTitle(title)
+            .setStyle(new NotificationCompat.BigTextStyle()
+                .bigText(body))
+            .setContentText(body);
+
+    mBuilder.setContentIntent(contentIntent);
+    mNotificationManager.notify(NOTIFICATION_ID, mBuilder.build());
   }
 
   private static class AscendingAlarmHandler extends Handler {
