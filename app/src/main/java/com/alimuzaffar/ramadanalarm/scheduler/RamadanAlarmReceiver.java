@@ -122,7 +122,7 @@ public class RamadanAlarmReceiver extends WakefulBroadcastReceiver implements Co
 
     if (suhoorOffset > 0) {
       Intent sIntent = new Intent(context, RamadanAlarmReceiver.class);
-      sIntent.putExtra(EXTRA_PRAYER_NAME, "Suhoor is close.");
+      sIntent.putExtra(EXTRA_PRAYER_NAME, context.getString(R.string.suhoor_is_close));
       sIntent.putExtra(EXTRA_PRAYER_TIME, preSuhoorTime.getTimeInMillis());
       sAlarmIntent = PendingIntent.getBroadcast(context, PRE_SUHOOR_ALARM_ID, sIntent, PendingIntent.FLAG_CANCEL_CURRENT);
       alarmMgr.set(AlarmManager.RTC_WAKEUP, preSuhoorTime.getTimeInMillis(), sAlarmIntent);
@@ -134,7 +134,7 @@ public class RamadanAlarmReceiver extends WakefulBroadcastReceiver implements Co
 
     if (iftarOffset > 0) {
       Intent iIntent = new Intent(context, RamadanAlarmReceiver.class);
-      iIntent.putExtra(EXTRA_PRAYER_NAME, "Iftar is close.");
+      iIntent.putExtra(EXTRA_PRAYER_NAME, context.getString(R.string.iftar_is_close));
       iIntent.putExtra(EXTRA_PRAYER_TIME, preIftarTime.getTimeInMillis());
       iAlarmIntent = PendingIntent.getBroadcast(context, PRE_IFTAR_ALARM_ID, iIntent, PendingIntent.FLAG_CANCEL_CURRENT);
       alarmMgr.set(AlarmManager.RTC_WAKEUP, preIftarTime.getTimeInMillis(), iAlarmIntent);
