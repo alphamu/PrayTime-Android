@@ -27,6 +27,7 @@ public class SalaatTimesFragment extends Fragment implements Constants {
   int mIndex = 0;
   Location mLastLocation;
   TextView mAlarm;
+  View mRamadanContainer;
 
   public static SalaatTimesFragment newInstance(int index, Location location) {
     SalaatTimesFragment fragment = new SalaatTimesFragment();
@@ -85,6 +86,7 @@ public class SalaatTimesFragment extends Fragment implements Constants {
     TextView sunrise = (TextView) view.findViewById(R.id.sunrise);
     TextView sunset = (TextView) view.findViewById(R.id.sunset);
     mAlarm = (TextView) view.findViewById(R.id.alarm);
+    mRamadanContainer = view.findViewById(R.id.ramadan_container);
 
     fajr.setText(prayerTimes.get(String.valueOf(fajr.getTag())));
     dhuhr.setText(prayerTimes.get(String.valueOf(dhuhr.getTag())));
@@ -104,6 +106,8 @@ public class SalaatTimesFragment extends Fragment implements Constants {
     int isAlarmSetInt = isAlarmSet ? 0 : 1;
     String buttonText = getResources().getQuantityString(R.plurals.button_alarm, isAlarmSetInt);
     button.setText(buttonText);
+    boolean isRamadanSet = AppSettings.getInstance(getActivity()).getBoolean(AppSettings.Key.IS_RAMADAN);
+    mRamadanContainer.setVisibility(isRamadanSet? View.VISIBLE : View.GONE);
   }
 
   private void setAlarmButtonClickListener(TextView alarm, int index) {

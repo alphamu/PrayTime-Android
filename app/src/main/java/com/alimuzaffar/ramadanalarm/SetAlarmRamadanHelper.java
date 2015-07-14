@@ -80,6 +80,13 @@ public class SetAlarmRamadanHelper implements CompoundButton.OnCheckedChangeList
       mSettings.set(AppSettings.Key.SUHOOR_OFFSET, 0);
       mSettings.set(AppSettings.Key.IFTAR_OFFSET, 0);
     }
+  }
 
+  public void setRamadanOption(boolean active) {
+    mRamadan.setChecked(active);
+  }
+
+  public void setRamadanOptionEnabled(boolean enabled) {
+    mRamadan.setEnabled(enabled);
   }
 }

@@ -128,4 +128,15 @@
         <item>1 hour</item>
     </string-array>
 
+    <!-- Prayers -->
+    <string name="suhoor_dua">Suhoor dua</string>
+    <string name="prayer_sehri">وَبِصَوْمِ غَدٍ نَّوَيْتَ مِنْ شَهْرِ رَمَضَانَ</string>
+    <string name="prayer_sehri_en">Wa bi-sawmi ghadin nawaytu min shahri ramadan</string>
+    <string name="prayer_sehri_translation">I intend to keep the fast for tomorrow in the month of Ramadan.</string>
+
+    <string name="iftar_dua">Iftar dua</string>
+    <string name="prayer_iftar">\u200F اِنِّى لَكَ صُمْتُ وَبِكَ امنْتُ وَ عَلى رِزْقِكَ اَفْطَرْتُ</string>
+    <string name="prayer_iftar_en">Allahumma Inni laka sumtu wa bika amantu [wa alayka tawakkalto] wa ‘ala rizqika aftartu</string>
+    <string name="prayer_iftar_translation">O Allah! I fasted for You and I believe in You and I break my fast with Your sustenance</string>
+
 </resources>

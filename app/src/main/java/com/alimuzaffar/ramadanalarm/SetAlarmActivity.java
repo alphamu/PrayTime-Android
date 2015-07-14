@@ -107,6 +107,11 @@ public class SetAlarmActivity extends AppCompatActivity implements Constants,
         setPrayerAlarmStatus(i, isChecked);
       }
 
+      if (!isChecked) {
+        mRamadanHelper.setRamadanOption(false);
+      }
+      mRamadanHelper.setRamadanOptionEnabled(isChecked);
+
     } else if (id == mAscending.getId()) {
       settings.set(AppSettings.Key.IS_ASCENDING_ALARM, isChecked);
 
