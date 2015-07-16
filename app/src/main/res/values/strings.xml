@@ -69,7 +69,9 @@
     <string name="high_latitude">High latitude adjustment</string>
     <string name="high_latitude_explain">
         For people living in higher latitudes, the prayer times can be incorrect.
-        If the prayer times seem incorrect, try changing this value.
+        If the prayer times seem incorrect, try changing this value.\n\n
+        During the summer months One-Seventh method produces a later Fajr time than
+        Angle based method. If you perfer Angle based method, please change below.
     </string>
     <string name="high_lat_none">None</string>
     <string name="high_lat_midnight">Midnight</string>

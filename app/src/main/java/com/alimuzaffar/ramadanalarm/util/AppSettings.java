@@ -291,7 +291,7 @@ public class AppSettings {
   }
 
   public int getHighLatitudeAdjustmentFor(int index) {
-    return getInt(getKeyFor(Key.ADJUST_METHOD, index), PrayTime.NONE);
+    return getInt(getKeyFor(Key.ADJUST_METHOD, index), PrayTime.ONE_SEVENTH);
   }
 
   public void setHighLatitudeAdjustmentMethodFor(int index, int value) {
