@@ -43,8 +43,8 @@ public class AlarmUtils {
     return alert;
   }
 
-  public static int getAlarmVolumeFromPercentage(AudioManager audioManager, float percentage) {
-    int volume = (int) Math.ceil((double) audioManager.getStreamMaxVolume(AudioManager.STREAM_ALARM) * (percentage / 100.0d));
+  public static int getAlarmVolumeFromPercentage(AudioManager audioManager, int audioStream, float percentage) {
+    int volume = (int) Math.ceil((double) audioManager.getStreamMaxVolume(audioStream) * (percentage / 100.0d));
     return volume;
   }
 

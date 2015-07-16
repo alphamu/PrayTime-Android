@@ -4,6 +4,7 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.AssetFileDescriptor;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.net.Uri;
@@ -23,12 +24,14 @@ import com.alimuzaffar.ramadanalarm.util.AlarmUtils;
 import com.alimuzaffar.ramadanalarm.util.AppSettings;
 import com.alimuzaffar.ramadanalarm.util.PrayTime;
 import com.alimuzaffar.ramadanalarm.util.ScreenUtils;
+import com.google.android.gms.wearable.Asset;
 
+import java.io.IOException;
 import java.lang.ref.WeakReference;
 import java.util.Calendar;
 import java.util.TimeZone;
 
-public class RingAlarmActivity extends AppCompatActivity implements Constants, View.OnClickListener {
+public class RingAlarmActivity extends AppCompatActivity implements Constants, View.OnClickListener, MediaPlayer.OnCompletionListener {
 
   private Button mAlarmOff;
   private TextView mPrayerName;
@@ -38,6 +41,8 @@ public class RingAlarmActivity extends AppCompatActivity implements Constants, V
   AudioManager mAudioManager;
   AscendingAlarmHandler mAscHandler;
   String mPrayerNameString = null;
+  AppSettings mSettings;
+  static int mAudioStream = AudioManager.STREAM_ALARM;
 
   private NotificationManager mNotificationManager;
 
@@ -59,12 +64,14 @@ public class RingAlarmActivity extends AppCompatActivity implements Constants, V
     Calendar now = Calendar.getInstance(TimeZone.getDefault());
     now.setTimeInMillis(System.currentTimeMillis());
 
+    mSettings = AppSettings.getInstance(this);
+
     mPrayerName = (TextView) findViewById(R.id.prayer_name);
     mPrayerNameString = getIntent().getStringExtra(EXTRA_PRAYER_NAME);
 
     if (getIntent().hasExtra(EXTRA_PRE_ALARM_FLAG)) {
       String formatString = "%2$tl:%2$tM %2$tp %1$s";
-      if (AppSettings.getInstance(this).getTimeFormatFor(0) == PrayTime.TIME_24) {
+      if (mSettings.getTimeFormatFor(0) == PrayTime.TIME_24) {
         formatString = "%2$tk:%2$tM %1$s";
       }
       mPrayerName.setText(String.format(formatString, mPrayerNameString, now));
@@ -83,34 +90,50 @@ public class RingAlarmActivity extends AppCompatActivity implements Constants, V
   }
 
   private void playAlarm() throws Exception {
-    AppSettings settings = AppSettings.getInstance(this);
+    boolean loop = true;
     Uri alert = null;
-    //IF RANDOM RINGTONE IS SELECTED, USE IT.
-    if (settings.getBoolean(AppSettings.Key.IS_RANDOM_ALARM)) {
+    AssetFileDescriptor assetFileDescriptor = null;
+    if (mSettings.getBoolean(AppSettings.Key.USE_ADHAN)) {
+      loop = false;
+      //mAudioStream = AudioManager.STREAM_MUSIC;
+      if (mPrayerNameString.equalsIgnoreCase(getString(R.string.fajr))) {
+        assetFileDescriptor = getResources().openRawResourceFd(R.raw.adhan_fajr_trimmed);
+      } else {
+        assetFileDescriptor = getResources().openRawResourceFd(R.raw.adhan_trimmed);
+      }
+
+    } else if (mSettings.getBoolean(AppSettings.Key.IS_RANDOM_ALARM)) {
+      //IF RANDOM RINGTONE IS SELECTED, USE IT.
       alert = AlarmUtils.getRandomRingtone(this);
     } else {
       //IF A RINGTONE IS SELECTED, USE IT!
-      String uriStr = settings.getString(AppSettings.Key.SELECTED_RINGTONE);
+      String uriStr = mSettings.getString(AppSettings.Key.SELECTED_RINGTONE);
       if (TextUtils.isEmpty(uriStr)) {
         alert = AlarmUtils.getAlarmRingtoneUri();
       } else {
         alert = Uri.parse(uriStr);
       }
     }
+    //if URI is not null, then it's a ringtone
     mMediaPlayer = new MediaPlayer();
-    mMediaPlayer.setDataSource(this, alert);
+    if (alert != null) {
+      mMediaPlayer.setDataSource(this, alert);
+    } else {
+      mMediaPlayer.setDataSource(assetFileDescriptor.getFileDescriptor(), assetFileDescriptor.getStartOffset(), assetFileDescriptor.getLength());
+    }
+
     mAudioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
 
-    mOriginalVolume = mAudioManager.getStreamVolume(AudioManager.STREAM_ALARM);
+    mOriginalVolume = mAudioManager.getStreamVolume(mAudioStream);
 
     if (mOriginalVolume == 0) {
-      int volume = AlarmUtils.getAlarmVolumeFromPercentage(mAudioManager, 50f);
+      int volume = AlarmUtils.getAlarmVolumeFromPercentage(mAudioManager, mAudioStream, 50f);
       mAudioManager.setStreamVolume(AudioManager.STREAM_ALARM, volume, 0);
     }
 
-    if (settings.getBoolean(AppSettings.Key.IS_ASCENDING_ALARM)) {
-      int volume = AlarmUtils.getAlarmVolumeFromPercentage(mAudioManager, 20f);
-      mAudioManager.setStreamVolume(AudioManager.STREAM_ALARM, volume, 0);
+    if (mSettings.getBoolean(AppSettings.Key.IS_ASCENDING_ALARM)) {
+      int volume = AlarmUtils.getAlarmVolumeFromPercentage(mAudioManager, mAudioStream, 20f);
+      mAudioManager.setStreamVolume(mAudioStream, volume, 0);
       if (mAscHandler == null) {
         mAscHandler = new AscendingAlarmHandler(mAudioManager);
       }
@@ -120,9 +143,12 @@ public class RingAlarmActivity extends AppCompatActivity implements Constants, V
       mAscHandler.sendEmptyMessageDelayed(5, 40000);
     }
 
-    mMediaPlayer.setAudioStreamType(AudioManager.STREAM_ALARM);
-    mMediaPlayer.setLooping(true);
+    mMediaPlayer.setLooping(loop);
+    mMediaPlayer.setAudioStreamType(mAudioStream);
     mMediaPlayer.prepare();
+    if (assetFileDescriptor != null) {
+      mMediaPlayer.setOnCompletionListener(this);
+    }
     mMediaPlayer.start();
 
     mAlarmOff.postDelayed(mAutoStop = new Runnable() {
@@ -138,11 +164,21 @@ public class RingAlarmActivity extends AppCompatActivity implements Constants, V
 
   private void stopAlarm() {
     if (mAscHandler != null) {
-      if (mAscHandler.hasMessages(20)) { mAscHandler.removeMessages(20); }
-      if (mAscHandler.hasMessages(40)) { mAscHandler.removeMessages(20); }
-      if (mAscHandler.hasMessages(60)) { mAscHandler.removeMessages(20); }
-      if (mAscHandler.hasMessages(80)) { mAscHandler.removeMessages(20); }
-      if (mAscHandler.hasMessages(100)) { mAscHandler.removeMessages(20); }
+      if (mAscHandler.hasMessages(20)) {
+        mAscHandler.removeMessages(20);
+      }
+      if (mAscHandler.hasMessages(40)) {
+        mAscHandler.removeMessages(20);
+      }
+      if (mAscHandler.hasMessages(60)) {
+        mAscHandler.removeMessages(20);
+      }
+      if (mAscHandler.hasMessages(80)) {
+        mAscHandler.removeMessages(20);
+      }
+      if (mAscHandler.hasMessages(100)) {
+        mAscHandler.removeMessages(20);
+      }
       mAscHandler = null;
     }
 
@@ -151,7 +187,7 @@ public class RingAlarmActivity extends AppCompatActivity implements Constants, V
       mMediaPlayer.release();
       mMediaPlayer = null;
       if (mOriginalVolume != -1) {
-        mAudioManager.setStreamVolume(AudioManager.STREAM_ALARM, mOriginalVolume, 0);
+        mAudioManager.setStreamVolume(mAudioStream, mOriginalVolume, 0);
       }
     }
 
@@ -210,6 +246,45 @@ public class RingAlarmActivity extends AppCompatActivity implements Constants, V
     mNotificationManager.notify(NOTIFICATION_ID, mBuilder.build());
   }
 
+  @Override
+  public void onCompletion(MediaPlayer mp) {
+    //IF RAMADAN PLAY PRAYER, IF PRAYER ALREADY PLAYED, STOP
+    if (mSettings.getBoolean(AppSettings.Key.USE_ADHAN) &&
+        mSettings.getBoolean(AppSettings.Key.IS_RAMADAN)) {
+      mMediaPlayer.stop();
+      mMediaPlayer.release();
+      mMediaPlayer = null;
+      AssetFileDescriptor assetFileDescriptor = null;
+      if (mPrayerNameString.equalsIgnoreCase(getString(R.string.fajr))) {
+        assetFileDescriptor = getResources().openRawResourceFd(R.raw.dua_sehri);
+      } else if (mPrayerNameString.equalsIgnoreCase(getString(R.string.maghrib))) {
+        assetFileDescriptor = getResources().openRawResourceFd(R.raw.dua_iftar);
+      }
+
+      if (assetFileDescriptor == null) {
+        stopAlarm();
+        return;
+      }
+
+      try {
+        mMediaPlayer = new MediaPlayer();
+        mMediaPlayer.setDataSource(assetFileDescriptor.getFileDescriptor(), assetFileDescriptor.getStartOffset(), assetFileDescriptor.getLength());
+        mMediaPlayer.setAudioStreamType(mAudioStream);
+        mMediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+          @Override
+          public void onCompletion(MediaPlayer mp) {
+            stopAlarm();
+          }
+        });
+        mMediaPlayer.setLooping(false);
+        mMediaPlayer.prepare();
+        mMediaPlayer.start();
+      } catch (Exception e) {
+        Log.e("RingAlarmActivity", e.getMessage(), e);
+      }
+    }
+  }
+
   private static class AscendingAlarmHandler extends Handler {
     WeakReference<AudioManager> mAudioManagerRef = null;
 
@@ -225,7 +300,7 @@ public class RingAlarmActivity extends AppCompatActivity implements Constants, V
       if (audioManager != null) {
         int what = msg.what;
         float percentage = (float) what * 20f;
-        int volume = AlarmUtils.getAlarmVolumeFromPercentage(audioManager, percentage);
+        int volume = AlarmUtils.getAlarmVolumeFromPercentage(audioManager, mAudioStream, percentage);
         audioManager.setStreamVolume(AudioManager.STREAM_ALARM, volume, 0);
       }
     }

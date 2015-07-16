@@ -58,7 +58,7 @@ public class AppSettings {
     public static final String IS_ASCENDING_ALARM = "is_ascending_alarm";
     public static final String IS_RANDOM_ALARM = "is_random_alarm";
     public static final String SELECTED_RINGTONE = "ringtone_selected";
-
+    public static final String USE_ADHAN = "use_adhan";
 
     //CONFIG RELATED
     public static final String HAS_DEFAULT_SET = "has_default_set";
