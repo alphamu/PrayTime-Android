@@ -113,14 +113,15 @@
     <string name="suhoor_is_close">Suhoor is close.</string>
     <string name="iftar_is_close">Iftar is close.</string>
     <string name="set_alarm_ascending_explain">Volume starts off low and increases every 10 seconds to gently wake you up.</string>
-    <string name="set_alarm_ascending">Ascending alarm</string>
+    <string name="set_alarm_ascending">Ascending volume alarm/Adhan</string>
     <string name="set_alarm_ringtone_options">Ringtone options</string>
     <string name="set_alarm_notify_before_iftar">Notify me before Iftar</string>
     <string name="set_alarm_notify_before_suhoor">Notify me before Suhoor</string>
     <string name="set_alarm_ramadan_explain">Be notified before Suhoor or Iftar and display prayers in the alarm screen.\nThis option is only available if alarm is turned on.</string>
     <string name="set_alarm_ramadan">Turn on Ramadan options</string>
-    <string name="set_alarm_select_ringtone">Select a ringtone</string>
-    <string name="set_alarm_random_ringtone">Random ringtone</string>
+    <string name="set_alarm_select_ringtone">Select a ringtone (Current: %s)</string>
+    <string name="set_alarm_random_ringtone">Random alarm ringtone</string>
+    <string name="set_alarm_use_adhan">Play Adhan instead of alarm ringtone</string>
 
     <string-array name="alarm_before">
         <item>Off</item>

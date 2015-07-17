@@ -37,12 +37,14 @@ public class RingAlarmActivity extends AppCompatActivity implements Constants, V
   private TextView mPrayerName;
   MediaPlayer mMediaPlayer = null;
   Runnable mAutoStop = null;
+  Runnable mStartDua = null;
   int mOriginalVolume = -1;
   AudioManager mAudioManager;
   AscendingAlarmHandler mAscHandler;
   String mPrayerNameString = null;
   AppSettings mSettings;
   static int mAudioStream = AudioManager.STREAM_ALARM;
+  boolean mPreAlarm = false;
 
   private NotificationManager mNotificationManager;
 
@@ -69,7 +71,8 @@ public class RingAlarmActivity extends AppCompatActivity implements Constants, V
     mPrayerName = (TextView) findViewById(R.id.prayer_name);
     mPrayerNameString = getIntent().getStringExtra(EXTRA_PRAYER_NAME);
 
-    if (getIntent().hasExtra(EXTRA_PRE_ALARM_FLAG)) {
+    mPreAlarm = getIntent().hasExtra(EXTRA_PRE_ALARM_FLAG) && getIntent().getBooleanExtra(EXTRA_PRE_ALARM_FLAG, true);
+    if (mPreAlarm) {
       String formatString = "%2$tl:%2$tM %2$tp %1$s";
       if (mSettings.getTimeFormatFor(0) == PrayTime.TIME_24) {
         formatString = "%2$tk:%2$tM %1$s";
@@ -93,7 +96,7 @@ public class RingAlarmActivity extends AppCompatActivity implements Constants, V
     boolean loop = true;
     Uri alert = null;
     AssetFileDescriptor assetFileDescriptor = null;
-    if (mSettings.getBoolean(AppSettings.Key.USE_ADHAN)) {
+    if (!mPreAlarm && mSettings.getBoolean(AppSettings.Key.USE_ADHAN)) {
       loop = false;
       //mAudioStream = AudioManager.STREAM_MUSIC;
       if (mPrayerNameString.equalsIgnoreCase(getString(R.string.fajr))) {
@@ -182,6 +185,16 @@ public class RingAlarmActivity extends AppCompatActivity implements Constants, V
       mAscHandler = null;
     }
 
+    if (mAutoStop != null) {
+      mAlarmOff.removeCallbacks(mAutoStop);
+      mAutoStop = null;
+    }
+
+    if (mStartDua != null) {
+      mAlarmOff.removeCallbacks(mStartDua);
+      mStartDua = null;
+    }
+
     if (mMediaPlayer != null) {
       mMediaPlayer.stop();
       mMediaPlayer.release();
@@ -189,11 +202,6 @@ public class RingAlarmActivity extends AppCompatActivity implements Constants, V
       if (mOriginalVolume != -1) {
         mAudioManager.setStreamVolume(mAudioStream, mOriginalVolume, 0);
       }
-    }
-
-    if (mAutoStop != null) {
-      mAlarmOff.removeCallbacks(mAutoStop);
-      mAutoStop = null;
     }
   }
 
@@ -278,7 +286,13 @@ public class RingAlarmActivity extends AppCompatActivity implements Constants, V
         });
         mMediaPlayer.setLooping(false);
         mMediaPlayer.prepare();
-        mMediaPlayer.start();
+        mAlarmOff.postDelayed(mStartDua = new Runnable() {
+          @Override
+          public void run() {
+            mMediaPlayer.start();
+          }
+        }, 3000);
+
       } catch (Exception e) {
         Log.e("RingAlarmActivity", e.getMessage(), e);
       }
