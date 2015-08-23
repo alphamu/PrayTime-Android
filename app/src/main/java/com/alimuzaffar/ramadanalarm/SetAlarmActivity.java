@@ -31,12 +31,14 @@ public class SetAlarmActivity extends AppCompatActivity implements Constants,
   CheckBox mAlarm;
   CheckBox mAscending;
   CheckBox mRandom;
+  CheckBox mAdhan;
   TextView mRingtone;
   TextView[] mPrayers = new TextView[5];
 
   SetAlarmRamadanHelper mRamadanHelper;
   Map<String, Uri> mRingtonesMap;
   private Uri mLastSelectedRingtone = null;
+  private String mLastSelectedRingtoneName = "Default";
   private MediaPlayer mMediaPlayer;
 
 
@@ -51,6 +53,7 @@ public class SetAlarmActivity extends AppCompatActivity implements Constants,
     mAlarm = (CheckBox) findViewById(R.id.alarm);
     mAscending = (CheckBox) findViewById(R.id.ascending_alarm);
     mRandom = (CheckBox) findViewById(R.id.random_ringtone);
+    mAdhan = (CheckBox) findViewById(R.id.adhan_ringtone);
     mRingtone = (TextView) findViewById(R.id.ringtone);
 
     mPrayers[0] = (TextView) findViewById(R.id.fajr);
@@ -62,7 +65,7 @@ public class SetAlarmActivity extends AppCompatActivity implements Constants,
     for (int i = 0; i < mPrayers.length; i++) {
       TextView tv = mPrayers[i];
       tv.setOnClickListener(this);
-      tv.setTag(new Integer(i));
+      tv.setTag(i);
     }
 
     Intent intent = getIntent();
@@ -85,11 +88,13 @@ public class SetAlarmActivity extends AppCompatActivity implements Constants,
 
     mAscending.setChecked(settings.getBoolean(AppSettings.Key.IS_ASCENDING_ALARM));
     mRandom.setChecked(settings.getBoolean(AppSettings.Key.IS_RANDOM_ALARM));
+    mAdhan.setChecked(settings.getBoolean(AppSettings.Key.USE_ADHAN));
 
     //attach listener after init to prevent unpredictable result.
     mAlarm.setOnCheckedChangeListener(this);
     mAscending.setOnCheckedChangeListener(this);
     mRandom.setOnCheckedChangeListener(this);
+    mAdhan.setOnCheckedChangeListener(this);
 
     mRamadanHelper = new SetAlarmRamadanHelper(this, mIndex);
     setupRingtoneSelection();
@@ -117,7 +122,15 @@ public class SetAlarmActivity extends AppCompatActivity implements Constants,
 
     } else if (id == mRandom.getId()) {
       settings.set(AppSettings.Key.IS_RANDOM_ALARM, isChecked);
+      if (isChecked) {
+        mAdhan.setChecked(false);
+      }
 
+    } else if (id == mAdhan.getId()) {
+      settings.set(AppSettings.Key.USE_ADHAN, isChecked);
+      if (isChecked) {
+        mRandom.setChecked(false);
+      }
     }
   }
 
@@ -193,6 +206,10 @@ public class SetAlarmActivity extends AppCompatActivity implements Constants,
 
   private void setupRingtoneSelection() {
     mRingtonesMap = AlarmUtils.getRingtones(SetAlarmActivity.this);
+
+    mRingtone.setText(getString(R.string.set_alarm_select_ringtone,
+        settings.getString(AppSettings.Key.SELECTED_RINGTONE_NAME, mLastSelectedRingtoneName)));
+
     mRingtone.setOnClickListener(new View.OnClickListener() {
       @Override
       public void onClick(View v) {
@@ -211,8 +228,9 @@ public class SetAlarmActivity extends AppCompatActivity implements Constants,
           @Override
           public void onClick(DialogInterface dialog, int which) { //item selected
             String name = ringtoneKeys.get(which);
-            Uri uri = mRingtonesMap.get(name);
-            mLastSelectedRingtone = uri;
+            mLastSelectedRingtoneName = name;
+            mLastSelectedRingtone = mRingtonesMap.get(name);
+
             try {
               if (mMediaPlayer == null) {
                 mMediaPlayer = new MediaPlayer();
@@ -239,6 +257,10 @@ public class SetAlarmActivity extends AppCompatActivity implements Constants,
               mMediaPlayer = null;
             }
             settings.set(AppSettings.Key.SELECTED_RINGTONE, mLastSelectedRingtone.toString());
+            settings.set(AppSettings.Key.SELECTED_RINGTONE_NAME, mLastSelectedRingtoneName);
+            //Update the textview
+            mRingtone.setText(getString(R.string.set_alarm_select_ringtone,
+                settings.getString(AppSettings.Key.SELECTED_RINGTONE_NAME, mLastSelectedRingtoneName)));
             dialog.dismiss();
           }
         }, new DialogInterface.OnClickListener() { //cancel

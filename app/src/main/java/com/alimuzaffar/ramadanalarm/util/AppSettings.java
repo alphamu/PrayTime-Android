@@ -1,7 +1,11 @@
 package com.alimuzaffar.ramadanalarm.util;
 
+import android.app.Application;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.text.format.DateFormat;
+
+import java.lang.ref.WeakReference;
 
 /*
  * A Singleton for managing your SharedPreferences.
@@ -32,6 +36,7 @@ public class AppSettings {
   private SharedPreferences mPref;
   private SharedPreferences.Editor mEditor;
   private boolean mBulkUpdate = false;
+  private WeakReference<Context> mContextRef;
 
   /**
    * Class for keeping all the keys used for shared preferences in one place.
@@ -58,6 +63,7 @@ public class AppSettings {
     public static final String IS_ASCENDING_ALARM = "is_ascending_alarm";
     public static final String IS_RANDOM_ALARM = "is_random_alarm";
     public static final String SELECTED_RINGTONE = "ringtone_selected";
+    public static final String SELECTED_RINGTONE_NAME = "ringtone_selected_name";
     public static final String USE_ADHAN = "use_adhan";
 
     //CONFIG RELATED
@@ -72,11 +78,16 @@ public class AppSettings {
     public static final String LNG_FOR = "lng_for_%d";
     public static final String SHOW_ORIENATATION_INSTRACTIONS = "showOrientationInstructions";
 
+    //APP RELATED
+    public static final String IS_INIT = "app_init";
+    public static final String APP_VERSION_CODE = "current_version_code";
+
   }
 
 
   private AppSettings(Context context) {
     mPref = context.getSharedPreferences(SETTINGS_NAME, Context.MODE_PRIVATE);
+    mContextRef = new WeakReference<Context>(context);
   }
 
 
@@ -300,7 +311,7 @@ public class AppSettings {
   }
 
   public int getTimeFormatFor(int index) {
-    return getInt(getKeyFor(Key.TIME_FORMAT, index), PrayTime.TIME_12);
+    return getInt(getKeyFor(Key.TIME_FORMAT, index), DateFormat.is24HourFormat(mContextRef.get())? PrayTime.TIME_24 : PrayTime.TIME_12);
   }
 
   public void setTimeFormatFor(int index, int format) {

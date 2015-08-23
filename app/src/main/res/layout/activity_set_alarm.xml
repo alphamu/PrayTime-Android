@@ -202,6 +202,24 @@
                 android:background="?attr/separatorColor"/>
 
             <CheckBox
+                android:id="@+id/adhan_ringtone"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:button="@null"
+                android:drawableRight="?android:attr/listChoiceIndicatorMultiple"
+                android:padding="@dimen/space"
+                android:text="@string/set_alarm_use_adhan"/>
+
+            <CheckBox
+                android:id="@+id/random_ringtone"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:button="@null"
+                android:drawableRight="?android:attr/listChoiceIndicatorMultiple"
+                android:padding="@dimen/space"
+                android:text="@string/set_alarm_random_ringtone"/>
+
+            <CheckBox
                 android:id="@+id/ascending_alarm"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -219,15 +237,6 @@
                 android:paddingLeft="@dimen/space"
                 android:paddingRight="@dimen/space"
                 android:text="@string/set_alarm_ascending_explain"/>
-
-            <CheckBox
-                android:id="@+id/random_ringtone"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:button="@null"
-                android:drawableRight="?android:attr/listChoiceIndicatorMultiple"
-                android:padding="@dimen/space"
-                android:text="@string/set_alarm_random_ringtone"/>
 
             <TextView
                 android:id="@+id/ringtone"

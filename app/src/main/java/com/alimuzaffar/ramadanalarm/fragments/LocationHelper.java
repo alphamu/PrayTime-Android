@@ -98,8 +98,10 @@ public class LocationHelper extends Fragment implements Constants, GoogleApiClie
       //}
     } else {
       Log.d("SalaatTimesActivity", sLastLocation.getLatitude() + "," + sLastLocation.getLongitude());
+      if (mCallback != null) {
       mCallback.onLocationChanged(sLastLocation);
     }
+  }
   }
 
   private synchronized void buildGoogleApiClient() {

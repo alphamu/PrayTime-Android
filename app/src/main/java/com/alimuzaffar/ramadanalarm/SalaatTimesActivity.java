@@ -29,7 +29,7 @@ import com.alimuzaffar.ramadanalarm.widget.SlidingTabLayout;
 
 
 public class SalaatTimesActivity extends AppCompatActivity implements Constants,
-    View.OnClickListener, InitialConfigFragment.OnOptionSelectedListener, ViewPager.OnPageChangeListener,
+    InitialConfigFragment.OnOptionSelectedListener, ViewPager.OnPageChangeListener,
     LocationHelper.LocationCallback {
 
   private LocationHelper mLocationHelper;
@@ -42,6 +42,19 @@ public class SalaatTimesActivity extends AppCompatActivity implements Constants,
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
+    AppSettings settings = AppSettings.getInstance(this);
+    //INIT APP
+    if (!settings.getBoolean(AppSettings.Key.IS_INIT)) {
+      settings.set(settings.getKeyFor(AppSettings.Key.IS_ALARM_SET,         0), true);
+      settings.set(settings.getKeyFor(AppSettings.Key.IS_FAJR_ALARM_SET,    0), true);
+      settings.set(settings.getKeyFor(AppSettings.Key.IS_DHUHR_ALARM_SET,   0), true);
+      settings.set(settings.getKeyFor(AppSettings.Key.IS_ASR_ALARM_SET,     0), true);
+      settings.set(settings.getKeyFor(AppSettings.Key.IS_MAGHRIB_ALARM_SET, 0), true);
+      settings.set(settings.getKeyFor(AppSettings.Key.IS_ISHA_ALARM_SET,    0), true);
+      settings.set(AppSettings.Key.USE_ADHAN, true);
+      settings.set(AppSettings.Key.IS_INIT, true);
+    }
+
     setContentView(R.layout.activity_salaat_times);
     ScreenUtils.lockOrientation(this);
 
@@ -125,11 +138,6 @@ public class SalaatTimesActivity extends AppCompatActivity implements Constants,
     }
 
     return super.onOptionsItemSelected(item);
-  }
-
-  @Override
-  public void onClick(View v) {
-
   }
 
   private void startOnboardingFor(int index) {
