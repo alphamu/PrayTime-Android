@@ -60,6 +60,7 @@ public abstract class PermissionUtil {
                 return false;
             }
         }
+
         return true;
     }
 
@@ -74,7 +75,6 @@ public abstract class PermissionUtil {
         if (!isMNC()) {
             return true;
         }
-
         return activity.checkSelfPermission(permission) == PackageManager.PERMISSION_GRANTED;
     }
 
@@ -85,7 +85,7 @@ public abstract class PermissionUtil {
          should be used: */
         // return Build.VERSION.SDK_INT == Build.VERSION_CODES.MNC
 
-        return "MNC".equals(Build.VERSION.CODENAME);
+        return "MNC".equals(Build.VERSION.CODENAME) || Build.VERSION.SDK_INT > Build.VERSION_CODES.LOLLIPOP_MR1;
     }
 
 }

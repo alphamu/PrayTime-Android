@@ -4,6 +4,7 @@ package com.alimuzaffar.ramadanalarm.fragments;
 import android.Manifest;
 import android.app.Activity;
 import android.app.Fragment;
+import android.content.DialogInterface;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.hardware.Sensor;
@@ -12,14 +13,18 @@ import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.location.Location;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 
 import com.alimuzaffar.ramadanalarm.BuildConfig;
 import com.alimuzaffar.ramadanalarm.Constants;
 import com.alimuzaffar.ramadanalarm.R;
+import com.alimuzaffar.ramadanalarm.util.AppSettings;
 import com.alimuzaffar.ramadanalarm.util.PermissionUtil;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -106,9 +111,11 @@ public class KaabaLocatorFragment extends Fragment implements Constants, OnMapRe
     if (!PermissionUtil.hasSelfPermission(getActivity(), Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
       throw new IllegalStateException("WRITE_EXTERNAL_STORAGE permission should be granted before this method is called.");
     }
+
     if (mMapFragment == null) {
       mMapFragment = (MapFragment) getFragmentManager().findFragmentByTag("map_fragment");
     }
+
     if (mMapFragment == null) {
       GoogleMapOptions options = new GoogleMapOptions()
               .rotateGesturesEnabled(false)
@@ -119,10 +126,12 @@ public class KaabaLocatorFragment extends Fragment implements Constants, OnMapRe
               .scrollGesturesEnabled(true);
       mMapFragment = MapFragment.newInstance(options);
     }
+
     if (mMap == null && !mMapFragment.isAdded()) {
       ((ViewGroup) getView().findViewById(R.id.map_container)).removeAllViews();
       getFragmentManager().beginTransaction().add(R.id.map_container, mMapFragment, "map_fragment").commit();
       mMapFragment.getMapAsync(this);
+      showOrientationDialog();
     } else {
       registerRotationListener();
     }
@@ -280,14 +289,40 @@ public class KaabaLocatorFragment extends Fragment implements Constants, OnMapRe
 
     if (requestCode == REQUEST_WRITE_EXTERNAL) {
       if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-
+       showMap();
       } else {
         Log.i("BaseActivity", "LOCATION permission was NOT granted.");
         sWriterExternalPermissionDenied = true;
       }
 
     } else {
-      getActivity().onRequestPermissionsResult(requestCode, permissions, grantResults);
+      super.onRequestPermissionsResult(requestCode, permissions, grantResults);
     }
   }
+
+  private void showOrientationDialog() {
+    if (!AppSettings.getInstance().getBoolean(AppSettings.Key.SHOW_ORIENATATION_INSTRACTIONS, true)) {
+      return;
+    }
+    View v = getActivity().getLayoutInflater().inflate(R.layout.view_orientation_instructions, null);
+    AlertDialog.Builder alertBuilder = new AlertDialog.Builder(getActivity());
+    alertBuilder.setView(v)
+        .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+          @Override
+          public void onClick(DialogInterface dialog, int which) {
+            dialog.dismiss();
+          }
+        });
+
+    CheckBox doNotShow = (CheckBox) v.findViewById(R.id.checkbox_no_show);
+    doNotShow.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+      @Override
+      public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+        AppSettings.getInstance().set(AppSettings.Key.SHOW_ORIENATATION_INSTRACTIONS, !isChecked);
+      }
+    });
+
+    alertBuilder.create().show();
+  }
+
 }

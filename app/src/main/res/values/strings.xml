@@ -78,6 +78,11 @@
     <string name="high_lat_one_seventh">One-seventh of night</string>
     <string name="high_lat_angle_based">Angle based</string>
 
+    <!-- Map -->
+    <string name="label_compass_orientation">This feature uses the compass in your phone to point you in the correct direction. The compass can be unreliable indoors so if the results look incorrect, we recommend orienting your phones compass by performing the following steps.</string>
+    <string name="label_dont_show_again">Don\'t show again</string>
+    <string name="title_compass_orientation">Compass orientation</string>
+
     <!-- SNACK BAR -->
     <string name="button_okay">Okay</string>
     <string name="button_retry">Retry</string>

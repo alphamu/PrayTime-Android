@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:paddingTop="@dimen/space_x2"
+              android:paddingLeft="@dimen/space_x2"
+              android:paddingRight="@dimen/space_x2"
+              android:orientation="vertical">
+
+    <TextView
+        style="@style/Widget.CardTitle.Text"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/title_compass_orientation"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/space_x2"
+        android:text="@string/label_compass_orientation"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        android:paddingTop="@dimen/space"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/icon_orientation_left_right"/>
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/icon_orientation_up_down"/>
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/icon_orientation_round"/>
+
+    </LinearLayout>
+
+    <CheckBox
+        android:id="@+id/checkbox_no_show"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/label_dont_show_again"/>
+
+</LinearLayout>

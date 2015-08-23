@@ -84,7 +84,8 @@
                         style="@style/Widget.TimeCol.Title"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:gravity="center_vertical"
+                        android:gravity="center"
+                        android:drawableBottom="@drawable/icon_fajr_opt2"
                         android:text="@string/fajr"/>
 
                     <TextView
@@ -110,7 +111,8 @@
                         style="@style/Widget.TimeCol.Title"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:gravity="center_vertical"
+                        android:gravity="center"
+                        android:drawableBottom="@drawable/icon_dhuhr_opt2"
                         android:text="@string/dhuhr"/>
 
                     <TextView
@@ -134,7 +136,8 @@
                         style="@style/Widget.TimeCol.Title"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:gravity="center_vertical"
+                        android:gravity="center"
+                        android:drawableBottom="@drawable/icon_asr_opt2"
                         android:text="@string/asr"/>
 
                     <TextView
@@ -158,7 +161,8 @@
                         style="@style/Widget.TimeCol.Title"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:gravity="center_vertical"
+                        android:gravity="center"
+                        android:drawableBottom="@drawable/icon_maghrib_opt2"
                         android:text="@string/maghrib"/>
 
                     <TextView
@@ -182,7 +186,8 @@
                         style="@style/Widget.TimeCol.Title"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:gravity="center_vertical"
+                        android:gravity="center"
+                        android:drawableBottom="@drawable/icon_isha_opt2"
                         android:text="Isha"/>
 
                     <TextView

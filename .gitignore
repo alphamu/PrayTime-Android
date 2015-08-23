@@ -30,5 +30,8 @@ proguard/
 .idea/
 *.iml
 
+#Windows
+Thumbs.db
+
 #File to holds secret strings
 app/src/main/res/values/secret.xml

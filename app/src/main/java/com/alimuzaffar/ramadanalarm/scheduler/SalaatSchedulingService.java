@@ -66,7 +66,7 @@ public class SalaatSchedulingService extends IntentService implements Constants 
 
     NotificationCompat.Builder mBuilder =
         new NotificationCompat.Builder(this)
-            .setSmallIcon(R.mipmap.ic_launcher)
+            .setSmallIcon(R.drawable.icon_notification)
             .setContentTitle(title)
             .setStyle(new NotificationCompat.BigTextStyle()
                 .bigText(msg))

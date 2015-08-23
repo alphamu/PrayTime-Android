@@ -70,6 +70,7 @@ public class AppSettings {
     //LOCATION RELATED
     public static final String LAT_FOR = "lat_for_%d";
     public static final String LNG_FOR = "lng_for_%d";
+    public static final String SHOW_ORIENATATION_INSTRACTIONS = "showOrientationInstructions";
 
   }
 
