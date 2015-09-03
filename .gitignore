@@ -34,4 +34,6 @@ proguard/
 Thumbs.db
 
 #File to holds secret strings
-app/src/main/res/values/secret.xml
+app/src/main/res/values/secret.xm
+app/src/prod/res/values/secret.xml
+app/src/dev/res/values/secret.xml

@@ -7,9 +7,11 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.LocationManager;
+import android.os.Build;
 import android.support.v4.content.WakefulBroadcastReceiver;
 import android.util.Log;
 
+import com.alimuzaffar.ramadanalarm.BuildConfig;
 import com.alimuzaffar.ramadanalarm.Constants;
 import com.alimuzaffar.ramadanalarm.R;
 import com.alimuzaffar.ramadanalarm.RingAlarmActivity;
@@ -155,7 +157,16 @@ public class SalaatAlarmReceiver extends WakefulBroadcastReceiver implements Con
     intent.putExtra(EXTRA_PRAYER_TIME, then.getTimeInMillis());
     alarmIntent = PendingIntent.getBroadcast(context, ALARM_ID, intent, PendingIntent.FLAG_CANCEL_CURRENT);
 
-    alarmMgr.set(AlarmManager.RTC_WAKEUP, then.getTimeInMillis(), alarmIntent);
+    if (Build.VERSION.SDK_INT > Build.VERSION_CODES.LOLLIPOP_MR1) {
+      //lollipop_mr1 is 22, this is only 23 and above
+      alarmMgr.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, then.getTimeInMillis(), alarmIntent);
+    } else if (Build.VERSION.SDK_INT > Build.VERSION_CODES.JELLY_BEAN_MR2) {
+      //JB_MR2 is 18, this is only 19 and above.
+      alarmMgr.setExact(AlarmManager.RTC_WAKEUP, then.getTimeInMillis(), alarmIntent);
+    } else {
+      //available since api1
+      alarmMgr.set(AlarmManager.RTC_WAKEUP, then.getTimeInMillis(), alarmIntent);
+    }
 
     // SET PASSIVE LOCATION RECEIVER
     Intent passiveIntent = new Intent(context, PassiveLocationChangedReceiver.class);

@@ -27,6 +27,17 @@ android {
             applicationIdSuffix ".debug"
         }
     }
+
+    productFlavors {
+        dev {
+            versionName += "-DEV"
+        }
+
+        prod {
+
+        }
+    }
+
 }
 
 dependencies {
