@@ -7,6 +7,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.LocationManager;
+import android.os.Build;
 import android.support.v4.content.WakefulBroadcastReceiver;
 import android.util.Log;
 
@@ -125,7 +126,17 @@ public class RamadanAlarmReceiver extends WakefulBroadcastReceiver implements Co
       sIntent.putExtra(EXTRA_PRAYER_NAME, context.getString(R.string.suhoor_is_close));
       sIntent.putExtra(EXTRA_PRAYER_TIME, preSuhoorTime.getTimeInMillis());
       sAlarmIntent = PendingIntent.getBroadcast(context, PRE_SUHOOR_ALARM_ID, sIntent, PendingIntent.FLAG_CANCEL_CURRENT);
-      alarmMgr.set(AlarmManager.RTC_WAKEUP, preSuhoorTime.getTimeInMillis(), sAlarmIntent);
+      if (Build.VERSION.SDK_INT > Build.VERSION_CODES.LOLLIPOP_MR1) {
+        //lollipop_mr1 is 22, this is only 23 and above
+        alarmMgr.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, preSuhoorTime.getTimeInMillis(), sAlarmIntent);
+      } else if (Build.VERSION.SDK_INT > Build.VERSION_CODES.JELLY_BEAN_MR2) {
+        //JB_MR2 is 18, this is only 19 and above.
+        alarmMgr.setExact(AlarmManager.RTC_WAKEUP, preSuhoorTime.getTimeInMillis(), sAlarmIntent);
+      } else {
+        //available since api1
+        alarmMgr.set(AlarmManager.RTC_WAKEUP, preSuhoorTime.getTimeInMillis(), sAlarmIntent);
+      }
+
     }
 
     if (preIftarTime.before(now)) {
@@ -137,7 +148,16 @@ public class RamadanAlarmReceiver extends WakefulBroadcastReceiver implements Co
       iIntent.putExtra(EXTRA_PRAYER_NAME, context.getString(R.string.iftar_is_close));
       iIntent.putExtra(EXTRA_PRAYER_TIME, preIftarTime.getTimeInMillis());
       iAlarmIntent = PendingIntent.getBroadcast(context, PRE_IFTAR_ALARM_ID, iIntent, PendingIntent.FLAG_CANCEL_CURRENT);
-      alarmMgr.set(AlarmManager.RTC_WAKEUP, preIftarTime.getTimeInMillis(), iAlarmIntent);
+      if (Build.VERSION.SDK_INT > Build.VERSION_CODES.LOLLIPOP_MR1) {
+        //lollipop_mr1 is 22, this is only 23 and above
+        alarmMgr.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, preIftarTime.getTimeInMillis(), iAlarmIntent);
+      } else if (Build.VERSION.SDK_INT > Build.VERSION_CODES.JELLY_BEAN_MR2) {
+        //JB_MR2 is 18, this is only 19 and above.
+        alarmMgr.setExact(AlarmManager.RTC_WAKEUP, preIftarTime.getTimeInMillis(), iAlarmIntent);
+      } else {
+        //available since api1
+        alarmMgr.set(AlarmManager.RTC_WAKEUP, preIftarTime.getTimeInMillis(), iAlarmIntent);
+      }
     }
   }
   // END_INCLUDE(set_alarm)
