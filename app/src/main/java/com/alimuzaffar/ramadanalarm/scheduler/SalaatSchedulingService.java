@@ -14,7 +14,6 @@ import com.alimuzaffar.ramadanalarm.util.AppSettings;
 import com.alimuzaffar.ramadanalarm.util.PrayTime;
 
 import java.util.Calendar;
-import java.util.LinkedHashMap;
 import java.util.TimeZone;
 
 /**
@@ -50,7 +49,7 @@ public class SalaatSchedulingService extends IntentService implements Constants 
     if (AppSettings.getInstance(this).getTimeFormatFor(0) == PrayTime.TIME_24) {
       formatString = "%2$tk:%2$tM %1$s";
     }
-    sendNotification(String.format(formatString, prayerName, now), getString(R.string.test_notification_body, prayerName));
+    sendNotification(String.format(formatString, prayerName, now), getString(R.string.notification_body, prayerName));
     // Release the wake lock provided by the BroadcastReceiver.
     SalaatAlarmReceiver.completeWakefulIntent(intent);
     // END_INCLUDE(service_onhandle)
