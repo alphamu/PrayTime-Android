@@ -113,7 +113,7 @@ public class RamadanAlarmReceiver extends WakefulBroadcastReceiver implements Co
 
     if (iftarOffset > 0) {
       long time = iftarOffset * 15 * 60 * 1000;
-      preIftarTime = getCalendarFromPrayerTime(preSuhoorTime, prayerTimes.get("Maghrib"));
+      preIftarTime = getCalendarFromPrayerTime(preIftarTime, prayerTimes.get("Maghrib"));
       preIftarTime.setTimeInMillis(preIftarTime.getTimeInMillis() - time);
     }
 
