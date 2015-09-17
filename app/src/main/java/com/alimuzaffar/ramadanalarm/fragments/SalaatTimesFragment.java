@@ -23,7 +23,7 @@ import java.util.LinkedHashMap;
 import java.util.TimeZone;
 
 public class SalaatTimesFragment extends Fragment implements Constants {
-
+  private static boolean sIsAlarmInit = false;
   int mIndex = 0;
   Location mLastLocation;
   TextView mAlarm;
@@ -71,6 +71,7 @@ public class SalaatTimesFragment extends Fragment implements Constants {
       return;
     }
 
+
     //Toolbar will now take on default Action Bar characteristics
     LinkedHashMap<String, String> prayerTimes =
         PrayTime.getPrayerTimes(getActivity(), mIndex, mLastLocation.getLatitude(), mLastLocation.getLongitude());
@@ -99,6 +100,15 @@ public class SalaatTimesFragment extends Fragment implements Constants {
     //set text for the first card.
     setAlarmButtonText(mAlarm, mIndex);
     setAlarmButtonClickListener(mAlarm, mIndex);
+
+    if (!sIsAlarmInit) {
+      if (AppSettings.getInstance().isDefaultSet()) {
+        AppSettings.getInstance().setLatFor(mIndex, mLastLocation.getLatitude());
+        AppSettings.getInstance().setLngFor(mIndex, mLastLocation.getLongitude());
+        updateAlarmStatus();
+        sIsAlarmInit = true;
+      }
+    }
   }
 
   private void setAlarmButtonText(TextView button, int index) {
@@ -134,8 +144,30 @@ public class SalaatTimesFragment extends Fragment implements Constants {
 
   public void setLocation(Location location) {
     mLastLocation = location;
+    AppSettings.getInstance().setLatFor(mIndex, location.getLatitude());
+    AppSettings.getInstance().setLngFor(mIndex, location.getLatitude());
     if (isAdded()) {
       init(getView());
+    }
+  }
+
+  private void updateAlarmStatus() {
+    setAlarmButtonText(mAlarm, mIndex);
+
+    AppSettings settings = AppSettings.getInstance(getActivity());
+
+    SalaatAlarmReceiver sar = new SalaatAlarmReceiver();
+    boolean isAlarmSet = settings.isAlarmSetFor(mIndex);
+    sar.cancelAlarm(getActivity());
+    if (isAlarmSet) {
+      sar.setAlarm(getActivity());
+    }
+
+    RamadanAlarmReceiver rar = new RamadanAlarmReceiver();
+    boolean isRamadanAlarmSet = settings.getBoolean(AppSettings.Key.IS_RAMADAN);
+    rar.cancelAlarm(getActivity());
+    if (isRamadanAlarmSet) {
+      rar.setAlarm(getActivity());
     }
   }
 
@@ -143,26 +175,10 @@ public class SalaatTimesFragment extends Fragment implements Constants {
   public void onActivityResult(int requestCode, int resultCode, Intent data) {
     if (requestCode == REQUEST_SET_ALARM) {
       if (resultCode == Activity.RESULT_OK) {
-        setAlarmButtonText(mAlarm, mIndex);
-
-        AppSettings settings = AppSettings.getInstance(getActivity());
-
-        SalaatAlarmReceiver sar = new SalaatAlarmReceiver();
-        boolean isAlarmSet = settings.isAlarmSetFor(mIndex);
-        sar.cancelAlarm(getActivity());
-        if (isAlarmSet) {
-          sar.setAlarm(getActivity());
-        }
-
-        RamadanAlarmReceiver rar = new RamadanAlarmReceiver();
-        boolean isRamadanAlarmSet = settings.getBoolean(AppSettings.Key.IS_RAMADAN);
-        rar.cancelAlarm(getActivity());
-        if (isRamadanAlarmSet) {
-          rar.setAlarm(getActivity());
-        }
+        updateAlarmStatus();
+      } else {
+        super.onActivityResult(requestCode, resultCode, data);
       }
-    } else {
-      super.onActivityResult(requestCode, resultCode, data);
     }
   }
 }
