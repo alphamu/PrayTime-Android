@@ -113,7 +113,7 @@
     <string name="set_alarm">Set alarm</string>
     <string name="prayer_name_time">%s time.</string>
     <string name="notification_body">It is time for %s prayers.</string>
-    <string name="alarm_timed_out">%s alarm timed out after 5 minutes.</string>
+    <string name="alarm_timed_out">%s Alarm timed out after 5 minutes.</string>
     <string name="alarm_timed_out_only">Alarm timed out after 5 minutes.</string>
     <string name="alarm_interrupted">Alarm interrupted</string>
     <string name="alarm_interrupted_body">alarm interrupted by an other app or phone call.</string>

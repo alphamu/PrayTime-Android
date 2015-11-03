@@ -25,12 +25,9 @@ import android.widget.TextView;
 
 import com.alimuzaffar.ramadanalarm.util.AlarmUtils;
 import com.alimuzaffar.ramadanalarm.util.AppSettings;
-import com.alimuzaffar.ramadanalarm.util.PermissionUtil;
 import com.alimuzaffar.ramadanalarm.util.PrayTime;
 import com.alimuzaffar.ramadanalarm.util.ScreenUtils;
-import com.google.android.gms.wearable.Asset;
 
-import java.io.IOException;
 import java.lang.ref.WeakReference;
 import java.util.Calendar;
 import java.util.TimeZone;
@@ -116,10 +113,10 @@ public class RingAlarmActivity extends AppCompatActivity implements Constants, V
       Log.e("RingAlarmActivity", e.getMessage(), e);
     }
 
-    if(PermissionUtil.hasSelfPermission(this,  Manifest.permission.READ_PHONE_STATE)) {
+    //if(PermissionUtil.hasSelfPermission(this,  Manifest.permission.READ_PHONE_STATE)) {
       TelephonyManager telephonyManager = (TelephonyManager) getSystemService(TELEPHONY_SERVICE);
       telephonyManager.listen(phoneStateListener, PhoneStateListener.LISTEN_CALL_STATE);
-    }
+    //}
   }
 
   private void playAlarm() throws Exception {
@@ -241,10 +238,8 @@ public class RingAlarmActivity extends AppCompatActivity implements Constants, V
     }
 
     mAudioManager.abandonAudioFocus(mOnAudioFocusChangeListener);
-    if (PermissionUtil.hasSelfPermission(this,  Manifest.permission.READ_PHONE_STATE)) {
-      TelephonyManager telephonyManager = (TelephonyManager) getSystemService(TELEPHONY_SERVICE);
-      telephonyManager.listen(phoneStateListener, PhoneStateListener.LISTEN_CALL_STATE);
-    }
+    TelephonyManager telephonyManager = (TelephonyManager) getSystemService(TELEPHONY_SERVICE);
+    telephonyManager.listen(phoneStateListener, PhoneStateListener.LISTEN_NONE);
   }
 
 
@@ -281,6 +276,9 @@ public class RingAlarmActivity extends AppCompatActivity implements Constants, V
     }
     String title = interrupted? getString(R.string.alarm_interrupted) : getString(R.string.alarm_timed_out_only);
     String body = String.format(formatString, now);
+    if (interrupted) {
+        body = mPrayerName.getText().toString();
+    }
 
     mNotificationManager = (NotificationManager)
         this.getSystemService(Context.NOTIFICATION_SERVICE);
