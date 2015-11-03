@@ -81,7 +81,7 @@ public class LocationHelper extends Fragment implements Constants, GoogleApiClie
 //      Intent intent = mActivity.getPackageManager().buildRequestPermissionsIntent(new String[]{Manifest.permission.ACCESS_FINE_LOCATION});
 //      startActivityForResult(intent, REQUEST_LOCATION);
       if (!sLoationPermissionDenied) {
-        requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, REQUEST_LOCATION);
+        requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.READ_PHONE_STATE}, REQUEST_LOCATION);
       }
     }
   }

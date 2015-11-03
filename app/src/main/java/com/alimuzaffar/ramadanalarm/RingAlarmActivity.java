@@ -1,5 +1,6 @@
 package com.alimuzaffar.ramadanalarm;
 
+import android.Manifest;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
@@ -13,6 +14,8 @@ import android.os.Handler;
 import android.os.Message;
 import android.support.v4.app.NotificationCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.telephony.PhoneStateListener;
+import android.telephony.TelephonyManager;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
@@ -22,6 +25,7 @@ import android.widget.TextView;
 
 import com.alimuzaffar.ramadanalarm.util.AlarmUtils;
 import com.alimuzaffar.ramadanalarm.util.AppSettings;
+import com.alimuzaffar.ramadanalarm.util.PermissionUtil;
 import com.alimuzaffar.ramadanalarm.util.PrayTime;
 import com.alimuzaffar.ramadanalarm.util.ScreenUtils;
 import com.google.android.gms.wearable.Asset;
@@ -60,14 +64,23 @@ public class RingAlarmActivity extends AppCompatActivity implements Constants, V
     }
   };
 
+  private PhoneStateListener phoneStateListener = new PhoneStateListener() {
+    @Override
+    public void onCallStateChanged(int state, String incomingNumber) {
+      if (state == TelephonyManager.CALL_STATE_RINGING) {
+        mOnAudioFocusChangeListener.onAudioFocusChange(AudioManager.AUDIOFOCUS_LOSS);
+      }
+    }
+  };
+
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON |
-        WindowManager.LayoutParams.FLAG_DISMISS_KEYGUARD |
-        WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED |
-        WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON |
-        WindowManager.LayoutParams.FLAG_FULLSCREEN);
+            WindowManager.LayoutParams.FLAG_DISMISS_KEYGUARD |
+            WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED |
+            WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON |
+            WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
     ScreenUtils.lockOrientation(this);
 
@@ -101,6 +114,11 @@ public class RingAlarmActivity extends AppCompatActivity implements Constants, V
       playAlarm();
     } catch (Exception e) {
       Log.e("RingAlarmActivity", e.getMessage(), e);
+    }
+
+    if(PermissionUtil.hasSelfPermission(this,  Manifest.permission.READ_PHONE_STATE)) {
+      TelephonyManager telephonyManager = (TelephonyManager) getSystemService(TELEPHONY_SERVICE);
+      telephonyManager.listen(phoneStateListener, PhoneStateListener.LISTEN_CALL_STATE);
     }
   }
 
@@ -223,6 +241,10 @@ public class RingAlarmActivity extends AppCompatActivity implements Constants, V
     }
 
     mAudioManager.abandonAudioFocus(mOnAudioFocusChangeListener);
+    if (PermissionUtil.hasSelfPermission(this,  Manifest.permission.READ_PHONE_STATE)) {
+      TelephonyManager telephonyManager = (TelephonyManager) getSystemService(TELEPHONY_SERVICE);
+      telephonyManager.listen(phoneStateListener, PhoneStateListener.LISTEN_CALL_STATE);
+    }
   }
 
 
@@ -253,9 +275,9 @@ public class RingAlarmActivity extends AppCompatActivity implements Constants, V
     Calendar now = Calendar.getInstance(TimeZone.getDefault());
     now.setTimeInMillis(System.currentTimeMillis());
 
-    String formatString = " %1$tl:%1$tM %1$tp " + getString(R.string.alarm_timed_out, mPrayerName);
+    String formatString = " %1$tl:%1$tM %1$tp " + getString(R.string.alarm_timed_out, mPrayerName.getText().toString());
     if (AppSettings.getInstance(this).getTimeFormatFor(0) == PrayTime.TIME_24) {
-      formatString = "%1$tk:%1$tM " + getString(R.string.alarm_timed_out, mPrayerName);
+      formatString = "%1$tk:%1$tM " + getString(R.string.alarm_timed_out, mPrayerName.getText().toString());
     }
     String title = interrupted? getString(R.string.alarm_interrupted) : getString(R.string.alarm_timed_out_only);
     String body = String.format(formatString, now);
