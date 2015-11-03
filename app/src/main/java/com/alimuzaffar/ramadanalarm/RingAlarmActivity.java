@@ -47,6 +47,18 @@ public class RingAlarmActivity extends AppCompatActivity implements Constants, V
   boolean mPreAlarm = false;
 
   private NotificationManager mNotificationManager;
+  private AudioManager.OnAudioFocusChangeListener mOnAudioFocusChangeListener = new AudioManager.OnAudioFocusChangeListener() {
+    @Override
+    public void onAudioFocusChange(int focusChange) {
+      if (focusChange == AudioManager.AUDIOFOCUS_LOSS) {
+        sendNotification(true);
+        stopAlarm();
+        finish();
+      } else if (focusChange == AudioManager.AUDIOFOCUS_GAIN) {
+        startAlarm();
+      }
+    }
+  };
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -152,6 +164,14 @@ public class RingAlarmActivity extends AppCompatActivity implements Constants, V
     if (assetFileDescriptor != null) {
       mMediaPlayer.setOnCompletionListener(this);
     }
+
+    int result = mAudioManager.requestAudioFocus(mOnAudioFocusChangeListener, mAudioStream, AudioManager.AUDIOFOCUS_GAIN);
+    if (result == AudioManager.AUDIOFOCUS_GAIN) {
+      startAlarm();
+    }
+  }
+
+  private void startAlarm() {
     mMediaPlayer.start();
 
     mAlarmOff.postDelayed(mAutoStop = new Runnable() {
@@ -161,8 +181,6 @@ public class RingAlarmActivity extends AppCompatActivity implements Constants, V
         mAlarmOff.performClick();
       }
     }, FIVE_MINUTES);
-
-
   }
 
   private void stopAlarm() {
@@ -203,6 +221,8 @@ public class RingAlarmActivity extends AppCompatActivity implements Constants, V
         mAudioManager.setStreamVolume(mAudioStream, mOriginalVolume, 0);
       }
     }
+
+    mAudioManager.abandonAudioFocus(mOnAudioFocusChangeListener);
   }
 
 
@@ -225,8 +245,11 @@ public class RingAlarmActivity extends AppCompatActivity implements Constants, V
     super.onDestroy();
   }
 
-  // Post a notification indicating whether a doodle was found.
   private void sendNotification() {
+    sendNotification(false);
+  }
+
+  private void sendNotification(boolean interrupted) {
     Calendar now = Calendar.getInstance(TimeZone.getDefault());
     now.setTimeInMillis(System.currentTimeMillis());
 
@@ -234,7 +257,7 @@ public class RingAlarmActivity extends AppCompatActivity implements Constants, V
     if (AppSettings.getInstance(this).getTimeFormatFor(0) == PrayTime.TIME_24) {
       formatString = "%1$tk:%1$tM " + getString(R.string.alarm_timed_out, mPrayerName);
     }
-    String title = getString(R.string.alarm_timed_out_only);
+    String title = interrupted? getString(R.string.alarm_interrupted) : getString(R.string.alarm_timed_out_only);
     String body = String.format(formatString, now);
 
     mNotificationManager = (NotificationManager)

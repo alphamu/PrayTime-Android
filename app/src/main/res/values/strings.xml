@@ -115,6 +115,7 @@
     <string name="notification_body">It is time for %s prayers.</string>
     <string name="alarm_timed_out">%s alarm timed out after 5 minutes.</string>
     <string name="alarm_timed_out_only">Alarm timed out after 5 minutes.</string>
+    <string name="alarm_interrupted">Alarm interrupted by an other app</string>
     <string name="suhoor_is_close">Suhoor is close.</string>
     <string name="iftar_is_close">Iftar is close.</string>
     <string name="set_alarm_ascending_explain">Volume starts off low and increases every 10 seconds to gently wake you up.</string>
