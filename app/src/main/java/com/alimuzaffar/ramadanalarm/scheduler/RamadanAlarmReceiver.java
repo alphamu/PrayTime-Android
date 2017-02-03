@@ -179,7 +179,7 @@ public class RamadanAlarmReceiver extends WakefulBroadcastReceiver implements Co
         sAlarmIntent = PendingIntent.getBroadcast(context, PRE_SUHOOR_ALARM_ID, sIntent, PendingIntent.FLAG_CANCEL_CURRENT);
 
         Intent iIntent = new Intent(context, RamadanAlarmReceiver.class);
-        sAlarmIntent = PendingIntent.getBroadcast(context, PRE_SUHOOR_ALARM_ID, iIntent, PendingIntent.FLAG_CANCEL_CURRENT);
+        iAlarmIntent = PendingIntent.getBroadcast(context, PRE_IFTAR_ALARM_ID, iIntent, PendingIntent.FLAG_CANCEL_CURRENT);
       }
 
       alarmMgr.cancel(sAlarmIntent);

@@ -90,6 +90,17 @@ public class SalaatTimesActivity extends AppCompatActivity implements Constants,
       mLocationHelper = LocationHelper.newInstance();
       getFragmentManager().beginTransaction().add(mLocationHelper, LOCATION_FRAGMENT).commit();
     }
+
+    if (!settings.getBoolean(AppSettings.Key.IS_TNC_ACCEPTED, false)) {
+      getWindow().getDecorView().postDelayed(new Runnable() {
+        @Override
+        public void run() {
+          Intent intent = new Intent(SalaatTimesActivity.this, TermsAndConditionsActivity.class);
+          overridePendingTransition(R.anim.enter_from_bottom, R.anim.no_animation);
+          startActivityForResult(intent, REQUEST_TNC);
+        }
+      }, 2000);
+    }
   }
 
   @Override
@@ -195,17 +206,6 @@ public class SalaatTimesActivity extends AppCompatActivity implements Constants,
 
   @Override
   public void onLocationChanged(Location location) {
-    AppSettings settings = AppSettings.getInstance(this);
-    if (!settings.getBoolean(AppSettings.Key.IS_TNC_ACCEPTED, false)) {
-      getWindow().getDecorView().postDelayed(new Runnable() {
-        @Override
-        public void run() {
-          Intent intent = new Intent(SalaatTimesActivity.this, TermsAndConditionsActivity.class);
-          overridePendingTransition(R.anim.enter_from_bottom, R.anim.no_animation);
-          startActivityForResult(intent, REQUEST_TNC);
-        }
-      }, 2000);
-    }
     mLastLocation = location;
     // NOT THE BEST SOLUTION, THINK OF SOMETHING ELSE
     mAdapter = new ScreenSlidePagerAdapter(getFragmentManager(), 0);
