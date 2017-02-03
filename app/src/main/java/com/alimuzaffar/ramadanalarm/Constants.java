@@ -1,9 +1,5 @@
 package com.alimuzaffar.ramadanalarm;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.Locale;
-
 public interface Constants {
   // REQUEST CODES
   int REQUEST_CHECK_SETTINGS = 101;
@@ -11,6 +7,7 @@ public interface Constants {
   int REQUEST_LOCATION = 103;
   int REQUEST_WRITE_EXTERNAL = 104;
   int REQUEST_SET_ALARM = 105;
+  int REQUEST_TNC = 106;
 
   int ALARM_ID = 1010;
   int PASSIVE_LOCATION_ID = 1011;

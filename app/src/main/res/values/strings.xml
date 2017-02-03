@@ -149,5 +149,8 @@
     <string name="prayer_iftar_en">Allahumma Inni laka sumtu wa bika amantu [wa alayka tawakkalto] wa ‘ala rizqika aftartu</string>
     <string name="prayer_iftar_translation">O Allah! I fasted for You and I believe in You and I break my fast with Your sustenance</string>
 
+    <string name="title_terms_and_conditions">Terms and Conditions</string>
+    <string name="action_accept">Accept</string>
+
     <string name="secret_google_maps_api_key"></string>
 </resources>

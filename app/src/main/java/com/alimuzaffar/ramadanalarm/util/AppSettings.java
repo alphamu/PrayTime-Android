@@ -1,6 +1,5 @@
 package com.alimuzaffar.ramadanalarm.util;
 
-import android.app.Application;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.text.format.DateFormat;
@@ -81,6 +80,7 @@ public class AppSettings {
     //APP RELATED
     public static final String IS_INIT = "app_init";
     public static final String APP_VERSION_CODE = "current_version_code";
+    public static final String IS_TNC_ACCEPTED = "is_tnc_accepted";
 
   }
 

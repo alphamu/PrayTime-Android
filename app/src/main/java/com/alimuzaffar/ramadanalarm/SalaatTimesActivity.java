@@ -5,17 +5,13 @@ import android.app.Activity;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.content.Intent;
-import android.content.pm.ActivityInfo;
-import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 
 import com.alimuzaffar.ramadanalarm.fragments.InitialConfigFragment;
 import com.alimuzaffar.ramadanalarm.fragments.KaabaLocatorFragment;
@@ -135,6 +131,11 @@ public class SalaatTimesActivity extends AppCompatActivity implements Constants,
     if (id == R.id.action_settings) {
       startOnboardingFor(0);
       return true;
+    } else if (id == R.id.action_terms) {
+      Intent intent = new Intent(SalaatTimesActivity.this, TermsAndConditionsActivity.class);
+      intent.putExtra(TermsAndConditionsActivity.EXTRA_DISPLAY_ONLY, true);
+      overridePendingTransition(R.anim.enter_from_bottom, R.anim.no_animation);
+      startActivityForResult(intent, REQUEST_TNC);
     }
 
     return super.onOptionsItemSelected(item);
@@ -166,6 +167,13 @@ public class SalaatTimesActivity extends AppCompatActivity implements Constants,
       if (resultCode == RESULT_OK) {
         onUseDefaultSelected();
       }
+    } else if (requestCode == REQUEST_TNC) {
+      if (resultCode == RESULT_CANCELED) {
+        finish();
+      } else {
+        AppSettings settings = AppSettings.getInstance(this);
+        settings.set(AppSettings.Key.IS_TNC_ACCEPTED, true);
+      }
     } else {
       super.onActivityResult(requestCode, resultCode, data);
     }
@@ -187,6 +195,17 @@ public class SalaatTimesActivity extends AppCompatActivity implements Constants,
 
   @Override
   public void onLocationChanged(Location location) {
+    AppSettings settings = AppSettings.getInstance(this);
+    if (!settings.getBoolean(AppSettings.Key.IS_TNC_ACCEPTED, false)) {
+      getWindow().getDecorView().postDelayed(new Runnable() {
+        @Override
+        public void run() {
+          Intent intent = new Intent(SalaatTimesActivity.this, TermsAndConditionsActivity.class);
+          overridePendingTransition(R.anim.enter_from_bottom, R.anim.no_animation);
+          startActivityForResult(intent, REQUEST_TNC);
+        }
+      }, 2000);
+    }
     mLastLocation = location;
     // NOT THE BEST SOLUTION, THINK OF SOMETHING ELSE
     mAdapter = new ScreenSlidePagerAdapter(getFragmentManager(), 0);
@@ -265,5 +284,7 @@ public class SalaatTimesActivity extends AppCompatActivity implements Constants,
         return getString(R.string.kaaba_position);
       }
     }
+
+
   }
 }
